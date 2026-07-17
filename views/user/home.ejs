@@ -1,0 +1,1455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>ShopyGo - Home</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #f8fafc; color: #0f172a; }
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1d4ed8;
+            --soft-bg: #eff6ff;
+            --border-light: #e9eff5;
+        }
+        .btn-primary-blue {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+            border-radius: 40px;
+            padding: 10px 28px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-primary-blue:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+        }
+        .btn-outline-primary-blue {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            border-radius: 40px;
+            padding: 8px 20px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-outline-primary-blue:hover {
+            background-color: var(--primary-blue);
+            color: white;
+        }
+        .navbar {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 0;
+        }
+        .search-bar { max-width: 450px; width: 100%; }
+        .search-bar .input-group {
+            border-radius: 48px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .search-bar input {
+            border: 1px solid var(--border-light);
+            border-right: none;
+            padding: 10px 18px;
+            font-size: 0.9rem;
+        }
+        .search-bar button {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-left: none;
+            color: var(--primary-blue);
+        }
+        .nav-icon {
+            font-size: 1.4rem;
+            color: #1e293b;
+            transition: 0.2s;
+            position: relative;
+            cursor: pointer;
+        }
+        .nav-icon:hover { color: var(--primary-blue); }
+        .dropdown-menu-custom {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            margin-top: 12px;
+            min-width: 220px;
+            padding: 8px;
+        }
+        .dropdown-menu-custom .dropdown-item {
+            padding: 10px 16px;
+            border-radius: 10px;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+        .dropdown-menu-custom .dropdown-item:hover {
+            background: var(--soft-bg);
+        }
+        .dropdown-menu-custom .dropdown-item.text-danger:hover {
+            background: #fee2e2;
+            color: #dc2626 !important;
+        }
+        .dropdown-menu-custom .dropdown-divider {
+            margin: 6px 0;
+        }
+        
+        .banner-section {
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border-radius: 28px;
+            padding: 50px 40px;
+            margin: 20px 0 30px;
+            position: relative;
+            overflow: hidden;
+        }
+        .banner-section h1 { color: white; font-size: 2.8rem; font-weight: 800; }
+        .banner-section h1 span { color: #fcd34d; }
+        .banner-section p { color: rgba(255,255,255,0.85); font-size: 1.1rem; }
+        .banner-section .btn-banner {
+            background: white;
+            color: var(--primary-blue);
+            border: none;
+            border-radius: 40px;
+            padding: 12px 32px;
+            font-weight: 700;
+            transition: 0.3s;
+        }
+        .banner-section .btn-banner:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
+        .banner-section .banner-image i { font-size: 8rem; color: rgba(255,255,255,0.2); }
+        
+        .category-card {
+            background: white;
+            border-radius: 28px;
+            padding: 0;
+            text-align: center;
+            transition: all 0.25s;
+            border: 1px solid var(--border-light);
+            cursor: pointer;
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+        .category-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 25px -12px rgba(37, 99, 235, 0.12);
+            border-color: #cde3f5;
+        }
+        .category-card .category-image {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            background: var(--soft-bg);
+        }
+        .category-card .category-content { padding: 16px 12px 20px; }
+        .category-card .category-image-placeholder {
+            width: 100%;
+            height: 140px;
+            background: linear-gradient(135deg, var(--soft-bg), #dbeafe);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--primary-blue);
+        }
+        .subcount-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: var(--primary-blue);
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+        
+        .subcategory-modal-card {
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            transition: all 0.3s;
+            cursor: pointer;
+            overflow: hidden;
+            height: 100%;
+            background: white;
+        }
+        .subcategory-modal-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px -12px rgba(37, 99, 235, 0.15);
+            border-color: var(--primary-blue);
+        }
+        .subcategory-modal-card .sub-img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            background: var(--soft-bg);
+        }
+        .subcategory-modal-card .sub-content { 
+            padding: 16px; 
+            text-align: center;
+        }
+        .subcategory-modal-card .sub-content h6 { 
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        .subcategory-modal-card .sub-content .sub-desc { 
+            font-size: 0.85rem; 
+            color: #64748b;
+            margin-top: 2px;
+        }
+        .subcategory-modal-card .sub-content .sub-icon {
+            font-size: 2rem;
+            color: var(--primary-blue);
+            display: block;
+            margin-bottom: 4px;
+        }
+        .subcategory-modal-card .sub-img-placeholder {
+            width: 100%;
+            height: 180px;
+            background: var(--soft-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            color: var(--primary-blue);
+        }
+        
+        .product-card {
+            border-radius: 24px;
+            border: 1px solid var(--border-light);
+            transition: 0.25s;
+            background: white;
+            height: 100%;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 28px -12px rgba(0, 0, 0, 0.08);
+        }
+        .product-img {
+            background: #f8fafd;
+            padding: 24px 0;
+            text-align: center;
+            height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-img img {
+            max-height: 160px;
+            max-width: 100%;
+            object-fit: contain;
+        }
+        .product-img i { font-size: 3.5rem; color: var(--primary-blue); }
+        .rating { color: #f5b042; font-size: 0.75rem; letter-spacing: 2px; }
+        .rating-count {
+            color: #94a3b8;
+            font-size: 0.7rem;
+            margin-left: 4px;
+        }
+        
+        .current-price {
+            color: #2563eb;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .original-price {
+            text-decoration: line-through;
+            color: #94a3b8;
+            font-size: 0.85rem;
+            margin-left: 8px;
+        }
+        .sale-badge {
+            background: #ef4444;
+            color: white;
+            font-size: 0.65rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            margin-left: 6px;
+            font-weight: 600;
+        }
+        
+        .product-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .product-link:hover {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 48px 0 28px;
+            margin-top: 60px;
+        }
+        footer a { color: #94a3b8; text-decoration: none; transition: 0.2s; }
+        footer a:hover { color: white; }
+        .social-icons i {
+            font-size: 1.3rem;
+            margin-right: 18px;
+            color: #cbd5e1;
+            transition: 0.2s;
+        }
+        .social-icons i:hover { color: white; }
+        .copyright {
+            border-top: 1px solid #1e293b;
+            padding-top: 28px;
+            margin-top: 32px;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+        
+        .toast-container { z-index: 9999; }
+        .cart-badge { background-color: #2563eb; font-size: 10px; }
+        
+        .modal-header { border-bottom: 2px solid var(--soft-bg); }
+        .modal-footer { border-top: 2px solid var(--soft-bg); }
+
+        /* ===== LOGIN POPUP ===== */
+        .login-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        .login-popup-overlay.show {
+            display: flex;
+        }
+        .login-popup {
+            background: white;
+            border-radius: 28px;
+            padding: 45px 40px 35px;
+            max-width: 440px;
+            width: 92%;
+            text-align: center;
+            animation: slideUp 0.35s ease;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(40px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .login-popup .popup-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .login-popup .popup-close:hover {
+            color: #1e293b;
+            transform: rotate(90deg);
+        }
+        .login-popup .icon {
+            font-size: 4.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+            background: var(--soft-bg);
+            width: 90px;
+            height: 90px;
+            line-height: 90px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .login-popup h4 {
+            font-weight: 700;
+            font-size: 1.4rem;
+            margin-bottom: 6px;
+        }
+        .login-popup p {
+            color: #64748b;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+        }
+        .login-popup .btn {
+            border-radius: 40px;
+            padding: 12px;
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        .login-popup .btn-primary {
+            background: var(--primary-blue);
+            border: none;
+        }
+        .login-popup .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+        .login-popup .btn-outline-primary {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+        }
+        .login-popup .btn-outline-primary:hover {
+            background: var(--primary-blue);
+            color: white;
+        }
+        .login-popup .divider {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 16px 0;
+        }
+        .login-popup .divider::before,
+        .login-popup .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #e2e8f0;
+        }
+        .login-popup .divider span {
+            color: #94a3b8;
+            font-size: 0.8rem;
+        }
+        
+        /* ===== SEARCH INFO BAR ===== */
+        .search-info-bar {
+            background: white;
+            padding: 16px 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .search-info-bar .search-term {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        .search-info-bar .clear-search-btn {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .search-info-bar .clear-search-btn:hover {
+            color: #ef4444;
+        }
+        
+        .debug-badge {
+            position: fixed;
+            bottom: 10px;
+            right: 10px;
+            background: #1e293b;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 10px;
+            z-index: 9997;
+            opacity: 0.7;
+            cursor: pointer;
+        }
+        .debug-badge:hover {
+            opacity: 1;
+        }
+        
+        @media (max-width: 992px) {
+            .search-bar { order: 3; margin-top: 12px; width: 100%; max-width: 100%; }
+            .navbar .container-fluid { flex-wrap: wrap; }
+        }
+        @media (max-width: 768px) {
+            .subcategory-modal-card .sub-img { height: 140px; }
+            .banner-section { padding: 30px 20px; }
+            .banner-section h1 { font-size: 2rem; }
+            .banner-section .banner-image i { font-size: 5rem; }
+            .login-popup { padding: 30px 20px 25px; }
+            .login-popup .icon { width: 70px; height: 70px; line-height: 70px; font-size: 3.5rem; }
+            .search-info-bar { padding: 12px 16px; flex-direction: column; align-items: flex-start; }
+        }
+        @media (max-width: 576px) {
+            .banner-section h1 { font-size: 1.6rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-3 px-lg-5">
+        <a class="navbar-brand fw-bold fs-2" href="/" style="background: linear-gradient(135deg, #2563eb, #3b82f6); background-clip: text; -webkit-background-clip: text; color: transparent;">ShopyGo</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navRightContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navRightContent">
+            <div class="mx-auto search-bar my-2 my-lg-0">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for products..." id="globalSearchInput">
+                    <button class="btn" type="button" id="globalSearchBtn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            
+            <div class="d-flex align-items-center gap-3 ms-auto mt-2 mt-lg-0">
+                <a href="#" class="nav-icon position-relative" onclick="handleCartClick(event)">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge">0</span>
+                </a>
+                
+                <div class="dropdown">
+                    <a href="#" class="nav-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none;" id="profileDropdown">
+                        <i class="fas fa-user-circle fa-lg"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom" id="authDropdown">
+                        <!-- Dynamically populated -->
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== LOGIN POPUP ===== -->
+<div class="login-popup-overlay" id="loginPopup">
+    <div class="login-popup">
+        <button type="button" class="popup-close" onclick="closeLoginPopup()">&times;</button>
+        <div class="icon"><i class="fas fa-user-circle"></i></div>
+        <h4>Login Required</h4>
+        <p>Please login or create an account to continue</p>
+        <div class="d-grid gap-3 mt-2">
+            <a href="/login" class="btn btn-primary">
+                <i class="fas fa-sign-in-alt me-2"></i> Login
+            </a>
+            <div class="divider"><span>or</span></div>
+            <a href="/register" class="btn btn-outline-primary">
+                <i class="fas fa-user-plus me-2"></i> Create New Account
+            </a>
+            <button type="button" class="btn btn-outline-secondary" onclick="closeLoginPopup()" style="border-radius:40px;padding:12px;">
+                <i class="fas fa-times me-2"></i> Continue Shopping
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="container my-3">
+
+    <!-- BANNER - Summer Sale -->
+    <div class="banner-section">
+        <div class="row align-items-center">
+            <div class="col-lg-7">
+                <h1>Summer Sale <br><span>Up to 50% OFF</span></h1>
+                <p>Discover the latest trends at unbeatable prices. Shop now and save big!</p>
+                <a href="/shop" class="btn btn-banner"><i class="fas fa-bolt me-2"></i> Shop Now</a>
+            </div>
+            <div class="col-lg-5 banner-image mt-4 mt-lg-0">
+                <i class="fas fa-tags"></i>
+            </div>
+        </div>
+    </div>
+
+    <!-- CATEGORIES -->
+    <div class="my-5">
+        <h2 class="fw-bold mb-4">Shop by <span style="color: #2563eb;">Category</span></h2>
+        <div class="row g-4" id="categoriesList">
+            <div class="col-12 text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SEARCH RESULTS SECTION -->
+    <div id="searchResultsSection" style="display: none;">
+        <div class="search-info-bar" id="searchInfoBar">
+            <span>
+                <i class="fas fa-search me-2" style="color: var(--primary-blue);"></i>
+                Results for: <span class="search-term" id="searchTermDisplay"></span>
+                <span class="text-muted ms-2" id="searchResultCount"></span>
+            </span>
+            <a href="#" class="clear-search-btn" onclick="clearSearch()">
+                <i class="fas fa-times me-1"></i> Clear Search
+            </a>
+        </div>
+        <div class="row g-4" id="searchResultsGrid">
+            <!-- Results will be populated here -->
+        </div>
+    </div>
+
+    <!-- TRENDING PRODUCTS -->
+    <div class="my-5" id="trendingSection">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="fw-bold">🔥 Trending Products</h2>
+            <a href="/shop" style="color: #2563eb; text-decoration: none;">View all →</a>
+        </div>
+        <div class="row g-4" id="trendingProducts">
+            <div class="col-12 text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- NEW ARRIVALS -->
+    <div class="my-5" id="newArrivalsSection">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h2 class="fw-bold">✨ New Arrivals</h2>
+            <a href="/shop" style="color: #2563eb; text-decoration: none;">View all →</a>
+        </div>
+        <div class="row g-4" id="newArrivals">
+            <div class="col-12 text-center">
+                <div class="spinner-border text-primary" role="status">
+                    <span class="visually-hidden">Loading...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- ===== SUBCATEGORY MODAL - FIXED ===== -->
+<div class="modal fade" id="subcategoryModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 24px; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
+            <!-- ✅ HEADER ADDED -->
+            <div class="modal-header" style="border-radius: 24px 24px 0 0; padding: 20px 30px; border-bottom: 2px solid #eff6ff;">
+                <div>
+                    <h5 class="modal-title fw-bold">
+                        <i class="fas fa-tags text-primary me-2"></i>
+                        <span id="modalCategoryName">Category</span>
+                    </h5>
+                    <p class="text-muted small mb-0" id="modalSubcategoryCount">Loading...</p>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body" style="padding: 30px;">
+                <div class="row g-4" id="modalSubcategories">
+                    <div class="col-12 text-center">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer" style="border-radius: 0 0 24px 24px; padding: 16px 30px; border-top: 2px solid #eff6ff;">
+                <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">
+                    <i class="fas fa-times"></i> Close
+                </button>
+                <a href="#" id="browseAllBtn" class="btn btn-primary-blue rounded-pill">
+                    <i class="fas fa-store"></i> Browse All
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-4">
+                <h4 class="fw-bold text-white mb-3"><i class="fas fa-store me-2"></i>ShopyGo</h4>
+                <p class="small">India's fastest growing e-commerce platform.</p>
+                <div class="social-icons mt-3">
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <h5 class="text-white mb-3">Company</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Support</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/help">Help</a></li>
+                    <li><a href="/returns">Returns</a></li>
+                    <li><a href="/terms">Terms</a></li>
+                    <li><a href="/privacy">Privacy</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Contact</h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-envelope me-2"></i> support@shopygo.com</li>
+                    <li><i class="fas fa-phone-alt me-2"></i> +91 1800 202 8899</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright text-center">
+            © 2025 ShopyGo — All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<!-- Debug badge -->
+<div class="debug-badge" id="debugBadge" onclick="showDebugInfo()">
+    🔍 Debug
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    const API_URL = 'http://localhost:5000/api';
+    let currentCategoryId = null;
+    let pendingProductId = null;
+    let pendingAction = null;
+    let pendingRedirect = null;
+    let allProducts = [];
+    let currentSearchTerm = '';
+
+    // ================================================================
+    // DEBUG FUNCTION
+    // ================================================================
+    function showDebugInfo() {
+        const token = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
+        console.log('🔍 DEBUG INFO:');
+        console.log('Token:', token);
+        console.log('User:', user);
+        console.log('Is Logged In:', isLoggedIn());
+        console.log('All Products Count:', allProducts.length);
+        alert(`🔍 Debug Info:\n\nLogged In: ${isLoggedIn()}\nToken: ${token ? '✅ Present' : '❌ Missing'}\nUser: ${user ? JSON.stringify(JSON.parse(user)) : '❌ Missing'}\nProducts Loaded: ${allProducts.length}`);
+        updateNavbar();
+    }
+
+    // ================================================================
+    // CHECK LOGIN STATUS
+    // ================================================================
+    function isLoggedIn() {
+        try {
+            const token = localStorage.getItem('token');
+            if (token && token !== 'null' && token !== 'undefined' && token.trim() !== '') {
+                const user = localStorage.getItem('user');
+                if (user && user !== 'null' && user !== 'undefined') {
+                    return true;
+                }
+            }
+            return false;
+        } catch (e) {
+            console.error('Error checking login status:', e);
+            return false;
+        }
+    }
+
+    // ================================================================
+    // LOGIN POPUP
+    // ================================================================
+    function showLoginPopup(productId, action, redirect) {
+        pendingProductId = productId;
+        pendingAction = action || 'addtocart';
+        pendingRedirect = redirect || null;
+        
+        const popup = document.getElementById('loginPopup');
+        if (popup) {
+            popup.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeLoginPopup() {
+        const popup = document.getElementById('loginPopup');
+        if (popup) {
+            popup.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        pendingProductId = null;
+        pendingAction = null;
+        pendingRedirect = null;
+    }
+
+    document.getElementById('loginPopup').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeLoginPopup();
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeLoginPopup();
+        }
+    });
+
+    // ================================================================
+    // SEARCH FUNCTIONALITY - Redirect to Search Page
+    // ================================================================
+    function performSearch() {
+        const query = document.getElementById('globalSearchInput').value.trim();
+        
+        if (!query) {
+            showToast('Please enter a search term', 'info');
+            return;
+        }
+
+        // 🔴 REDIRECT TO SEARCH PAGE
+        window.location.href = `/search?q=${encodeURIComponent(query)}`;
+    }
+
+    // ================================================================
+    // CLEAR SEARCH
+    // ================================================================
+    function clearSearch() {
+        document.getElementById('searchResultsSection').style.display = 'none';
+        document.getElementById('trendingSection').style.display = 'block';
+        document.getElementById('newArrivalsSection').style.display = 'block';
+        document.getElementById('globalSearchInput').value = '';
+        currentSearchTerm = '';
+        const url = new URL(window.location);
+        url.searchParams.delete('search');
+        window.history.pushState({}, '', url);
+    }
+
+    // ================================================================
+    // LOAD SEARCH RESULTS FROM URL
+    // ================================================================
+    async function loadSearchResults() {
+        const params = new URLSearchParams(window.location.search);
+        const search = params.get('search');
+        
+        if (!search) {
+            document.getElementById('searchResultsSection').style.display = 'none';
+            document.getElementById('trendingSection').style.display = 'block';
+            document.getElementById('newArrivalsSection').style.display = 'block';
+            return;
+        }
+
+        currentSearchTerm = search;
+        document.getElementById('globalSearchInput').value = search;
+        document.getElementById('searchResultsSection').style.display = 'block';
+        document.getElementById('trendingSection').style.display = 'none';
+        document.getElementById('newArrivalsSection').style.display = 'none';
+        document.getElementById('searchTermDisplay').textContent = search;
+
+        try {
+            const data = await apiCall(`/products?search=${encodeURIComponent(search)}&limit=50`);
+            
+            let products = [];
+            if (data.products && Array.isArray(data.products)) {
+                products = data.products;
+            } else if (Array.isArray(data)) {
+                products = data;
+            }
+            
+            allProducts = products;
+            console.log(`🔍 Found ${products.length} results for "${search}"`);
+            document.getElementById('searchResultCount').textContent = `(${products.length} found)`;
+            renderSearchResults(products);
+
+        } catch (error) {
+            console.error('❌ Search error:', error);
+            document.getElementById('searchResultsGrid').innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-exclamation-circle fa-3x text-danger"></i>
+                    <h5 class="mt-3">Error loading results</h5>
+                    <p class="text-muted">${error.message}</p>
+                </div>
+            `;
+            document.getElementById('searchResultCount').textContent = '(Error)';
+        }
+    }
+
+    // ================================================================
+    // RENDER SEARCH RESULTS
+    // ================================================================
+    function renderSearchResults(products) {
+        const grid = document.getElementById('searchResultsGrid');
+        
+        if (!products || products.length === 0) {
+            grid.innerHTML = `
+                <div class="col-12 text-center py-5">
+                    <i class="fas fa-search fa-3x text-muted"></i>
+                    <h5 class="mt-3">No products found</h5>
+                    <p class="text-muted">Try different keywords or browse our categories</p>
+                    <a href="/" class="btn btn-outline-primary-blue mt-2">
+                        <i class="fas fa-home me-2"></i> Back to Home
+                    </a>
+                </div>
+            `;
+            return;
+        }
+
+        grid.innerHTML = products.map(product => {
+            const price = Number(product.price) || 0;
+            const sale = product.salePrice ? Number(product.salePrice) : null;
+            const displayPrice = sale && sale < price ? sale : price;
+            const showOriginal = sale && sale < price;
+            const discount = showOriginal ? Math.round(((price - sale) / price) * 100) : null;
+            const img = product.mainImage || product.image || 'https://via.placeholder.com/300x300';
+            const rating = product.rating || 4.5;
+            const ratingCount = product.ratingCount || 0;
+            
+            return `
+                <div class="col-6 col-md-4 col-lg-3">
+                    <a href="/product-detail?id=${product._id}" class="product-link">
+                        <div class="product-card">
+                            <div class="product-img">
+                                <img src="${img}" alt="${product.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas ${getIcon(product.category)}\\'></i>'">
+                            </div>
+                            <div class="p-3">
+                                <h6 class="fw-bold" style="display:-webkit-box; display:box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; box-orient:vertical; overflow:hidden; height:44px;">${product.name || 'Product'}</h6>
+                                <div class="rating">${getStars(rating)} <span class="rating-count">(${ratingCount || Math.floor(Math.random() * 50) + 10})</span></div>
+                                <div class="d-flex align-items-center flex-wrap">
+                                    <span class="current-price">${formatPrice(displayPrice)}</span>
+                                    ${showOriginal ? `<span class="original-price">${formatPrice(price)}</span>` : ''}
+                                    ${discount ? `<span class="sale-badge">-${discount}%</span>` : ''}
+                                </div>
+                                <button class="btn btn-primary-blue w-100 mt-2" style="font-size:0.8rem;padding:6px 12px;" onclick="addToCart(event, '${product._id}')">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // ================================================================
+    // CART ICON CLICK
+    // ================================================================
+    function handleCartClick(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        
+        if (!isLoggedIn()) {
+            showLoginPopup(null, 'redirect', '/cart');
+            return false;
+        }
+        
+        window.location.href = '/cart';
+        return false;
+    }
+
+    // ================================================================
+    // SUB CATEGORY ICON MAPPING
+    // ================================================================
+    function getSubcategoryIcon(subcategoryName) {
+        const icons = {
+            "Men's clothing": 'fa-male',
+            "Women's Clothing": 'fa-female',
+            "Kids' Clothing": 'fa-child',
+            "Bridal Sets": 'fa-ring',
+            "Earrings": 'fa-gem',
+            "Bangles": 'fa-hand-sparkles',
+            "Men's Footwear": 'fa-shoe-prints',
+            "Women's Footwear": 'fa-shoe-prints',
+            "Kids' Footwear": 'fa-shoe-prints',
+            "Watches": 'fa-clock',
+            "Bags": 'fa-bag-shopping',
+            "Hair Accessories": 'fa-paintbrush'
+        };
+        return icons[subcategoryName] || 'fa-tag';
+    }
+
+    // ================================================================
+    // TOAST
+    // ================================================================
+    function showToast(message, type = 'info') {
+        let container = document.getElementById('toastContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container position-fixed top-0 end-0 p-3';
+            document.body.appendChild(container);
+        }
+        const bgColor = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-primary';
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-white ${bgColor} border-0 show`;
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button>
+            </div>
+        `;
+        container.appendChild(toast);
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }, 3000);
+    }
+
+    // ================================================================
+    // CART
+    // ================================================================
+    function getCart() {
+        return JSON.parse(localStorage.getItem('cart')) || [];
+    }
+
+    function saveCart(cart) {
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+    }
+
+    function updateCartCount() {
+        const cart = getCart();
+        const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const badge = document.getElementById('cartCount');
+        if (badge) {
+            badge.textContent = total;
+            badge.style.display = total > 0 ? 'inline-block' : 'none';
+        }
+    }
+
+    // ================================================================
+    // ADD TO CART
+    // ================================================================
+    function addToCart(event, productId) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        
+        if (!isLoggedIn()) {
+            showLoginPopup(productId, 'addtocart');
+            return false;
+        }
+        
+        let cart = getCart();
+        const existing = cart.find(item => item.productId === productId);
+        if (existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({ productId, quantity: 1 });
+        }
+        saveCart(cart);
+        showToast('✅ Added to cart!', 'success');
+        return false;
+    }
+
+    // ================================================================
+    // CHECK PENDING ACTION
+    // ================================================================
+    function checkPendingAction() {
+        if (pendingProductId && pendingAction) {
+            const productId = pendingProductId;
+            const action = pendingAction;
+            const redirect = pendingRedirect;
+            
+            pendingProductId = null;
+            pendingAction = null;
+            pendingRedirect = null;
+            
+            if (action === 'addtocart') {
+                let cart = getCart();
+                const existing = cart.find(item => item.productId === productId);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({ productId, quantity: 1 });
+                }
+                saveCart(cart);
+                showToast('✅ Added to cart!', 'success');
+            } else if (action === 'redirect' && redirect) {
+                window.location.href = redirect;
+            }
+        }
+    }
+
+    // ================================================================
+    // API
+    // ================================================================
+    async function apiCall(endpoint) {
+        try {
+            const url = `${API_URL}${endpoint}`;
+            console.log('📡 Fetching:', url);
+            const res = await fetch(url);
+            
+            console.log('📊 Response Status:', res.status);
+            
+            if (!res.ok) {
+                throw new Error(`HTTP ${res.status}: ${res.statusText}`);
+            }
+            
+            const data = await res.json();
+            console.log('✅ API Response:', data);
+            return data;
+        } catch (error) {
+            console.error('❌ API Error:', error);
+            throw error;
+        }
+    }
+
+    // ================================================================
+    // HELPERS
+    // ================================================================
+    function formatPrice(p) { return `₹${Number(p).toFixed(2)}`; }
+    
+    function getStars(r) {
+        if (!r) return '☆☆☆☆☆';
+        let s = '';
+        const full = Math.floor(r);
+        const half = r % 1 >= 0.5;
+        for (let i = 0; i < full; i++) s += '★';
+        if (half) s += '½';
+        for (let i = s.length; i < 5; i++) s += '☆';
+        return s;
+    }
+    
+    function getIcon(cat) {
+        const map = {
+            'clothing': 'fa-tshirt', 'fashion': 'fa-tshirt',
+            'electronics': 'fa-laptop', 'mobile': 'fa-mobile-alt',
+            'jewellery': 'fa-gem', 'jewelry': 'fa-gem',
+            'footwear': 'fa-shoe-prints', 'shoes': 'fa-shoe-prints',
+            'accessories': 'fa-glasses', 'watch': 'fa-clock', 'watches': 'fa-clock',
+            'beauty': 'fa-mask', 'home': 'fa-couch', 'furniture': 'fa-couch',
+            'sports': 'fa-running', 'books': 'fa-book',
+            'toys': 'fa-robot', 'gaming': 'fa-gamepad',
+            'default': 'fa-folder'
+        };
+        const l = cat?.toLowerCase() || '';
+        for (const [k, v] of Object.entries(map)) {
+            if (l.includes(k)) return v;
+        }
+        return map.default;
+    }
+
+    // ================================================================
+    // LOAD CATEGORIES - FIXED TO SHOW ALL CATEGORIES
+    // ================================================================
+    async function loadCategories() {
+        try {
+            const cats = await apiCall('/categories');
+            const container = document.getElementById('categoriesList');
+            
+            if (!cats || cats.length === 0) {
+                container.innerHTML = `<div class="col-12 text-center text-muted">No categories</div>`;
+                return;
+            }
+            
+            // ✅ FIXED: Show ALL categories (removed .slice(0, 4))
+            container.innerHTML = cats.map(cat => {
+                const subCount = cat.subcategories ? cat.subcategories.length : 0;
+                return `
+                    <div class="col-6 col-md-3">
+                        <div class="category-card" onclick="openModal('${cat._id}')">
+                            ${cat.image ? 
+                                `<img src="${cat.image}" class="category-image" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'category-image-placeholder\\'><i class=\\'fas ${getIcon(cat.name)}\\'></i></div>'">` :
+                                `<div class="category-image-placeholder"><i class="fas ${getIcon(cat.name)}"></i></div>`
+                            }
+                            ${subCount > 0 ? `<span class="subcount-badge">${subCount}</span>` : ''}
+                            <div class="category-content">
+                                <h5 class="fw-bold">${cat.name}</h5>
+                                ${subCount > 0 ? `<small class="text-muted">${subCount} subcategories</small>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            console.log(`✅ Loaded ${cats.length} categories`);
+            
+        } catch (e) {
+            console.error('❌ Error loading categories:', e);
+            document.getElementById('categoriesList').innerHTML = `
+                <div class="col-12 text-center text-danger">
+                    <i class="fas fa-exclamation-circle fa-2x"></i>
+                    <p class="mt-2">Failed to load categories: ${e.message}</p>
+                </div>
+            `;
+        }
+    }
+
+    // ================================================================
+    // OPEN MODAL - FIXED
+    // ================================================================
+    async function openModal(categoryId) {
+        try {
+            console.log('📂 Opening modal for category:', categoryId);
+            
+            // Get categories
+            const cats = await apiCall('/categories');
+            const cat = cats.find(c => c._id === categoryId);
+            
+            if (!cat) {
+                showToast('Category not found', 'error');
+                return;
+            }
+            
+            currentCategoryId = categoryId;
+            const subs = cat.subcategories || [];
+            
+            // Update modal header
+            const modalName = document.getElementById('modalCategoryName');
+            const modalCount = document.getElementById('modalSubcategoryCount');
+            const browseBtn = document.getElementById('browseAllBtn');
+            
+            if (modalName) modalName.textContent = cat.name;
+            if (modalCount) modalCount.textContent = `${subs.length} subcategories`;
+            if (browseBtn) browseBtn.href = `/shop?category=${categoryId}`;
+            
+            const container = document.getElementById('modalSubcategories');
+            if (!container) {
+                console.error('❌ modalSubcategories element not found');
+                showToast('Modal error - please refresh', 'error');
+                return;
+            }
+            
+            if (subs.length === 0) {
+                container.innerHTML = `
+                    <div class="col-12 text-center text-muted py-4">
+                        <i class="fas fa-folder-open fa-3x mb-3"></i>
+                        <p>No subcategories available</p>
+                        <a href="/shop?category=${cat._id}" class="btn btn-primary-blue rounded-pill mt-2">
+                            <i class="fas fa-store"></i> Browse All Products
+                        </a>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = subs.map(sub => {
+                    const iconClass = getSubcategoryIcon(sub.name);
+                    return `
+                        <div class="col-md-4 col-sm-6">
+                            <div class="subcategory-modal-card" onclick="window.location.href='/shop?subcategory=${sub._id}'">
+                                ${sub.image ? 
+                                    `<img src="${sub.image}" class="sub-img" onerror="this.style.display='none'; this.parentElement.innerHTML='<div class=\\'sub-img-placeholder\\'><i class=\\'fas ${iconClass}\\'></i></div><div class=\\'sub-content\\'><h6 class=\\'fw-bold\\'>${sub.name}</h6>${sub.description ? `<p class=\\'sub-desc\\'>${sub.description}</p>` : ''}</div>'">` :
+                                    `<div class="sub-img-placeholder"><i class="fas ${iconClass}"></i></div>`
+                                }
+                                <div class="sub-content">
+                                    <h6 class="fw-bold">${sub.name}</h6>
+                                    ${sub.description ? `<p class="sub-desc">${sub.description}</p>` : ''}
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            // Show modal
+            const modalElement = document.getElementById('subcategoryModal');
+            if (modalElement) {
+                const modal = new bootstrap.Modal(modalElement);
+                modal.show();
+            } else {
+                console.error('❌ Modal element not found');
+                showToast('Modal not found', 'error');
+            }
+            
+        } catch (e) {
+            console.error('❌ Error loading subcategories:', e);
+            showToast('Error loading subcategories: ' + e.message, 'error');
+        }
+    }
+
+    // ================================================================
+    // LOAD PRODUCTS (Trending & New Arrivals)
+    // ================================================================
+    async function loadProducts() {
+        try {
+            console.log('🔄 Loading products...');
+            const data = await apiCall('/products?limit=16');
+            
+            let products = [];
+            
+            if (data.products && Array.isArray(data.products)) {
+                products = data.products;
+                console.log('✅ Format 1: products array, count:', products.length);
+            } else if (Array.isArray(data)) {
+                products = data;
+                console.log('✅ Format 2: direct array, count:', products.length);
+            } else {
+                console.warn('⚠️ Unknown response format:', data);
+                products = [];
+            }
+            
+            allProducts = products;
+            console.log(`📦 Total products: ${products.length}`);
+            
+            const trending = products.slice(0, 8);
+            const newArrivals = products.slice(8, 16);
+            
+            const render = (p) => {
+                if (!p || p.length === 0) {
+                    return '<div class="col-12 text-center text-muted">No products available</div>';
+                }
+                
+                return p.map(product => {
+                    const price = Number(product.price) || 0;
+                    const sale = product.salePrice ? Number(product.salePrice) : null;
+                    const display = sale && sale < price ? sale : price;
+                    const showOriginal = sale && sale < price;
+                    const discount = showOriginal ? Math.round(((price - sale) / price) * 100) : null;
+                    const img = product.mainImage || product.image || 'https://via.placeholder.com/300x300';
+                    const rating = product.rating || 4.5;
+                    const ratingCount = product.ratingCount || 0;
+                    
+                    return `
+                        <div class="col-6 col-md-3">
+                            <a href="/product-detail?id=${product._id}" class="product-link">
+                                <div class="product-card">
+                                    <div class="product-img">
+                                        <img src="${img}" alt="${product.name || 'Product'}" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas ${getIcon(product.category)}\\'></i>'">
+                                    </div>
+                                    <div class="p-3">
+                                        <h6 class="fw-bold" style="display:-webkit-box; display:box; -webkit-line-clamp:2; line-clamp:2; -webkit-box-orient:vertical; box-orient:vertical; overflow:hidden; height:44px;">${product.name || 'Product'}</h6>
+                                        <div class="rating">${getStars(rating)} <span class="rating-count">(${ratingCount || Math.floor(Math.random() * 50) + 10})</span></div>
+                                        <div class="d-flex align-items-center flex-wrap">
+                                            <span class="current-price">${formatPrice(display)}</span>
+                                            ${showOriginal ? `<span class="original-price">${formatPrice(price)}</span>` : ''}
+                                            ${discount ? `<span class="sale-badge">-${discount}%</span>` : ''}
+                                        </div>
+                                        <button class="btn btn-primary-blue w-100 mt-2" style="font-size:0.8rem;padding:6px 12px;" onclick="addToCart(event, '${product._id}')">
+                                            <i class="fas fa-shopping-cart"></i> Add to Cart
+                                        </button>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    `;
+                }).join('');
+            };
+            
+            document.getElementById('trendingProducts').innerHTML = render(trending) || '<div class="col-12 text-center text-muted">No products</div>';
+            document.getElementById('newArrivals').innerHTML = render(newArrivals) || '<div class="col-12 text-center text-muted">No products</div>';
+            
+            console.log('✅ Products rendered successfully!');
+            
+        } catch (e) {
+            console.error('❌ Error loading products:', e);
+            document.getElementById('trendingProducts').innerHTML = `
+                <div class="col-12 text-center text-danger">
+                    <i class="fas fa-exclamation-circle fa-2x"></i>
+                    <p class="mt-2">Failed to load products: ${e.message}</p>
+                    <button class="btn btn-primary btn-sm" onclick="loadProducts()">Retry</button>
+                </div>
+            `;
+            document.getElementById('newArrivals').innerHTML = `
+                <div class="col-12 text-center text-muted">No products available</div>
+            `;
+        }
+    }
+
+    // ================================================================
+    // AUTH
+    // ================================================================
+    function updateNavbar() {
+        const dropdown = document.getElementById('authDropdown');
+        const isLoggedInStatus = isLoggedIn();
+        
+        console.log('🔄 Updating navbar, logged in:', isLoggedInStatus);
+        
+        if (isLoggedInStatus) {
+            try {
+                const user = JSON.parse(localStorage.getItem('user') || '{}');
+                const userName = user.name || user.username || 'My Account';
+                
+                dropdown.innerHTML = `
+                    <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>${userName}</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                `;
+                console.log('✅ Logout option added to dropdown');
+            } catch (e) {
+                console.error('Error parsing user data:', e);
+                dropdown.innerHTML = `
+                    <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>My Account</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                    <li><hr class="dropdown-divider"></li>
+                    <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                `;
+            }
+        } else {
+            dropdown.innerHTML = `
+                <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login / Signup</a></li>
+                <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Create Account</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+            `;
+        }
+    }
+
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('cart');
+            showToast('✅ Logged out successfully!', 'success');
+            setTimeout(() => {
+                window.location.href = '/';
+            }, 500);
+        }
+    }
+
+    // ================================================================
+    // TEST: Set a dummy login for testing
+    // ================================================================
+    function setTestLogin() {
+        localStorage.setItem('token', 'test-token-12345');
+        localStorage.setItem('user', JSON.stringify({ name: 'Test User', email: 'test@example.com' }));
+        updateNavbar();
+        showToast('✅ Test login activated!', 'success');
+        console.log('🧪 Test login activated');
+    }
+
+    // ================================================================
+    // INIT
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 ShopyGo Home page loaded!');
+        updateCartCount();
+        updateNavbar();
+        loadCategories();
+        loadProducts();
+        checkPendingAction();
+        loadSearchResults();
+        
+        document.getElementById('globalSearchBtn').addEventListener('click', performSearch);
+        document.getElementById('globalSearchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                performSearch();
+            }
+        });
+        
+        setTimeout(() => {
+            console.log('📊 Final state - Logged in:', isLoggedIn());
+            console.log('📊 Products loaded:', allProducts.length);
+        }, 3000);
+    });
+
+    // Make functions globally accessible
+    window.addToCart = addToCart;
+    window.openModal = openModal;
+    window.performSearch = performSearch;
+    window.logout = logout;
+    window.closeLoginPopup = closeLoginPopup;
+    window.showLoginPopup = showLoginPopup;
+    window.checkPendingAction = checkPendingAction;
+    window.handleCartClick = handleCartClick;
+    window.loadProducts = loadProducts;
+    window.showDebugInfo = showDebugInfo;
+    window.setTestLogin = setTestLogin;
+    window.isLoggedIn = isLoggedIn;
+    window.updateNavbar = updateNavbar;
+    window.clearSearch = clearSearch;
+    window.loadSearchResults = loadSearchResults;
+</script>
+</body>
+</html>

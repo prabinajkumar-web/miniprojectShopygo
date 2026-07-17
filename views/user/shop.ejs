@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shop - ShopyGo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #f8fafc; }
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1d4ed8;
+            --soft-bg: #eff6ff;
+            --border-light: #e9eff5;
+        }
+        .navbar { background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border-bottom: 1px solid var(--border-light); padding: 12px 0; }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+        .nav-icon { font-size: 1.4rem; color: #1e293b; transition: 0.2s; position: relative; cursor: pointer; }
+        .nav-icon:hover { color: var(--primary-blue); }
+        .cart-badge { background-color: #2563eb; font-size: 10px; }
+        .btn-primary-blue {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+            border-radius: 40px;
+            padding: 10px 28px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-primary-blue:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37,99,235,0.25);
+        }
+        .filter-sidebar {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid var(--border-light);
+            position: sticky;
+            top: 20px;
+        }
+        .product-card {
+            border-radius: 24px;
+            border: 1px solid var(--border-light);
+            transition: 0.25s;
+            background: white;
+            height: 100%;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 28px -12px rgba(0,0,0,0.08);
+        }
+        .product-img {
+            background: #f8fafd;
+            padding: 24px 0;
+            text-align: center;
+            height: 160px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .product-img img { max-height: 120px; max-width: 100%; object-fit: contain; }
+        .product-img i { font-size: 3.5rem; color: var(--primary-blue); }
+        .rating { color: #f5b042; font-size: 0.75rem; letter-spacing: 2px; }
+        .current-price { color: #2563eb; font-weight: 700; font-size: 1.1rem; }
+        .original-price { text-decoration: line-through; color: #94a3b8; font-size: 0.85rem; margin-left: 8px; }
+        .sale-badge { background: #ef4444; color: white; font-size: 0.65rem; padding: 2px 8px; border-radius: 20px; margin-left: 6px; font-weight: 600; }
+        .product-link {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+        .product-link:hover { text-decoration: none; color: inherit; }
+        .toast-container { z-index: 9999; }
+        .page-link { color: var(--primary-blue); }
+        .page-item.active .page-link { background-color: var(--primary-blue); border-color: var(--primary-blue); }
+        footer { background: #0f172a; color: #cbd5e1; padding: 48px 0 28px; margin-top: 60px; }
+        footer a { color: #94a3b8; text-decoration: none; }
+        footer a:hover { color: white; }
+        .copyright { border-top: 1px solid #1e293b; padding-top: 28px; margin-top: 32px; font-size: 0.75rem; text-align: center; }
+        .subcategory-title {
+            background: var(--soft-bg);
+            padding: 12px 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            display: inline-block;
+        }
+        /* Login Popup Styles */
+        .login-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(4px);
+        }
+        .login-popup-overlay.show {
+            display: flex;
+        }
+        .login-popup {
+            background: white;
+            border-radius: 28px;
+            padding: 45px 40px 35px;
+            max-width: 440px;
+            width: 92%;
+            text-align: center;
+            animation: slideUp 0.35s ease;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        @keyframes slideUp {
+            from { transform: translateY(40px) scale(0.95); opacity: 0; }
+            to { transform: translateY(0) scale(1); opacity: 1; }
+        }
+        .login-popup .popup-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #94a3b8;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .login-popup .popup-close:hover {
+            color: #1e293b;
+            transform: rotate(90deg);
+        }
+        .login-popup .icon {
+            font-size: 4.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 12px;
+            background: var(--soft-bg);
+            width: 90px;
+            height: 90px;
+            line-height: 90px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .login-popup h4 { font-weight: 700; font-size: 1.4rem; margin-bottom: 6px; }
+        .login-popup p { color: #64748b; font-size: 0.95rem; margin-bottom: 20px; }
+        .login-popup .btn { border-radius: 40px; padding: 12px; font-weight: 600; font-size: 0.95rem; }
+        .login-popup .btn-primary { background: var(--primary-blue); border: none; }
+        .login-popup .btn-primary:hover { background: var(--primary-dark); }
+        .login-popup .btn-outline-primary { border-color: var(--primary-blue); color: var(--primary-blue); }
+        .login-popup .btn-outline-primary:hover { background: var(--primary-blue); color: white; }
+        .login-popup .divider { display: flex; align-items: center; gap: 16px; margin: 16px 0; }
+        .login-popup .divider::before,
+        .login-popup .divider::after { content: ""; flex: 1; height: 1px; background: #e2e8f0; }
+        .login-popup .divider span { color: #94a3b8; font-size: 0.8rem; }
+        @media (max-width: 768px) {
+            .filter-sidebar { position: relative; top: 0; margin-bottom: 20px; }
+            .login-popup { padding: 30px 20px 25px; }
+            .login-popup .icon { width: 70px; height: 70px; line-height: 70px; font-size: 3.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-3 px-lg-5">
+        <a class="navbar-brand fw-bold fs-2" href="/">🛒 ShopyGo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navRight">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navRight">
+            <div class="mx-auto search-bar my-2 my-lg-0" style="max-width:450px;width:100%;">
+                <div class="input-group" style="border-radius:48px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,0.05);">
+                    <input type="text" class="form-control" placeholder="Search products..." id="shopSearchInput" style="border:1px solid var(--border-light);border-right:none;padding:10px 18px;">
+                    <button class="btn" type="button" id="shopSearchBtn" style="background:white;border:1px solid var(--border-light);border-left:none;color:var(--primary-blue);"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-3 ms-auto mt-2 mt-lg-0">
+                <a href="#" class="nav-icon position-relative" onclick="handleCartClick(event)">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge">0</span>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="nav-icon dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user-circle fa-lg"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" style="border-radius:20px;border:none;box-shadow:0 12px 28px rgba(0,0,0,0.08);margin-top:12px;" id="authDropdown">
+                        <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                        <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== LOGIN POPUP ===== -->
+<div class="login-popup-overlay" id="loginPopup">
+    <div class="login-popup">
+        <button type="button" class="popup-close" onclick="closeLoginPopup()">&times;</button>
+        <div class="icon"><i class="fas fa-user-circle"></i></div>
+        <h4>Login Required</h4>
+        <p>Please login or create an account to add items to your cart</p>
+        <div class="d-grid gap-3 mt-2">
+            <a href="/login" class="btn btn-primary"><i class="fas fa-sign-in-alt me-2"></i> Login</a>
+            <div class="divider"><span>or</span></div>
+            <a href="/register" class="btn btn-outline-primary"><i class="fas fa-user-plus me-2"></i> Create New Account</a>
+            <button type="button" class="btn btn-outline-secondary" onclick="closeLoginPopup()" style="border-radius:40px;padding:12px;">
+                <i class="fas fa-times me-2"></i> Continue Shopping
+            </button>
+        </div>
+    </div>
+</div>
+
+<main class="container my-4">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="filter-sidebar">
+                <h5 class="fw-bold mb-3"><i class="fas fa-filter text-primary-blue"></i> Filters</h5>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Category</label>
+                    <select id="filterCategory" class="form-select" style="border-radius:12px;">
+                        <option value="">All Categories</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Subcategory</label>
+                    <select id="filterSubcategory" class="form-select" style="border-radius:12px;">
+                        <option value="">All Subcategories</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Price Range</label>
+                    <div class="row g-2">
+                        <div class="col-6"><input type="number" id="filterMinPrice" class="form-control" placeholder="Min" style="border-radius:12px;"></div>
+                        <div class="col-6"><input type="number" id="filterMaxPrice" class="form-control" placeholder="Max" style="border-radius:12px;"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Sort</label>
+                    <select id="filterSort" class="form-select" style="border-radius:12px;">
+                        <option value="createdAt_desc">Newest</option>
+                        <option value="price_asc">Price: Low to High</option>
+                        <option value="price_desc">Price: High to Low</option>
+                        <option value="rating_desc">Highest Rated</option>
+                    </select>
+                </div>
+                <button id="applyFilters" class="btn btn-primary-blue w-100"><i class="fas fa-search"></i> Apply</button>
+                <button id="clearFilters" class="btn btn-outline-secondary w-100 mt-2" style="border-radius:40px;"><i class="fas fa-times"></i> Clear</button>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div id="filterInfo" class="subcategory-title"></div>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h5 id="resultCount" class="fw-bold">Loading...</h5>
+            </div>
+            <div class="row g-4" id="productGrid">
+                <div class="col-12 text-center"><div class="spinner-border text-primary"><span class="visually-hidden">Loading...</span></div></div>
+            </div>
+            <nav><ul class="pagination justify-content-center mt-4" id="pagination"></ul></nav>
+        </div>
+    </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-4">
+                <h4 class="fw-bold text-white mb-3"><i class="fas fa-store me-2"></i>ShopyGo</h4>
+                <p class="small">India's fastest growing e-commerce platform.</p>
+                <div class="social-icons mt-3">
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <h5 class="text-white mb-3">Company</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Support</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/help">Help</a></li>
+                    <li><a href="/returns">Returns</a></li>
+                    <li><a href="/terms">Terms</a></li>
+                    <li><a href="/privacy">Privacy</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Contact</h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-envelope me-2"></i> support@shopygo.com</li>
+                    <li><i class="fas fa-phone-alt me-2"></i> +91 1800 202 8899</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright text-center">
+            © 2025 ShopyGo — All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API_URL = 'http://localhost:5000/api';
+    let currentPage = 1;
+    const limit = 9;
+    let allCategories = [];
+    let currentSubcategoryId = '';
+    let currentSubcategoryName = '';
+    let currentCategoryId = '';
+    let currentCategoryName = '';
+
+    // ================================================================
+    // CHECK LOGIN STATUS
+    // ================================================================
+    function isLoggedIn() {
+        const token = localStorage.getItem('token');
+        if (token && token !== 'null' && token !== 'undefined' && token !== '') {
+            return true;
+        }
+        return false;
+    }
+
+    // ================================================================
+    // LOGIN POPUP
+    // ================================================================
+    let pendingProductId = null;
+    let pendingAction = null;
+    let pendingRedirect = null;
+
+    function showLoginPopup(productId, action, redirect) {
+        pendingProductId = productId;
+        pendingAction = action || 'addtocart';
+        pendingRedirect = redirect || null;
+        
+        const popup = document.getElementById('loginPopup');
+        if (popup) {
+            popup.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+    }
+
+    function closeLoginPopup() {
+        const popup = document.getElementById('loginPopup');
+        if (popup) {
+            popup.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        pendingProductId = null;
+        pendingAction = null;
+        pendingRedirect = null;
+    }
+
+    document.getElementById('loginPopup').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeLoginPopup();
+        }
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeLoginPopup();
+        }
+    });
+
+    // ================================================================
+    // CART ICON CLICK
+    // ================================================================
+    function handleCartClick(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        
+        if (!isLoggedIn()) {
+            showLoginPopup(null, 'redirect', '/cart');
+            return false;
+        }
+        
+        window.location.href = '/cart';
+        return false;
+    }
+
+    // ================================================================
+    // CART FUNCTIONS
+    // ================================================================
+    function getCart() { 
+        try {
+            return JSON.parse(localStorage.getItem('cart')) || []; 
+        } catch(e) {
+            return [];
+        }
+    }
+    
+    function saveCart(c) { 
+        localStorage.setItem('cart', JSON.stringify(c)); 
+        updateCartCount(); 
+    }
+    
+    function updateCartCount() {
+        const cart = getCart();
+        const total = cart.reduce((s, i) => s + i.quantity, 0);
+        const badge = document.getElementById('cartCount');
+        if (badge) { 
+            badge.textContent = total; 
+            badge.style.display = total > 0 ? 'inline-block' : 'none'; 
+        }
+    }
+
+    // ================================================================
+    // ADD TO CART
+    // ================================================================
+    function addToCart(event, id) {
+        if (event) {
+            event.stopPropagation();
+            event.preventDefault();
+        }
+        
+        console.log('🛒 Add to Cart clicked for product:', id);
+        
+        if (!isLoggedIn()) {
+            showLoginPopup(id, 'addtocart');
+            return false;
+        }
+        
+        let cart = getCart();
+        const existing = cart.find(i => i.productId === id);
+        if (existing) {
+            existing.quantity += 1;
+        } else {
+            cart.push({ productId: id, quantity: 1 });
+        }
+        saveCart(cart);
+        showToast('✅ Added to cart!', 'success');
+        return false;
+    }
+
+    // ================================================================
+    // CHECK PENDING ACTION
+    // ================================================================
+    function checkPendingAction() {
+        if (pendingProductId && pendingAction) {
+            const productId = pendingProductId;
+            const action = pendingAction;
+            const redirect = pendingRedirect;
+            
+            pendingProductId = null;
+            pendingAction = null;
+            pendingRedirect = null;
+            
+            if (action === 'addtocart') {
+                let cart = getCart();
+                const existing = cart.find(i => i.productId === productId);
+                if (existing) {
+                    existing.quantity += 1;
+                } else {
+                    cart.push({ productId: productId, quantity: 1 });
+                }
+                saveCart(cart);
+                showToast('✅ Added to cart!', 'success');
+            } else if (action === 'redirect' && redirect) {
+                window.location.href = redirect;
+            }
+        }
+    }
+
+    // ================================================================
+    // TOAST
+    // ================================================================
+    function showToast(msg, type = 'info') {
+        let container = document.getElementById('toastContainer');
+        if (!container) { 
+            container = document.createElement('div'); 
+            container.id = 'toastContainer'; 
+            container.className = 'toast-container position-fixed top-0 end-0 p-3'; 
+            document.body.appendChild(container); 
+        }
+        const bg = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-primary';
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-white ${bg} border-0 show`;
+        toast.innerHTML = `<div class="d-flex"><div class="toast-body">${msg}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button></div>`;
+        container.appendChild(toast);
+        setTimeout(() => { if (toast.parentElement) { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); } }, 3000);
+    }
+
+    // ================================================================
+    // HELPERS
+    // ================================================================
+    function formatPrice(p) { return `₹${Number(p).toFixed(2)}`; }
+    
+    function getStars(r) { if (!r) return '☆☆☆☆☆'; let s = ''; for (let i = 0; i < Math.floor(r); i++) s += '★'; if (r % 1 >= 0.5) s += '½'; for (let i = s.length; i < 5; i++) s += '☆'; return s; }
+    
+    function getIcon(cat) {
+        const map = { 'clothing': 'fa-tshirt', 'fashion': 'fa-tshirt', 'electronics': 'fa-laptop', 'mobile': 'fa-mobile-alt', 'jewellery': 'fa-gem', 'jewelry': 'fa-gem', 'footwear': 'fa-shoe-prints', 'shoes': 'fa-shoe-prints', 'accessories': 'fa-glasses', 'watch': 'fa-clock', 'watches': 'fa-clock', 'beauty': 'fa-mask', 'home': 'fa-couch', 'furniture': 'fa-couch', 'sports': 'fa-running', 'books': 'fa-book', 'toys': 'fa-robot', 'gaming': 'fa-gamepad', 'default': 'fa-folder' };
+        const l = cat?.toLowerCase() || '';
+        for (const [k, v] of Object.entries(map)) { if (l.includes(k)) return v; }
+        return map.default;
+    }
+    
+    async function apiCall(endpoint) {
+        const res = await fetch(`${API_URL}${endpoint}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'API error');
+        return data;
+    }
+
+    // ================================================================
+    // 🔥 FIX: LOAD CATEGORIES - WITH URL PARAMS
+    // ================================================================
+    async function loadCategories() {
+        try {
+            allCategories = await apiCall('/categories');
+            const select = document.getElementById('filterCategory');
+            select.innerHTML = '<option value="">All Categories</option>';
+            
+            allCategories.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat._id;
+                opt.textContent = cat.name;
+                select.appendChild(opt);
+            });
+            
+            // ✅ Read URL parameters
+            const params = new URLSearchParams(window.location.search);
+            const catId = params.get('category');
+            const subId = params.get('subcategory');
+            const search = params.get('search');
+            
+            console.log('🔍 URL Params:', { catId, subId, search });
+            
+            // ✅ Set category from URL
+            if (catId) {
+                const cat = allCategories.find(c => c._id === catId);
+                if (cat) {
+                    currentCategoryId = catId;
+                    currentCategoryName = cat.name;
+                    select.value = catId;
+                    await loadSubcategories(catId);
+                }
+            }
+            
+            // ✅ Set subcategory from URL
+            if (subId) {
+                let found = false;
+                for (let cat of allCategories) {
+                    if (cat.subcategories) {
+                        const sub = cat.subcategories.find(s => s._id === subId);
+                        if (sub) {
+                            currentSubcategoryId = subId;
+                            currentSubcategoryName = sub.name;
+                            currentCategoryId = cat._id;
+                            currentCategoryName = cat.name;
+                            found = true;
+                            
+                            document.getElementById('filterCategory').value = cat._id;
+                            await loadSubcategories(cat._id);
+                            
+                            setTimeout(() => {
+                                const subSelect = document.getElementById('filterSubcategory');
+                                for (let opt of subSelect.options) {
+                                    if (opt.value === subId) {
+                                        opt.selected = true;
+                                        break;
+                                    }
+                                }
+                            }, 100);
+                            
+                            break;
+                        }
+                    }
+                }
+                
+                if (!found) {
+                    console.warn('⚠️ Subcategory not found:', subId);
+                }
+            }
+            
+            // ✅ Set search value
+            if (search) {
+                document.getElementById('shopSearchInput').value = search;
+                console.log('✅ Search term set:', search);
+            }
+            
+            updateFilterInfo();
+            await loadProducts();
+            
+        } catch (e) { 
+            console.error('Error loading categories:', e);
+            await loadProducts();
+        }
+    }
+
+    // ================================================================
+    // 🔥 FIX: LOAD SUBCATEGORIES
+    // ================================================================
+    async function loadSubcategories(categoryId) {
+        try {
+            const cat = allCategories.find(c => c._id === categoryId);
+            const select = document.getElementById('filterSubcategory');
+            select.innerHTML = '<option value="">All Subcategories</option>';
+            
+            if (cat && cat.subcategories && cat.subcategories.length > 0) {
+                cat.subcategories.forEach(sub => {
+                    const opt = document.createElement('option');
+                    opt.value = sub._id;
+                    opt.textContent = sub.name;
+                    select.appendChild(opt);
+                });
+            }
+            
+            const params = new URLSearchParams(window.location.search);
+            const subId = params.get('subcategory');
+            
+            if (subId) {
+                for (let opt of select.options) {
+                    if (opt.value === subId) {
+                        opt.selected = true;
+                        currentSubcategoryId = subId;
+                        currentSubcategoryName = opt.textContent;
+                        break;
+                    }
+                }
+            }
+            
+            console.log('✅ Subcategories loaded for category:', categoryId);
+            
+        } catch (e) { 
+            console.error('Error loading subcategories:', e); 
+        }
+    }
+
+    // ================================================================
+    // 🔥 FIX: UPDATE FILTER INFO
+    // ================================================================
+    function updateFilterInfo() {
+        const filterInfo = document.getElementById('filterInfo');
+        const params = new URLSearchParams(window.location.search);
+        const subId = params.get('subcategory');
+        const catId = params.get('category');
+        const search = params.get('search');
+        const searchInput = document.getElementById('shopSearchInput').value.trim();
+        
+        let info = '';
+        const searchTerm = search || searchInput;
+        
+        if (searchTerm) {
+            info = `<i class="fas fa-search me-2"></i> Showing results for: <strong>${searchTerm}</strong>`;
+        } else if (subId && currentSubcategoryName) {
+            info = `<i class="fas fa-tag me-2"></i> Showing products in: <strong>${currentSubcategoryName}</strong> <span class="text-muted">(${currentCategoryName})</span>`;
+        } else if (catId && currentCategoryName) {
+            info = `<i class="fas fa-folder me-2"></i> Showing products in: <strong>${currentCategoryName}</strong>`;
+        } else {
+            info = `<i class="fas fa-store me-2"></i> All Products`;
+        }
+        filterInfo.innerHTML = info;
+    }
+
+    // ================================================================
+    // 🔥 FIX: LOAD PRODUCTS - WITH SUBCATEGORY FILTER
+    // ================================================================
+    async function loadProducts() {
+        const category = document.getElementById('filterCategory').value;
+        const subcategory = document.getElementById('filterSubcategory').value;
+        const minPrice = document.getElementById('filterMinPrice').value;
+        const maxPrice = document.getElementById('filterMaxPrice').value;
+        const sort = document.getElementById('filterSort').value;
+        const search = document.getElementById('shopSearchInput').value.trim();
+
+        let query = `?page=${currentPage}&limit=${limit}`;
+        
+        if (search) {
+            query += `&search=${encodeURIComponent(search)}`;
+            console.log('🔍 Searching for:', search);
+        }
+        
+        if (category) {
+            query += `&category=${category}`;
+            console.log('📂 Category filter:', category);
+        }
+        
+        // ✅ IMPORTANT: Subcategory filter
+        if (subcategory) {
+            query += `&subcategory=${subcategory}`;
+            const subName = document.getElementById('filterSubcategory').options[document.getElementById('filterSubcategory').selectedIndex]?.text || '';
+            console.log('📂 Subcategory filter:', subcategory, subName);
+        }
+        
+        if (minPrice) query += `&minPrice=${minPrice}`;
+        if (maxPrice) query += `&maxPrice=${maxPrice}`;
+        if (sort) query += `&sort=${sort}`;
+
+        console.log('📡 API Query:', `/products${query}`);
+
+        try {
+            const data = await apiCall(`/products${query}`);
+            
+            let products = [];
+            let total = 0;
+            
+            if (data.products && Array.isArray(data.products)) {
+                products = data.products;
+                total = data.total || products.length;
+            } else if (Array.isArray(data)) {
+                products = data;
+                total = data.length;
+            } else {
+                products = [];
+                total = 0;
+            }
+            
+            console.log(`📦 Found ${products.length} products out of ${total}`);
+            
+            const totalPages = Math.ceil(total / limit);
+            renderProducts(products);
+            renderPagination(total, totalPages);
+            document.getElementById('resultCount').textContent = `${products.length} of ${total} products`;
+            
+            updateFilterInfo();
+            
+        } catch (e) {
+            console.error('❌ Error loading products:', e);
+            document.getElementById('productGrid').innerHTML = `<div class="col-12 text-center text-danger">Failed to load products: ${e.message}</div>`;
+        }
+    }
+
+    // ================================================================
+    // RENDER PRODUCTS
+    // ================================================================
+    function renderProducts(products) {
+        const grid = document.getElementById('productGrid');
+        if (!products || products.length === 0) {
+            grid.innerHTML = `<div class="col-12 text-center py-5"><i class="fas fa-box-open fa-4x text-muted"></i><h5 class="mt-3">No products found</h5></div>`;
+            return;
+        }
+        grid.innerHTML = products.map(p => {
+            const price = Number(p.price) || 0;
+            const sale = p.salePrice ? Number(p.salePrice) : null;
+            const display = sale && sale < price ? sale : price;
+            const showOriginal = sale && sale < price;
+            const discount = showOriginal ? Math.round(((price - sale) / price) * 100) : null;
+            const img = p.mainImage || p.image || 'https://via.placeholder.com/300x300';
+            return `
+                <div class="col-md-4 col-sm-6">
+                    <a href="/product-detail?id=${p._id}" class="product-link">
+                        <div class="product-card">
+                            <div class="product-img">
+                                <img src="${img}" alt="${p.name}" onerror="this.style.display='none'; this.parentElement.innerHTML='<i class=\\'fas ${getIcon(p.category)}\\'></i>'">
+                            </div>
+                            <div class="p-3">
+                                <h6 class="fw-bold" style="display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;height:44px;">${p.name || 'Product'}</h6>
+                                <div class="rating">${getStars(p.rating || 4)}</div>
+                                <div class="d-flex align-items-center flex-wrap">
+                                    <span class="current-price">${formatPrice(display)}</span>
+                                    ${showOriginal ? `<span class="original-price">${formatPrice(price)}</span>` : ''}
+                                    ${discount ? `<span class="sale-badge">-${discount}%</span>` : ''}
+                                </div>
+                                <button class="btn btn-primary-blue w-100 mt-2" style="font-size:0.8rem;padding:6px 12px;" onclick="addToCart(event, '${p._id}')">
+                                    <i class="fas fa-shopping-cart"></i> Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            `;
+        }).join('');
+    }
+
+    // ================================================================
+    // PAGINATION
+    // ================================================================
+    function renderPagination(total, totalPages) {
+        const pagination = document.getElementById('pagination');
+        if (totalPages <= 1) { pagination.innerHTML = ''; return; }
+        let html = '';
+        html += `<li class="page-item ${currentPage === 1 ? 'disabled' : ''}"><a class="page-link" onclick="changePage(${currentPage - 1})">Previous</a></li>`;
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || Math.abs(i - currentPage) <= 2) {
+                html += `<li class="page-item ${i === currentPage ? 'active' : ''}"><a class="page-link" onclick="changePage(${i})">${i}</a></li>`;
+            } else if (i === currentPage - 3 || i === currentPage + 3) {
+                html += `<li class="page-item disabled"><span class="page-link">...</span></li>`;
+            }
+        }
+        html += `<li class="page-item ${currentPage === totalPages ? 'disabled' : ''}"><a class="page-link" onclick="changePage(${currentPage + 1})">Next</a></li>`;
+        pagination.innerHTML = html;
+    }
+
+    function changePage(page) { currentPage = page; loadProducts(); window.scrollTo({ top: 0, behavior: 'smooth' }); }
+
+    // ================================================================
+    // 🔥 FIX: EVENT LISTENERS - SUBCATEGORY CHANGE AUTO LOAD
+    // ================================================================
+    
+    // ✅ Subcategory change - Auto load products
+    document.getElementById('filterSubcategory').addEventListener('change', function() {
+        const subId = this.value;
+        const subName = this.options[this.selectedIndex]?.text || '';
+        
+        console.log('📂 Subcategory changed:', subId, subName);
+        
+        if (subId) {
+            currentSubcategoryId = subId;
+            currentSubcategoryName = subName;
+            
+            const catId = document.getElementById('filterCategory').value;
+            if (catId) {
+                const cat = allCategories.find(c => c._id === catId);
+                if (cat) {
+                    currentCategoryName = cat.name;
+                }
+            }
+            
+            const url = new URL(window.location);
+            url.searchParams.set('subcategory', subId);
+            if (catId) url.searchParams.set('category', catId);
+            window.history.pushState({}, '', url);
+            
+        } else {
+            currentSubcategoryId = '';
+            currentSubcategoryName = '';
+            
+            const url = new URL(window.location);
+            url.searchParams.delete('subcategory');
+            window.history.pushState({}, '', url);
+        }
+        
+        currentPage = 1;
+        loadProducts();
+        updateFilterInfo();
+    });
+
+    // ✅ Category change - Load subcategories and products
+    document.getElementById('filterCategory').addEventListener('change', function() {
+        const catId = this.value;
+        const catName = this.options[this.selectedIndex]?.text || '';
+        
+        console.log('📂 Category changed:', catId, catName);
+        
+        if (catId) {
+            currentCategoryId = catId;
+            currentCategoryName = catName;
+            
+            const url = new URL(window.location);
+            url.searchParams.set('category', catId);
+            url.searchParams.delete('subcategory');
+            window.history.pushState({}, '', url);
+            
+            loadSubcategories(catId);
+            
+            document.getElementById('filterSubcategory').value = '';
+            currentSubcategoryId = '';
+            currentSubcategoryName = '';
+            
+        } else {
+            currentCategoryId = '';
+            currentCategoryName = '';
+            
+            const url = new URL(window.location);
+            url.searchParams.delete('category');
+            url.searchParams.delete('subcategory');
+            window.history.pushState({}, '', url);
+            
+            const subSelect = document.getElementById('filterSubcategory');
+            subSelect.innerHTML = '<option value="">All Subcategories</option>';
+            currentSubcategoryId = '';
+            currentSubcategoryName = '';
+        }
+        
+        currentPage = 1;
+        loadProducts();
+        updateFilterInfo();
+    });
+
+    // ================================================================
+    // APPLY & CLEAR FILTERS
+    // ================================================================
+    document.getElementById('applyFilters').addEventListener('click', () => { 
+        currentPage = 1; 
+        loadProducts(); 
+        updateFilterInfo();
+    });
+    
+    document.getElementById('clearFilters').addEventListener('click', () => {
+        document.getElementById('filterCategory').value = '';
+        document.getElementById('filterSubcategory').innerHTML = '<option value="">All Subcategories</option>';
+        document.getElementById('filterMinPrice').value = '';
+        document.getElementById('filterMaxPrice').value = '';
+        document.getElementById('filterSort').value = 'createdAt_desc';
+        document.getElementById('shopSearchInput').value = '';
+        currentSubcategoryId = '';
+        currentSubcategoryName = '';
+        currentCategoryId = '';
+        currentCategoryName = '';
+        currentPage = 1;
+        
+        const url = new URL(window.location);
+        url.searchParams.delete('category');
+        url.searchParams.delete('subcategory');
+        url.searchParams.delete('search');
+        window.history.pushState({}, '', url);
+        
+        loadProducts();
+        updateFilterInfo();
+    });
+    
+    document.getElementById('shopSearchBtn').addEventListener('click', () => { 
+        currentPage = 1; 
+        loadProducts(); 
+        updateFilterInfo(); 
+    });
+    
+    document.getElementById('shopSearchInput').addEventListener('keypress', e => { 
+        if (e.key === 'Enter') { 
+            currentPage = 1; 
+            loadProducts(); 
+            updateFilterInfo(); 
+        } 
+    });
+
+    // ================================================================
+    // LOGOUT
+    // ================================================================
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        showToast('✅ Logged out successfully!', 'success');
+        setTimeout(() => { window.location.href = '/'; }, 500);
+    }
+
+    // ================================================================
+    // UPDATE NAVBAR
+    // ================================================================
+    function updateNavbar() {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const dropdown = document.getElementById('authDropdown');
+
+        if (token && token !== 'null' && token !== 'undefined') {
+            dropdown.innerHTML = `
+                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>${user.name || 'My Account'}</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            `;
+        } else {
+            dropdown.innerHTML = `
+                <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+            `;
+        }
+    }
+
+    // ================================================================
+    // INIT
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('🚀 Shop page loaded!');
+        updateCartCount();
+        loadCategories();
+        updateNavbar();
+        checkPendingAction();
+    });
+
+    // Make functions globally accessible
+    window.addToCart = addToCart;
+    window.changePage = changePage;
+    window.logout = logout;
+    window.closeLoginPopup = closeLoginPopup;
+    window.showLoginPopup = showLoginPopup;
+    window.checkPendingAction = checkPendingAction;
+    window.handleCartClick = handleCartClick;
+</script>
+</body>
+</html>

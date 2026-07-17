@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Careers - ShopyGo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #f8fafc; }
+        
+        .careers-hero {
+            background: linear-gradient(135deg, #0a0f1f, #1a2a6c);
+            padding: 80px 0 60px;
+            color: white;
+            text-align: center;
+            border-radius: 0 0 40px 40px;
+            margin-bottom: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .careers-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: rgba(37, 99, 235, 0.1);
+            border-radius: 50%;
+        }
+        .careers-hero::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -10%;
+            width: 400px;
+            height: 400px;
+            background: rgba(37, 99, 235, 0.08);
+            border-radius: 50%;
+        }
+        .careers-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            position: relative;
+            z-index: 1;
+        }
+        .careers-hero p {
+            font-size: 1.2rem;
+            opacity: 0.85;
+            max-width: 600px;
+            margin: 16px auto 0;
+            position: relative;
+            z-index: 1;
+        }
+        .careers-hero .hero-badge {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 20px;
+            border-radius: 40px;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        
+        .value-card {
+            background: white;
+            border-radius: 24px;
+            padding: 35px 25px;
+            border: 1px solid #e9eff5;
+            text-align: center;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        .value-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+        }
+        .value-card .icon {
+            width: 70px;
+            height: 70px;
+            background: #eff6ff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: #2563eb;
+            margin: 0 auto 18px;
+        }
+        .value-card h5 {
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+        .value-card p {
+            color: #64748b;
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+        }
+        
+        .job-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid #e9eff5;
+            transition: all 0.3s ease;
+            height: 100%;
+            cursor: pointer;
+        }
+        .job-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+            border-color: #2563eb;
+        }
+        .job-card .job-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        .job-card .job-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin: 0;
+        }
+        .job-card .job-badge {
+            background: #eff6ff;
+            color: #2563eb;
+            padding: 2px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+        .job-card .job-badge.urgent {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .job-card .job-meta {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            margin-bottom: 14px;
+        }
+        .job-card .job-meta span {
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+        .job-card .job-meta i {
+            margin-right: 6px;
+            color: #2563eb;
+            width: 16px;
+        }
+        .job-card .job-desc {
+            color: #64748b;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .job-card .btn-apply {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 8px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+        .job-card .btn-apply:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+        }
+        
+        .perks-section {
+            background: white;
+            border-radius: 24px;
+            padding: 60px 40px;
+            border: 1px solid #e9eff5;
+        }
+        .perk-item {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 12px 0;
+        }
+        .perk-item .perk-icon {
+            width: 45px;
+            height: 45px;
+            background: #eff6ff;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #2563eb;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+        .perk-item .perk-text h6 {
+            font-weight: 600;
+            margin: 0;
+            font-size: 0.95rem;
+        }
+        .perk-item .perk-text p {
+            color: #64748b;
+            font-size: 0.85rem;
+            margin: 0;
+        }
+        
+        .apply-section {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border-radius: 24px;
+            padding: 60px 40px;
+            color: white;
+            text-align: center;
+        }
+        .apply-section h2 {
+            font-weight: 800;
+            margin-bottom: 12px;
+        }
+        .apply-section p {
+            opacity: 0.85;
+            max-width: 500px;
+            margin: 0 auto 24px;
+        }
+        .apply-section .btn-apply-now {
+            background: white;
+            color: #2563eb;
+            border: none;
+            padding: 14px 40px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+        .apply-section .btn-apply-now:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+        }
+        
+        /* Navbar Styles */
+        .navbar { background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border-bottom: 1px solid #e9eff5; padding: 12px 0; }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+        .nav-icon { font-size: 1.4rem; color: #1e293b; transition: 0.2s; position: relative; cursor: pointer; }
+        .nav-icon:hover { color: #2563eb; }
+        .cart-badge { background-color: #2563eb; font-size: 10px; }
+        .dropdown-menu-custom {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            margin-top: 12px;
+            min-width: 220px;
+            padding: 8px;
+        }
+        .dropdown-menu-custom .dropdown-item {
+            padding: 10px 16px;
+            border-radius: 10px;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+        .dropdown-menu-custom .dropdown-item:hover {
+            background: #eff6ff;
+        }
+        .dropdown-menu-custom .dropdown-item.text-danger:hover {
+            background: #fee2e2;
+            color: #dc2626 !important;
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+        .footer h5, .footer h6 {
+            color: white;
+            font-weight: 700;
+        }
+        .footer a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .footer a:hover {
+            color: #3b82f6;
+        }
+        .footer .social-icons a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #1e293b;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            color: #94a3b8;
+            transition: 0.2s;
+            margin-right: 8px;
+        }
+        .footer .social-icons a:hover {
+            background: #2563eb;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .careers-hero h1 { font-size: 2.5rem; }
+            .careers-hero { padding: 50px 0 40px; }
+            .perks-section { padding: 30px 20px; }
+            .apply-section { padding: 40px 20px; }
+            .job-card .job-header { flex-direction: column; gap: 8px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-3 px-lg-5">
+        <a class="navbar-brand fw-bold fs-2" href="/">ShopyGo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navRight">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navRight">
+            <div class="ms-auto d-flex align-items-center gap-3 mt-2 mt-lg-0">
+                <a href="/shop" class="text-decoration-none text-secondary">Shop</a>
+                <a href="/about" class="text-decoration-none text-secondary">About</a>
+                <a href="/careers" class="text-decoration-none text-primary fw-semibold">Careers</a>
+                <a href="#" class="nav-icon position-relative" onclick="handleCartClick(event)">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge">0</span>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="nav-icon dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user-circle fa-lg"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom" id="authDropdown">
+                        <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                        <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== CAREERS HERO ===== -->
+<section class="careers-hero">
+    <div class="container">
+        <div class="hero-badge"><i class="fas fa-rocket me-2"></i> We're Hiring!</div>
+        <h1>Build Your Career <br>with <span style="color: #3b82f6;">ShopyGo</span></h1>
+        <p>Join us in shaping the future of e-commerce in India. Be part of a team that's passionate, innovative, and customer-obsessed.</p>
+    </div>
+</section>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="container mb-5">
+
+    <!-- Why Work With Us -->
+    <h2 class="fw-bold text-center mb-4">Why Work at <span style="color: #2563eb;">ShopyGo</span></h2>
+    <div class="row g-4 mb-5">
+        <div class="col-md-3 col-sm-6">
+            <div class="value-card">
+                <div class="icon"><i class="fas fa-rocket"></i></div>
+                <h5>Innovation</h5>
+                <p>Work with cutting-edge technology and build products used by millions.</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="value-card">
+                <div class="icon"><i class="fas fa-users"></i></div>
+                <h5>Collaboration</h5>
+                <p>Join a diverse team that values ideas, teamwork, and mutual growth.</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="value-card">
+                <div class="icon"><i class="fas fa-chart-line"></i></div>
+                <h5>Growth</h5>
+                <p>Unlimited learning opportunities, mentorship, and career development.</p>
+            </div>
+        </div>
+        <div class="col-md-3 col-sm-6">
+            <div class="value-card">
+                <div class="icon"><i class="fas fa-heart"></i></div>
+                <h5>Impact</h5>
+                <p>Make a real difference in the lives of thousands of customers across India.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Perks & Benefits -->
+    <h2 class="fw-bold text-center mb-4">Perks & <span style="color: #2563eb;">Benefits</span></h2>
+    <div class="perks-section mb-5">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="perk-item">
+                    <div class="perk-icon"><i class="fas fa-medical"></i></div>
+                    <div class="perk-text">
+                        <h6>Health Insurance</h6>
+                        <p>Comprehensive medical coverage for you and your family.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="perk-item">
+                    <div class="perk-icon"><i class="fas fa-coffee"></i></div>
+                    <div class="perk-text">
+                        <h6>Flexible Work</h6>
+                        <p>Remote work options and flexible working hours.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="perk-item">
+                    <div class="perk-icon"><i class="fas fa-graduation-cap"></i></div>
+                    <div class="perk-text">
+                        <h6>Learning Budget</h6>
+                        <p>Annual budget for courses, books, and conferences.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="perk-item">
+                    <div class="perk-icon"><i class="fas fa-plane"></i></div>
+                    <div class="perk-text">
+                        <h6>Paid Time Off</h6>
+                        <p>Generous vacation policy and paid holidays.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="perk-item">
+                    <div class="perk-icon"><i class="fas fa-trophy"></i></div>
+                    <div class="perk-text">
+                        <h6>Performance Bonus</h6>
+                        <p>Competitive performance-based bonuses twice a year.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="perk-item">
+                    <div class="perk-icon"><i class="fas fa-users-cog"></i></div>
+                    <div class="perk-text">
+                        <h6>Team Events</h6>
+                        <p>Regular team outings, celebrations, and fun activities.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Open Positions -->
+    <h2 class="fw-bold text-center mb-4">Open <span style="color: #2563eb;">Positions</span></h2>
+    <div class="row g-4 mb-5">
+        <!-- Job 1 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="job-card">
+                <div class="job-header">
+                    <h6 class="job-title">Full Stack Developer</h6>
+                    <span class="job-badge urgent">Urgent</span>
+                </div>
+                <div class="job-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Mumbai, India</span>
+                    <span><i class="fas fa-briefcase"></i> Full-Time</span>
+                    <span><i class="fas fa-clock"></i> 2-4 years</span>
+                </div>
+                <div class="job-desc">
+                    Build and scale our e-commerce platform using Node.js, React, and MongoDB.
+                </div>
+                <button class="btn-apply" onclick="applyJob('Full Stack Developer')">
+                    <i class="fas fa-paper-plane me-2"></i> Apply Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Job 2 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="job-card">
+                <div class="job-header">
+                    <h6 class="job-title">UX/UI Designer</h6>
+                    <span class="job-badge">Design</span>
+                </div>
+                <div class="job-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Bangalore, India</span>
+                    <span><i class="fas fa-briefcase"></i> Full-Time</span>
+                    <span><i class="fas fa-clock"></i> 3-5 years</span>
+                </div>
+                <div class="job-desc">
+                    Create intuitive and beautiful user experiences for our web and mobile platforms.
+                </div>
+                <button class="btn-apply" onclick="applyJob('UX/UI Designer')">
+                    <i class="fas fa-paper-plane me-2"></i> Apply Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Job 3 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="job-card">
+                <div class="job-header">
+                    <h6 class="job-title">Product Manager</h6>
+                    <span class="job-badge">Product</span>
+                </div>
+                <div class="job-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Delhi, India</span>
+                    <span><i class="fas fa-briefcase"></i> Full-Time</span>
+                    <span><i class="fas fa-clock"></i> 4-6 years</span>
+                </div>
+                <div class="job-desc">
+                    Lead product strategy and roadmap for our e-commerce platform.
+                </div>
+                <button class="btn-apply" onclick="applyJob('Product Manager')">
+                    <i class="fas fa-paper-plane me-2"></i> Apply Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Job 4 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="job-card">
+                <div class="job-header">
+                    <h6 class="job-title">Marketing Specialist</h6>
+                    <span class="job-badge">Marketing</span>
+                </div>
+                <div class="job-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Remote</span>
+                    <span><i class="fas fa-briefcase"></i> Full-Time</span>
+                    <span><i class="fas fa-clock"></i> 2-3 years</span>
+                </div>
+                <div class="job-desc">
+                    Drive brand awareness and customer acquisition through digital marketing.
+                </div>
+                <button class="btn-apply" onclick="applyJob('Marketing Specialist')">
+                    <i class="fas fa-paper-plane me-2"></i> Apply Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Job 5 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="job-card">
+                <div class="job-header">
+                    <h6 class="job-title">DevOps Engineer</h6>
+                    <span class="job-badge urgent">Urgent</span>
+                </div>
+                <div class="job-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Hyderabad, India</span>
+                    <span><i class="fas fa-briefcase"></i> Full-Time</span>
+                    <span><i class="fas fa-clock"></i> 3-5 years</span>
+                </div>
+                <div class="job-desc">
+                    Manage cloud infrastructure and CI/CD pipelines for our applications.
+                </div>
+                <button class="btn-apply" onclick="applyJob('DevOps Engineer')">
+                    <i class="fas fa-paper-plane me-2"></i> Apply Now
+                </button>
+            </div>
+        </div>
+
+        <!-- Job 6 -->
+        <div class="col-md-6 col-lg-4">
+            <div class="job-card">
+                <div class="job-header">
+                    <h6 class="job-title">Customer Support Lead</h6>
+                    <span class="job-badge">Support</span>
+                </div>
+                <div class="job-meta">
+                    <span><i class="fas fa-map-marker-alt"></i> Chennai, India</span>
+                    <span><i class="fas fa-briefcase"></i> Full-Time</span>
+                    <span><i class="fas fa-clock"></i> 2-4 years</span>
+                </div>
+                <div class="job-desc">
+                    Lead our customer support team and ensure exceptional service delivery.
+                </div>
+                <button class="btn-apply" onclick="applyJob('Customer Support Lead')">
+                    <i class="fas fa-paper-plane me-2"></i> Apply Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Apply Section -->
+    <div class="apply-section">
+        <h2>Ready to Join Us?</h2>
+        <p>Send us your resume and cover letter. We're always looking for talented people.</p>
+        <button class="btn-apply-now" onclick="openApplyForm()">
+            <i class="fas fa-paper-plane me-2"></i> Apply Now
+        </button>
+    </div>
+
+</main>
+
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-4">
+                <h4 class="fw-bold text-white mb-3"><i class="fas fa-store me-2"></i>ShopyGo</h4>
+                <p class="small">India's fastest growing e-commerce platform.</p>
+                <div class="social-icons mt-3">
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <h5 class="text-white mb-3">Company</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Support</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/help">Help</a></li>
+                    <li><a href="/returns">Returns</a></li>
+                    <li><a href="/terms">Terms</a></li>
+                    <li><a href="/privacy">Privacy</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Contact</h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-envelope me-2"></i> support@shopygo.com</li>
+                    <li><i class="fas fa-phone-alt me-2"></i> +91 1800 202 8899</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright text-center">
+            © 2025 ShopyGo — All rights reserved.
+        </div>
+    </div>
+</footer>
+<!-- ===== SCRIPTS ===== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var API_URL = 'http://localhost:5000/api';
+
+    function isLoggedIn() {
+        var token = localStorage.getItem('token');
+        if (token && token !== 'null' && token !== 'undefined' && token !== '') {
+            return true;
+        }
+        return false;
+    }
+
+    function getCart() { 
+        try {
+            return JSON.parse(localStorage.getItem('cart')) || []; 
+        } catch(e) {
+            return [];
+        }
+    }
+    
+    function updateCartCount() {
+        var cart = getCart();
+        var total = cart.reduce(function(s, i) { return s + i.quantity; }, 0);
+        var badge = document.getElementById('cartCount');
+        if (badge) { 
+            badge.textContent = total; 
+            badge.style.display = total > 0 ? 'inline-block' : 'none'; 
+        }
+    }
+
+    function handleCartClick(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        if (!isLoggedIn()) {
+            window.location.href = '/login';
+            return false;
+        }
+        window.location.href = '/cart';
+        return false;
+    }
+
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('cart');
+            window.location.href = '/';
+        }
+    }
+
+    function updateNavbar() {
+        var token = localStorage.getItem('token');
+        var user = JSON.parse(localStorage.getItem('user') || '{}');
+        var dropdown = document.getElementById('authDropdown');
+
+        if (token && token !== 'null' && token !== 'undefined') {
+            dropdown.innerHTML = 
+                '<li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>' + (user.name || 'My Account') + '</a></li>' +
+                '<li><hr class="dropdown-divider"></li>' +
+                '<li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>' +
+                '<li><hr class="dropdown-divider"></li>' +
+                '<li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>';
+        } else {
+            dropdown.innerHTML = 
+                '<li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>' +
+                '<li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>' +
+                '<li><hr class="dropdown-divider"></li>' +
+                '<li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>';
+        }
+    }
+
+    // Apply for Job
+    function applyJob(jobTitle) {
+        if (isLoggedIn()) {
+            if (confirm('Apply for the position of ' + jobTitle + '?')) {
+                showToast('Application submitted for ' + jobTitle + '!', 'success');
+            }
+        } else {
+            if (confirm('Please login to apply. Redirect to login?')) {
+                window.location.href = '/login';
+            }
+        }
+    }
+
+    // Open Apply Form
+    function openApplyForm() {
+        if (isLoggedIn()) {
+            window.location.href = '/apply';
+        } else {
+            if (confirm('Please login to apply. Redirect to login?')) {
+                window.location.href = '/login';
+            }
+        }
+    }
+
+    // Toast Notification
+    function showToast(msg, type) {
+        type = type || 'info';
+        var container = document.getElementById('toastContainer');
+        if (!container) { 
+            container = document.createElement('div'); 
+            container.id = 'toastContainer'; 
+            container.className = 'toast-container position-fixed top-0 end-0 p-3'; 
+            document.body.appendChild(container); 
+        }
+        var bg = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-primary';
+        var toast = document.createElement('div');
+        toast.className = 'toast align-items-center text-white ' + bg + ' border-0 show';
+        toast.innerHTML = '<div class="d-flex"><div class="toast-body">' + msg + '</div><button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button></div>';
+        container.appendChild(toast);
+        setTimeout(function() { if (toast.parentElement) { toast.classList.remove('show'); setTimeout(function() { toast.remove(); }, 300); } }, 3000);
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCartCount();
+        updateNavbar();
+    });
+
+    window.applyJob = applyJob;
+    window.openApplyForm = openApplyForm;
+    window.handleCartClick = handleCartClick;
+    window.logout = logout;
+</script>
+</body>
+</html>

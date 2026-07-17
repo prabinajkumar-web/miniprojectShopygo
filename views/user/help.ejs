@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - ShopyGo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #f8fafc; }
+        
+        .help-hero {
+            background: linear-gradient(135deg, #1a2a6c, #2563eb);
+            padding: 60px 0 50px;
+            color: white;
+            text-align: center;
+            border-radius: 0 0 40px 40px;
+            margin-bottom: 60px;
+        }
+        .help-hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+        .help-hero p {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            max-width: 500px;
+            margin: 12px auto 0;
+        }
+        .help-hero .search-box {
+            max-width: 500px;
+            margin: 24px auto 0;
+            position: relative;
+        }
+        .help-hero .search-box input {
+            width: 100%;
+            padding: 14px 20px 14px 50px;
+            border: none;
+            border-radius: 40px;
+            font-size: 1rem;
+            outline: none;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .help-hero .search-box i {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1.1rem;
+        }
+        
+        .help-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px 25px;
+            border: 1px solid #e9eff5;
+            text-align: center;
+            height: 100%;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+        .help-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+            border-color: #2563eb;
+        }
+        .help-card .icon {
+            width: 65px;
+            height: 65px;
+            background: #eff6ff;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            color: #2563eb;
+            margin: 0 auto 16px;
+        }
+        .help-card h6 {
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+        .help-card p {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        .faq-item {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 24px;
+            border: 1px solid #e9eff5;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .faq-item:hover {
+            border-color: #2563eb;
+        }
+        .faq-item .faq-question {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+        .faq-item .faq-question i {
+            color: #2563eb;
+            transition: 0.3s;
+        }
+        .faq-item .faq-answer {
+            display: none;
+            padding-top: 12px;
+            color: #64748b;
+            line-height: 1.7;
+            font-size: 0.95rem;
+        }
+        .faq-item.active .faq-answer {
+            display: block;
+        }
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+        
+        .contact-card {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            border: 1px solid #e9eff5;
+            text-align: center;
+            height: 100%;
+            transition: all 0.3s ease;
+        }
+        .contact-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+        }
+        .contact-card .icon {
+            font-size: 2.5rem;
+            color: #2563eb;
+            margin-bottom: 12px;
+        }
+        .contact-card h6 {
+            font-weight: 700;
+        }
+        .contact-card p {
+            color: #64748b;
+            font-size: 0.9rem;
+            margin: 0;
+        }
+        
+        /* Navbar Styles */
+        .navbar { background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border-bottom: 1px solid #e9eff5; padding: 12px 0; }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+        .nav-icon { font-size: 1.4rem; color: #1e293b; transition: 0.2s; position: relative; cursor: pointer; }
+        .nav-icon:hover { color: #2563eb; }
+        .cart-badge { background-color: #2563eb; font-size: 10px; }
+        .dropdown-menu-custom {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            margin-top: 12px;
+            min-width: 220px;
+            padding: 8px;
+        }
+        .dropdown-menu-custom .dropdown-item {
+            padding: 10px 16px;
+            border-radius: 10px;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+        .dropdown-menu-custom .dropdown-item:hover {
+            background: #eff6ff;
+        }
+        .dropdown-menu-custom .dropdown-item.text-danger:hover {
+            background: #fee2e2;
+            color: #dc2626 !important;
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+        .footer h5, .footer h6 {
+            color: white;
+            font-weight: 700;
+        }
+        .footer a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .footer a:hover {
+            color: #3b82f6;
+        }
+        .footer .social-icons a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #1e293b;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            color: #94a3b8;
+            transition: 0.2s;
+            margin-right: 8px;
+        }
+        .footer .social-icons a:hover {
+            background: #2563eb;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .help-hero h1 { font-size: 2.2rem; }
+            .help-hero { padding: 40px 0 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-3 px-lg-5">
+        <a class="navbar-brand fw-bold fs-2" href="/">ShopyGo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navRight">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navRight">
+            <div class="ms-auto d-flex align-items-center gap-3 mt-2 mt-lg-0">
+                <a href="/shop" class="text-decoration-none text-secondary">Shop</a>
+                <a href="/about" class="text-decoration-none text-secondary">About</a>
+                <a href="/help" class="text-decoration-none text-primary fw-semibold">Help</a>
+                <a href="#" class="nav-icon position-relative" onclick="handleCartClick(event)">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge">0</span>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="nav-icon dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user-circle fa-lg"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom" id="authDropdown">
+                        <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                        <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== HELP HERO ===== -->
+<section class="help-hero">
+    <div class="container">
+        <h1>How Can We Help?</h1>
+        <p>Find answers to your questions or get in touch with our support team.</p>
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="helpSearch" placeholder="Search for help topics..." onkeyup="searchHelp()">
+        </div>
+    </div>
+</section>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="container mb-5">
+
+    <!-- Help Categories -->
+    <div class="row g-4 mb-5">
+        <div class="col-md-3 col-6">
+            <a href="/orders-help" class="help-card">
+                <div class="icon"><i class="fas fa-box"></i></div>
+                <h6>Orders</h6>
+                <p>Order status, tracking, cancellations</p>
+            </a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="/returns" class="help-card">
+                <div class="icon"><i class="fas fa-undo"></i></div>
+                <h6>Returns</h6>
+                <p>Return policy, refunds, exchanges</p>
+            </a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="/shipping" class="help-card">
+                <div class="icon"><i class="fas fa-truck"></i></div>
+                <h6>Shipping</h6>
+                <p>Delivery times, tracking, charges</p>
+            </a>
+        </div>
+        <div class="col-md-3 col-6">
+            <a href="/payments-help" class="help-card">
+                <div class="icon"><i class="fas fa-credit-card"></i></div>
+                <h6>Payments</h6>
+                <p>Payment methods, security, issues</p>
+            </a>
+        </div>
+    </div>
+
+    <!-- FAQ Section -->
+    <h2 class="fw-bold mb-4">Frequently Asked <span style="color: #2563eb;">Questions</span></h2>
+    <div id="faqContainer">
+        <div class="faq-item active" onclick="toggleFAQ(this)">
+            <div class="faq-question">
+                <span>How do I track my order?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                You can track your order by logging into your account and visiting the "My Orders" section. You'll also receive tracking updates via email and SMS with a tracking link to monitor your delivery in real-time.
+            </div>
+        </div>
+        
+        <div class="faq-item" onclick="toggleFAQ(this)">
+            <div class="faq-question">
+                <span>What is the return policy?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                We offer a 7-day return policy for most items. Products must be unused and in their original packaging. For more details, please visit our Returns Policy page.
+            </div>
+        </div>
+        
+        <div class="faq-item" onclick="toggleFAQ(this)">
+            <div class="faq-question">
+                <span>How long does shipping take?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Standard shipping takes 2-5 business days depending on your location. Express shipping (1-2 days) is available for select pincodes at an additional cost.
+            </div>
+        </div>
+        
+        <div class="faq-item" onclick="toggleFAQ(this)">
+            <div class="faq-question">
+                <span>What payment methods are accepted?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                We accept all major credit/debit cards (Visa, Mastercard, Amex), UPI, Net Banking, and popular wallets like Paytm and Google Pay. Cash on Delivery is also available in select areas.
+            </div>
+        </div>
+        
+        <div class="faq-item" onclick="toggleFAQ(this)">
+            <div class="faq-question">
+                <span>How do I cancel my order?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Orders can be cancelled within 24 hours of placement or before they are dispatched. Go to "My Orders", select the order, and click "Cancel Order". Refunds will be processed within 3-5 business days.
+            </div>
+        </div>
+        
+        <div class="faq-item" onclick="toggleFAQ(this)">
+            <div class="faq-question">
+                <span>Do you offer Cash on Delivery?</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="faq-answer">
+                Yes, Cash on Delivery (COD) is available for orders up to ₹5,000 in select cities. A small convenience fee may apply for COD orders.
+            </div>
+        </div>
+    </div>
+
+    <!-- Contact Section -->
+    <h2 class="fw-bold mt-5 mb-4">Still Need <span style="color: #2563eb;">Help?</span></h2>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="contact-card">
+                <div class="icon"><i class="fas fa-phone-alt"></i></div>
+                <h6>Call Us</h6>
+                <p>+91 1800 202 8899<br>Mon-Sat, 9AM - 9PM</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="contact-card">
+                <div class="icon"><i class="fas fa-envelope"></i></div>
+                <h6>Email Us</h6>
+                <p>support@shopygo.com<br>We reply within 24 hours</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="contact-card">
+                <div class="icon"><i class="fas fa-comment-dots"></i></div>
+                <h6>Live Chat</h6>
+                <p>Chat with our team<br>Available 24/7</p>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-4">
+                <h4 class="fw-bold text-white mb-3"><i class="fas fa-store me-2"></i>ShopyGo</h4>
+                <p class="small">India's fastest growing e-commerce platform.</p>
+                <div class="social-icons mt-3">
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <h5 class="text-white mb-3">Company</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Support</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/help">Help</a></li>
+                    <li><a href="/returns">Returns</a></li>
+                    <li><a href="/terms">Terms</a></li>
+                    <li><a href="/privacy">Privacy</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Contact</h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-envelope me-2"></i> support@shopygo.com</li>
+                    <li><i class="fas fa-phone-alt me-2"></i> +91 1800 202 8899</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright text-center">
+            © 2025 ShopyGo — All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var API_URL = 'http://localhost:5000/api';
+
+    function isLoggedIn() {
+        var token = localStorage.getItem('token');
+        if (token && token !== 'null' && token !== 'undefined' && token !== '') {
+            return true;
+        }
+        return false;
+    }
+
+    function getCart() { 
+        try {
+            return JSON.parse(localStorage.getItem('cart')) || []; 
+        } catch(e) {
+            return [];
+        }
+    }
+    
+    function updateCartCount() {
+        var cart = getCart();
+        var total = cart.reduce(function(s, i) { return s + i.quantity; }, 0);
+        var badge = document.getElementById('cartCount');
+        if (badge) { 
+            badge.textContent = total; 
+            badge.style.display = total > 0 ? 'inline-block' : 'none'; 
+        }
+    }
+
+    function handleCartClick(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        if (!isLoggedIn()) {
+            window.location.href = '/login';
+            return false;
+        }
+        window.location.href = '/cart';
+        return false;
+    }
+
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('cart');
+            window.location.href = '/';
+        }
+    }
+
+    function updateNavbar() {
+        var token = localStorage.getItem('token');
+        var user = JSON.parse(localStorage.getItem('user') || '{}');
+        var dropdown = document.getElementById('authDropdown');
+
+        if (token && token !== 'null' && token !== 'undefined') {
+            dropdown.innerHTML = 
+                '<li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>' + (user.name || 'My Account') + '</a></li>' +
+                '<li><hr class="dropdown-divider"></li>' +
+                '<li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>' +
+                '<li><hr class="dropdown-divider"></li>' +
+                '<li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>';
+        } else {
+            dropdown.innerHTML = 
+                '<li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>' +
+                '<li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>' +
+                '<li><hr class="dropdown-divider"></li>' +
+                '<li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>';
+        }
+    }
+
+    function toggleFAQ(element) {
+        element.classList.toggle('active');
+    }
+
+    function searchHelp() {
+        var input = document.getElementById('helpSearch');
+        var filter = input.value.toLowerCase();
+        var items = document.querySelectorAll('.faq-item');
+        
+        items.forEach(function(item) {
+            var question = item.querySelector('.faq-question span').textContent.toLowerCase();
+            if (question.includes(filter)) {
+                item.style.display = 'block';
+            } else {
+                item.style.display = 'none';
+            }
+        });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCartCount();
+        updateNavbar();
+    });
+
+    window.handleCartClick = handleCartClick;
+    window.logout = logout;
+    window.toggleFAQ = toggleFAQ;
+    window.searchHelp = searchHelp;
+</script>
+</body>
+</html>

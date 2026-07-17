@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart - ShopyGo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #f8fafc; }
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1d4ed8;
+            --soft-bg: #eff6ff;
+            --border-light: #e9eff5;
+        }
+        .navbar { background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border-bottom: 1px solid var(--border-light); padding: 12px 0; }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+        .nav-icon { font-size: 1.4rem; color: #1e293b; transition: 0.2s; position: relative; }
+        .nav-icon:hover { color: var(--primary-blue); }
+        .cart-badge { background-color: #2563eb; font-size: 10px; }
+        .btn-primary-blue {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+            border-radius: 40px;
+            padding: 10px 28px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-primary-blue:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37,99,235,0.25);
+        }
+        .btn-checkout {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            padding: 12px;
+            font-weight: 600;
+            width: 100%;
+            transition: 0.3s;
+        }
+        .btn-checkout:hover { transform: scale(1.02); color: white; }
+        .cart-item {
+            background: white;
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 16px;
+            border: 1px solid var(--border-light);
+            transition: 0.2s;
+        }
+        .cart-item:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+        .cart-item img { width: 100px; height: 100px; object-fit: cover; border-radius: 12px; }
+        .cart-item .item-name { font-weight: 600; font-size: 1.1rem; }
+        .cart-item .item-price { color: var(--primary-blue); font-weight: 700; font-size: 1.2rem; }
+        .cart-summary {
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            border: 1px solid var(--border-light);
+            position: sticky;
+            top: 20px;
+        }
+        .cart-summary h4 { font-weight: 700; border-bottom: 2px solid var(--soft-bg); padding-bottom: 12px; }
+        .quantity-btn-sm { width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--border-light); background: white; font-weight: 600; transition: 0.2s; }
+        .quantity-btn-sm:hover { background: var(--primary-blue); color: white; border-color: var(--primary-blue); }
+        .quantity-input-sm { width: 40px; text-align: center; border: 1px solid var(--border-light); border-radius: 8px; padding: 4px; }
+        .toast-container { z-index: 9999; }
+        .login-popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-popup-overlay.show { display: flex; }
+        .login-popup {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            animation: slideUp 0.3s ease;
+            box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);
+        }
+        @keyframes slideUp {
+            from { transform: translateY(30px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        .login-popup .icon { font-size: 4rem; color: var(--primary-blue); margin-bottom: 16px; }
+        .login-popup h4 { font-weight: 700; }
+        .login-popup p { color: #64748b; font-size: 0.95rem; }
+        .login-popup .btn { border-radius: 40px; padding: 12px; font-weight: 600; }
+        footer { background: #0f172a; color: #cbd5e1; padding: 48px 0 28px; margin-top: 60px; }
+        footer a { color: #94a3b8; text-decoration: none; }
+        footer a:hover { color: white; }
+        .copyright { border-top: 1px solid #1e293b; padding-top: 28px; margin-top: 32px; font-size: 0.75rem; text-align: center; }
+        @media (max-width: 768px) {
+            .cart-item img { width: 60px; height: 60px; }
+            .cart-summary { position: relative; top: 0; margin-top: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-3 px-lg-5">
+        <a class="navbar-brand fw-bold fs-2" href="/">🛒 ShopyGo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navRight">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navRight">
+            <div class="d-flex align-items-center gap-3 ms-auto mt-2 mt-lg-0">
+                <a href="/cart" class="nav-icon position-relative">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge">0</span>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="nav-icon dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user-circle fa-lg"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" style="border-radius:20px;border:none;box-shadow:0 12px 28px rgba(0,0,0,0.08);margin-top:12px;" id="authDropdown">
+                        <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                        <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- LOGIN POPUP -->
+<div class="login-popup-overlay" id="loginPopup">
+    <div class="login-popup">
+        <div class="icon"><i class="fas fa-user-circle"></i></div>
+        <h4>Login Required</h4>
+        <p>Please login to proceed to checkout</p>
+        <div class="d-grid gap-2 mt-3">
+            <a href="/login" class="btn btn-primary-blue" id="loginPopupBtn">
+                <i class="fas fa-sign-in-alt me-2"></i> Login
+            </a>
+            <a href="/register" class="btn btn-outline-primary">
+                <i class="fas fa-user-plus me-2"></i> Create Account
+            </a>
+            <button class="btn btn-outline-secondary" onclick="closeLoginPopup()">
+                <i class="fas fa-times me-2"></i> Cancel
+            </button>
+        </div>
+    </div>
+</div>
+
+<main class="container my-4">
+    <h2 class="fw-bold"><i class="fas fa-shopping-cart text-primary-blue"></i> Your Cart</h2>
+    <hr>
+    <div class="row">
+        <div class="col-lg-8" id="cartItems">
+            <div class="text-center py-5">
+                <div class="spinner-border text-primary"><span class="visually-hidden">Loading...</span></div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="cart-summary" id="cartSummary">
+                <h4>Order Summary</h4>
+                <div id="summaryContent"><p class="text-muted">Loading...</p></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-4">
+                <h4 class="fw-bold text-white mb-3"><i class="fas fa-store me-2"></i>ShopyGo</h4>
+                <p class="small">India's fastest growing e-commerce platform.</p>
+                <div class="social-icons mt-3">
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <h5 class="text-white mb-3">Company</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Support</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/help">Help</a></li>
+                    <li><a href="/returns">Returns</a></li>
+                    <li><a href="/terms">Terms</a></li>
+                    <li><a href="/privacy">Privacy</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Contact</h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-envelope me-2"></i> support@shopygo.com</li>
+                    <li><i class="fas fa-phone-alt me-2"></i> +91 1800 202 8899</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright text-center">
+            © 2025 ShopyGo — All rights reserved.
+        </div>
+    </div>
+</footer>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API_URL = 'http://localhost:5000/api';
+
+    // ================================================================
+    // CHECK LOGIN STATUS
+    // ================================================================
+    function isLoggedIn() {
+        const token = localStorage.getItem('token');
+        return token !== null && token !== '';
+    }
+
+    function getCurrentUser() {
+        const user = localStorage.getItem('user');
+        if (user) {
+            try {
+                return JSON.parse(user);
+            } catch (e) {
+                return null;
+            }
+        }
+        return null;
+    }
+
+    // ================================================================
+    // LOGIN POPUP
+    // ================================================================
+    function showLoginPopup() {
+        document.getElementById('loginPopup').classList.add('show');
+    }
+
+    function closeLoginPopup() {
+        document.getElementById('loginPopup').classList.remove('show');
+    }
+
+    // Close popup on outside click
+    document.getElementById('loginPopup').addEventListener('click', function(e) {
+        if (e.target === this) {
+            closeLoginPopup();
+        }
+    });
+
+    // ================================================================
+    // CART FUNCTIONS
+    // ================================================================
+    function getCart() { return JSON.parse(localStorage.getItem('cart')) || []; }
+    function saveCart(c) { localStorage.setItem('cart', JSON.stringify(c)); updateCartCount(); }
+    function clearCart() { localStorage.removeItem('cart'); updateCartCount(); }
+    
+    function updateCartCount() {
+        const cart = getCart();
+        const total = cart.reduce((s, i) => s + i.quantity, 0);
+        const badge = document.getElementById('cartCount');
+        if (badge) { badge.textContent = total; badge.style.display = total > 0 ? 'inline-block' : 'none'; }
+    }
+
+    function showToast(msg, type = 'info') {
+        let container = document.getElementById('toastContainer');
+        if (!container) { container = document.createElement('div'); container.id = 'toastContainer'; container.className = 'toast-container position-fixed top-0 end-0 p-3'; document.body.appendChild(container); }
+        const bg = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-primary';
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-white ${bg} border-0 show`;
+        toast.innerHTML = `<div class="d-flex"><div class="toast-body">${msg}</div><button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button></div>`;
+        container.appendChild(toast);
+        setTimeout(() => { if (toast.parentElement) { toast.classList.remove('show'); setTimeout(() => toast.remove(), 300); } }, 3000);
+    }
+
+    function formatPrice(p) { return `₹${Number(p).toFixed(2)}`; }
+    function getIcon(cat) {
+        const map = { 'clothing': 'fa-tshirt', 'fashion': 'fa-tshirt', 'electronics': 'fa-laptop', 'mobile': 'fa-mobile-alt', 'jewellery': 'fa-gem', 'jewelry': 'fa-gem', 'footwear': 'fa-shoe-prints', 'shoes': 'fa-shoe-prints', 'accessories': 'fa-glasses', 'beauty': 'fa-mask', 'home': 'fa-couch', 'furniture': 'fa-couch', 'sports': 'fa-running', 'books': 'fa-book', 'toys': 'fa-robot', 'gaming': 'fa-gamepad', 'default': 'fa-folder' };
+        const l = cat?.toLowerCase() || '';
+        for (const [k, v] of Object.entries(map)) { if (l.includes(k)) return v; }
+        return map.default;
+    }
+
+    async function apiCall(endpoint) {
+        const res = await fetch(`${API_URL}${endpoint}`);
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'API error');
+        return data;
+    }
+
+    // ================================================================
+    // PROCEED TO CHECKOUT WITH LOGIN CHECK
+    // ================================================================
+    function proceedToCheckout() {
+        const cart = getCart();
+        if (cart.length === 0) { 
+            showToast('Cart is empty', 'error'); 
+            return; 
+        }
+        
+        if (!isLoggedIn()) {
+            showLoginPopup();
+            return;
+        }
+        
+        window.location.href = '/checkout';
+    }
+
+    // ================================================================
+    // CART ITEM FUNCTIONS
+    // ================================================================
+    function updateQty(productId, change) {
+        let cart = getCart();
+        const item = cart.find(i => i.productId === productId);
+        if (item) {
+            item.quantity += change;
+            if (item.quantity <= 0) cart = cart.filter(i => i.productId !== productId);
+            saveCart(cart);
+            renderCart();
+        }
+    }
+
+    function removeItem(productId) {
+        let cart = getCart();
+        cart = cart.filter(i => i.productId !== productId);
+        saveCart(cart);
+        renderCart();
+        showToast('🗑️ Item removed', 'info');
+    }
+
+    // ================================================================
+    // RENDER CART
+    // ================================================================
+    async function renderCart() {
+        const cart = getCart();
+        const container = document.getElementById('cartItems');
+        const summary = document.getElementById('summaryContent');
+
+        if (cart.length === 0) {
+            container.innerHTML = `
+                <div class="text-center py-5">
+                    <i class="fas fa-shopping-bag fa-4x text-muted"></i>
+                    <h4 class="mt-3">Your cart is empty</h4>
+                    <a href="/shop" class="btn btn-primary-blue mt-3">Start Shopping</a>
+                </div>
+            `;
+            summary.innerHTML = `<p class="text-muted">Add items to see summary</p>`;
+            return;
+        }
+
+        let html = '';
+        let subtotal = 0;
+        let totalItems = 0;
+
+        for (let item of cart) {
+            try {
+                const product = await apiCall(`/products/${item.productId}`);
+                const itemTotal = product.price * item.quantity;
+                subtotal += itemTotal;
+                totalItems += item.quantity;
+
+                html += `
+                    <div class="cart-item">
+                        <div class="row align-items-center">
+                            <div class="col-3 col-md-2">
+                                <img src="${product.mainImage || product.image || 'https://via.placeholder.com/100x100'}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/100x100'">
+                            </div>
+                            <div class="col-5 col-md-4">
+                                <div class="item-name">${product.name}</div>
+                                <small class="text-muted">${product.brand || ''}</small>
+                            </div>
+                            <div class="col-2 col-md-2">
+                                <div class="d-flex align-items-center gap-1">
+                                    <button class="quantity-btn-sm" onclick="updateQty('${product._id}', -1)">-</button>
+                                    <input type="text" class="quantity-input-sm" value="${item.quantity}" readonly>
+                                    <button class="quantity-btn-sm" onclick="updateQty('${product._id}', 1)">+</button>
+                                </div>
+                            </div>
+                            <div class="col-2 col-md-2">
+                                <div class="item-price">${formatPrice(itemTotal)}</div>
+                            </div>
+                            <div class="col-12 col-md-2 text-end">
+                                <button onclick="removeItem('${product._id}')" class="btn btn-danger btn-sm rounded-pill">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (e) {
+                console.error(e);
+            }
+        }
+
+        container.innerHTML = html;
+
+        const shipping = subtotal > 500 ? 0 : 49;
+        const tax = subtotal * 0.08;
+        const total = subtotal + shipping + tax;
+
+        summary.innerHTML = `
+            <div class="d-flex justify-content-between mb-2"><span>Subtotal (${totalItems} items)</span><span class="fw-bold">${formatPrice(subtotal)}</span></div>
+            <div class="d-flex justify-content-between mb-2"><span>Shipping</span><span class="fw-bold">${shipping === 0 ? 'Free' : formatPrice(shipping)}</span></div>
+            <div class="d-flex justify-content-between mb-2"><span>Tax (8%)</span><span class="fw-bold">${formatPrice(tax)}</span></div>
+            <hr>
+            <div class="d-flex justify-content-between mb-3">
+                <span class="h5 fw-bold">Total</span>
+                <span class="h5 text-primary-blue fw-bold">${formatPrice(total)}</span>
+            </div>
+            <button onclick="proceedToCheckout()" class="btn-checkout">
+                <i class="fas fa-lock"></i> Proceed to Checkout
+            </button>
+            <a href="/shop" class="btn btn-outline-secondary w-100 mt-2 rounded-pill">
+                <i class="fas fa-arrow-left"></i> Continue Shopping
+            </a>
+        `;
+    }
+
+    // ================================================================
+    // LOGOUT
+    // ================================================================
+    function logout() {
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        showToast('✅ Logged out successfully!', 'success');
+        setTimeout(() => { window.location.href = '/'; }, 500);
+    }
+
+    // ================================================================
+    // UPDATE NAVBAR
+    // ================================================================
+    function updateNavbar() {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const dropdown = document.getElementById('authDropdown');
+
+        if (token) {
+            dropdown.innerHTML = `
+                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>${user.name || 'My Account'}</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            `;
+        } else {
+            dropdown.innerHTML = `
+                <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+            `;
+        }
+    }
+
+    // ================================================================
+    // INIT
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        updateCartCount();
+        renderCart();
+        updateNavbar();
+    });
+
+    window.updateQty = updateQty;
+    window.removeItem = removeItem;
+    window.proceedToCheckout = proceedToCheckout;
+    window.logout = logout;
+    window.closeLoginPopup = closeLoginPopup;
+</script>
+</body>
+</html>

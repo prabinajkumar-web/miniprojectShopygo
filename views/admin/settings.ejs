@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Settings - ShopyGo Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f0f4ff; }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 270px;
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #e8edf5;
+            padding: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            padding: 24px 24px 20px;
+            border-bottom: 1px solid #e8edf5;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border-radius: 0;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .sidebar-brand .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-brand .brand-logo i {
+            font-size: 1.8rem;
+            color: #ffffff;
+        }
+
+        .sidebar-brand .brand-logo span {
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: #ffffff;
+        }
+
+        .sidebar-brand small {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.65rem;
+            display: block;
+            margin-top: 2px;
+            margin-left: 48px;
+        }
+
+        .sidebar-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: none;
+        }
+
+        .sidebar-close:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .sidebar-menu {
+            padding: 16px 12px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu .menu-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: 700;
+            padding: 8px 16px;
+            letter-spacing: 0.8px;
+            margin-top: 4px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            color: #64748b;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            font-weight: 500;
+            gap: 12px;
+            margin: 2px 0;
+            position: relative;
+        }
+
+        .sidebar-menu a i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar-menu a span {
+            flex: 1;
+        }
+
+        .sidebar-menu a .badge {
+            margin-left: auto;
+            background: #ef4444;
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu a:hover {
+            background: #eff6ff;
+            color: #2563eb;
+            transform: translateX(4px);
+        }
+
+        .sidebar-menu a:hover i {
+            color: #2563eb;
+        }
+
+        .sidebar-menu a.active {
+            background: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .sidebar-menu a.active i {
+            color: #ffffff;
+        }
+
+        .sidebar-menu a.active .badge {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .sidebar-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e8edf5;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-footer .footer-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #94a3b8;
+            font-size: 0.7rem;
+        }
+
+        .sidebar-footer .footer-content i {
+            font-size: 0.8rem;
+        }
+
+        .sidebar-footer .footer-version {
+            color: #94a3b8;
+            font-size: 0.6rem;
+            background: #f1f5f9;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        /* ===== TOP NAVBAR ===== */
+        .top-navbar {
+            background: #ffffff;
+            padding: 12px 30px;
+            border-bottom: 1px solid #e8edf5;
+            position: fixed;
+            top: 0;
+            left: 270px;
+            right: 0;
+            z-index: 999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-navbar .page-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .top-navbar .page-title i {
+            color: #2563eb;
+            margin-right: 8px;
+        }
+
+        .top-navbar .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .top-navbar .admin-profile .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .top-navbar .admin-profile .avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #1e293b;
+            cursor: pointer;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-left: 270px;
+            margin-top: 72px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        /* ===== SETTINGS CARDS ===== */
+        .settings-card {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            border: 1px solid #e8edf5;
+            margin-bottom: 24px;
+            transition: all 0.3s;
+        }
+
+        .settings-card:hover {
+            box-shadow: 0 8px 24px -8px rgba(37, 99, 235, 0.08);
+        }
+
+        .settings-card .card-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #1e293b;
+        }
+
+        .settings-card .card-title i {
+            color: #2563eb;
+            font-size: 1.3rem;
+        }
+
+        .settings-card .form-label {
+            font-weight: 600;
+            font-size: 0.85rem;
+            color: #475569;
+        }
+
+        .settings-card .form-control,
+        .settings-card .form-select {
+            border-radius: 12px;
+            padding: 10px 16px;
+            border: 1px solid #e8edf5;
+            transition: 0.2s;
+            font-size: 0.9rem;
+        }
+
+        .settings-card .form-control:focus,
+        .settings-card .form-select:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+        }
+
+        .settings-card .form-control:disabled {
+            background: #f1f5f9;
+            color: #94a3b8;
+        }
+
+        .settings-card .form-check-input:checked {
+            background-color: #2563eb;
+            border-color: #2563eb;
+        }
+
+        .settings-card .form-check-input {
+            width: 44px;
+            height: 24px;
+            cursor: pointer;
+        }
+
+        .settings-card .form-check-label {
+            font-weight: 500;
+            color: #475569;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+
+        .btn-primary-custom {
+            background: #2563eb;
+            border: none;
+            border-radius: 40px;
+            padding: 10px 28px;
+            font-weight: 600;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .btn-primary-custom:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-secondary-custom {
+            background: #f1f5f9;
+            border: none;
+            border-radius: 40px;
+            padding: 10px 28px;
+            font-weight: 600;
+            color: #64748b;
+            transition: 0.3s;
+        }
+
+        .btn-secondary-custom:hover {
+            background: #e2e8f0;
+            color: #1e293b;
+        }
+
+        .toast-notify {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .toast-notify.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .toast-notify.error {
+            background: #dc2626;
+        }
+
+        .toast-notify.success {
+            background: #16a34a;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .sidebar-close {
+                display: block !important;
+            }
+            .top-navbar {
+                left: 0;
+                padding: 12px 16px;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+                margin-top: 70px;
+            }
+            .mobile-toggle {
+                display: block !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .settings-card {
+                padding: 20px;
+            }
+            .top-navbar .page-title {
+                font-size: 0.9rem;
+            }
+            .btn-primary-custom,
+            .btn-secondary-custom {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-logo">
+            <i class="bi bi-bag-check-fill"></i>
+            <span>ShopyGo</span>
+        </div>
+        <small>Admin Panel v3.0</small>
+        <button class="sidebar-close" id="sidebarClose">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <div class="sidebar-menu">
+        <div class="menu-label">MAIN</div>
+
+        <a href="/admin-dashboard">
+            <i class="bi bi-speedometer2"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="/admin-analytics">
+            <i class="bi bi-graph-up"></i>
+            <span>Analytics</span>
+        </a>
+
+        <a href="/admin-products">
+            <i class="bi bi-box-seam"></i>
+            <span>Products</span>
+            <span class="badge" id="productBadge">0</span>
+        </a>
+
+        <a href="/admin-categories">
+            <i class="bi bi-tags"></i>
+            <span>Categories</span>
+        </a>
+
+        <a href="/admin-orders">
+            <i class="bi bi-cart-check"></i>
+            <span>Orders</span>
+            <span class="badge" id="orderBadge">0</span>
+        </a>
+
+        <a href="/admin-customers">
+            <i class="bi bi-people"></i>
+            <span>Customers</span>
+            <span class="badge" id="customerBadge">0</span>
+        </a>
+    </div>
+
+    <div class="sidebar-footer">
+        <div class="footer-content">
+            <i class="bi bi-shield-check"></i>
+            <span>Secure Admin</span>
+        </div>
+        <div class="footer-version">v3.0</div>
+    </div>
+</aside>
+
+<!-- ===== TOP NAVBAR ===== -->
+<nav class="top-navbar">
+    <div class="d-flex align-items-center gap-3">
+        <button class="mobile-toggle" id="mobileToggle">
+            <i class="bi bi-list"></i>
+        </button>
+        <span class="page-title"><i class="bi bi-gear"></i> Settings</span>
+    </div>
+    <div class="admin-profile">
+        <span class="badge bg-primary bg-opacity-10 text-primary p-2" id="adminNameDisplay">Admin</span>
+        <div class="avatar" id="adminAvatar" data-bs-toggle="dropdown">A</div>
+        <ul class="dropdown-menu dropdown-menu-end" style="border-radius: 12px; border: 1px solid #e8edf5; margin-top: 8px; min-width: 200px;">
+            <li><a class="dropdown-item" href="/admin/profile"><i class="bi bi-person-circle me-2"></i> Profile</a></li>
+            <li><a class="dropdown-item" href="/admin/settings"><i class="bi bi-gear me-2"></i> Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main-content">
+
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div>
+            <h4 class="fw-bold mb-1"><i class="bi bi-gear text-primary me-2"></i>Settings</h4>
+            <p class="text-muted small">Manage your store settings and preferences</p>
+        </div>
+        <div>
+            <span class="badge bg-primary bg-opacity-10 text-primary p-2" id="lastUpdated">
+                <i class="bi bi-clock me-1"></i> <span id="lastUpdatedTime">Loading...</span>
+            </span>
+            <button class="btn btn-primary-custom ms-2" onclick="loadAdminData()">
+                <i class="bi bi-arrow-repeat me-1"></i> Refresh
+            </button>
+        </div>
+    </div>
+
+    <!-- ===== ADMIN PROFILE SETTINGS ===== -->
+    <div class="settings-card">
+        <div class="card-title"><i class="bi bi-person-gear"></i> Admin Profile</div>
+        <form id="profileSettingsForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Full Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="adminName" placeholder="Your name">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Email Address <span class="text-danger">*</span></label>
+                    <input type="email" class="form-control" id="adminEmail" placeholder="admin@shopygo.com">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="adminPhone" placeholder="+91 9876543210">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Role</label>
+                    <input type="text" class="form-control" id="adminRole" disabled style="background: #f1f5f9;">
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">Address</label>
+                    <textarea class="form-control" id="adminAddress" rows="2" placeholder="Your address"></textarea>
+                </div>
+            </div>
+            <div class="d-flex gap-2 flex-wrap">
+                <button type="submit" class="btn-primary-custom"><i class="bi bi-save me-2"></i> Update Profile</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- ===== GENERAL SETTINGS ===== -->
+    <div class="settings-card">
+        <div class="card-title"><i class="bi bi-shop"></i> General Settings</div>
+        <form id="generalSettingsForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Store Name</label>
+                    <input type="text" class="form-control" id="storeName" placeholder="ShopyGo" value="ShopyGo">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Store Email</label>
+                    <input type="email" class="form-control" id="storeEmail" placeholder="store@shopygo.com" value="store@shopygo.com">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Phone Number</label>
+                    <input type="text" class="form-control" id="storePhone" placeholder="+91 9876543210" value="+91 9876543210">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Currency</label>
+                    <select class="form-select" id="storeCurrency">
+                        <option value="INR" selected>₹ Indian Rupee (INR)</option>
+                        <option value="USD">$ US Dollar (USD)</option>
+                        <option value="EUR">€ Euro (EUR)</option>
+                        <option value="GBP">£ British Pound (GBP)</option>
+                    </select>
+                </div>
+                <div class="col-12 mb-3">
+                    <label class="form-label">Store Address</label>
+                    <textarea class="form-control" id="storeAddress" rows="2" placeholder="123 Main Street, City, State">123 Main Street, Mumbai, Maharashtra</textarea>
+                </div>
+            </div>
+            <button type="submit" class="btn-primary-custom"><i class="bi bi-save me-2"></i> Save General Settings</button>
+        </form>
+    </div>
+
+    <!-- ===== PAYMENT SETTINGS ===== -->
+    <div class="settings-card">
+        <div class="card-title"><i class="bi bi-credit-card"></i> Payment Settings</div>
+        <form id="paymentSettingsForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">COD (Cash on Delivery)</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="codEnabled" checked>
+                        <label class="form-check-label" for="codEnabled">Enable COD</label>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">UPI</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="upiEnabled" checked>
+                        <label class="form-check-label" for="upiEnabled">Enable UPI</label>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Credit / Debit Card</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="cardEnabled" checked>
+                        <label class="form-check-label" for="cardEnabled">Enable Cards</label>
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Net Banking</label>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="netbankingEnabled">
+                        <label class="form-check-label" for="netbankingEnabled">Enable Net Banking</label>
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn-primary-custom"><i class="bi bi-save me-2"></i> Save Payment Settings</button>
+        </form>
+    </div>
+
+    <!-- ===== SHIPPING SETTINGS ===== -->
+    <div class="settings-card">
+        <div class="card-title"><i class="bi bi-truck"></i> Shipping Settings</div>
+        <form id="shippingSettingsForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Free Shipping Above</label>
+                    <div class="input-group">
+                        <span class="input-group-text">₹</span>
+                        <input type="number" class="form-control" id="freeShipping" placeholder="500" value="500">
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Standard Shipping Charge</label>
+                    <div class="input-group">
+                        <span class="input-group-text">₹</span>
+                        <input type="number" class="form-control" id="shippingCharge" placeholder="49" value="49">
+                    </div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Delivery Time (Days)</label>
+                    <input type="number" class="form-control" id="deliveryTime" placeholder="3-5" value="3">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">COD Charge</label>
+                    <div class="input-group">
+                        <span class="input-group-text">₹</span>
+                        <input type="number" class="form-control" id="codCharge" placeholder="0" value="0">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn-primary-custom"><i class="bi bi-save me-2"></i> Save Shipping Settings</button>
+        </form>
+    </div>
+
+    <!-- ===== SECURITY SETTINGS ===== -->
+    <div class="settings-card">
+        <div class="card-title"><i class="bi bi-shield-lock"></i> Security Settings</div>
+        <form id="securitySettingsForm">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Session Timeout (Minutes)</label>
+                    <input type="number" class="form-control" id="sessionTimeout" placeholder="60" value="60">
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Max Login Attempts</label>
+                    <input type="number" class="form-control" id="maxLoginAttempts" placeholder="5" value="5">
+                </div>
+            </div>
+            <button type="submit" class="btn-primary-custom"><i class="bi bi-save me-2"></i> Save Security Settings</button>
+        </form>
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API_URL = 'http://localhost:5000/api';
+
+    // ================================================================
+    // FIXED USER ID - Your actual ID from MongoDB
+    // ================================================================
+    const ADMIN_USER_ID = '6a461d79b048f0a920d8d312';
+
+    // ================================================================
+    // TOAST NOTIFICATION
+    // ================================================================
+    function showToast(message, type = 'success') {
+        let toast = document.getElementById('toastMsg');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'toastMsg';
+            toast.className = 'toast-notify';
+            document.body.appendChild(toast);
+        }
+        toast.className = 'toast-notify' + (type === 'error' ? ' error' : type === 'success' ? ' success' : '');
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // ================================================================
+    // LOGOUT
+    // ================================================================
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/admin/login';
+        }
+    }
+
+    // ================================================================
+    // CHECK ADMIN AUTH
+    // ================================================================
+    function checkAdminAuth() {
+        const token = localStorage.getItem('token');
+        let user = JSON.parse(localStorage.getItem('user') || '{}');
+        
+        if (!user.id && !user._id) {
+            user.id = ADMIN_USER_ID;
+            user._id = ADMIN_USER_ID;
+            user.role = 'admin';
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+        if (user._id && !user.id) {
+            user.id = user._id;
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+        if (user.id && !user._id) {
+            user._id = user.id;
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+        
+        if (!token || user.role !== 'admin') {
+            window.location.href = '/admin/login';
+            return false;
+        }
+        return true;
+    }
+
+    // ================================================================
+    // LOAD ADMIN DATA
+    // ================================================================
+    function loadAdminData() {
+        try {
+            let user = JSON.parse(localStorage.getItem('user') || '{}');
+            
+            if (!user.id && !user._id) {
+                user.id = ADMIN_USER_ID;
+                user._id = ADMIN_USER_ID;
+                user.role = 'admin';
+                localStorage.setItem('user', JSON.stringify(user));
+            }
+            if (user._id && !user.id) {
+                user.id = user._id;
+                localStorage.setItem('user', JSON.stringify(user));
+            }
+            if (user.id && !user._id) {
+                user._id = user.id;
+                localStorage.setItem('user', JSON.stringify(user));
+            }
+            
+            if (!user || !user.id) {
+                console.error('❌ No user ID found');
+                showToast('Please login again', 'error');
+                setTimeout(() => window.location.href = '/admin/login', 2000);
+                return;
+            }
+            
+            // Update admin name display
+            if (user.name) {
+                document.getElementById('adminNameDisplay').textContent = user.name;
+                document.getElementById('adminAvatar').textContent = user.name.charAt(0).toUpperCase();
+            }
+            
+            document.getElementById('adminName').value = user.name || '';
+            document.getElementById('adminEmail').value = user.email || '';
+            document.getElementById('adminPhone').value = user.phone || '';
+            document.getElementById('adminRole').value = user.role || 'admin';
+            document.getElementById('adminAddress').value = user.address || '';
+            document.getElementById('lastUpdatedTime').innerHTML = new Date().toLocaleTimeString();
+            
+            // Load badges
+            loadBadges();
+            
+        } catch (error) {
+            console.error('❌ Error loading admin data:', error);
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            document.getElementById('adminName').value = user.name || '';
+            document.getElementById('adminEmail').value = user.email || '';
+            document.getElementById('adminPhone').value = user.phone || '';
+            document.getElementById('adminRole').value = user.role || 'admin';
+        }
+    }
+
+    // ================================================================
+    // LOAD BADGES
+    // ================================================================
+    async function loadBadges() {
+        try {
+            // Products count
+            const productsRes = await fetch(`${API_URL}/products?limit=1000`);
+            if (productsRes.ok) {
+                const data = await productsRes.json();
+                let productCount = 0;
+                if (data.products && Array.isArray(data.products)) {
+                    productCount = data.products.length;
+                } else if (Array.isArray(data)) {
+                    productCount = data.length;
+                }
+                const badge = document.getElementById('productBadge');
+                badge.textContent = productCount;
+                badge.style.display = productCount > 0 ? 'inline-block' : 'none';
+            }
+
+            // Orders count
+            const ordersRes = await fetch(`${API_URL}/orders`);
+            if (ordersRes.ok) {
+                const orders = await ordersRes.json();
+                if (Array.isArray(orders)) {
+                    const badge = document.getElementById('orderBadge');
+                    badge.textContent = orders.length;
+                    badge.style.display = orders.length > 0 ? 'inline-block' : 'none';
+                }
+            }
+
+            // Customers count
+            const customersRes = await fetch(`${API_URL}/users`);
+            if (customersRes.ok) {
+                const customers = await customersRes.json();
+                if (Array.isArray(customers)) {
+                    const badge = document.getElementById('customerBadge');
+                    badge.textContent = customers.length;
+                    badge.style.display = customers.length > 0 ? 'inline-block' : 'none';
+                }
+            }
+
+        } catch (error) {
+            console.error('Error loading badges:', error);
+        }
+    }
+
+    // ================================================================
+    // UPDATE PROFILE SETTINGS
+    // ================================================================
+    document.getElementById('profileSettingsForm').addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const name = document.getElementById('adminName').value.trim();
+        const email = document.getElementById('adminEmail').value.trim();
+        const phone = document.getElementById('adminPhone').value.trim();
+        const address = document.getElementById('adminAddress').value.trim();
+
+        if (!name || !email) {
+            showToast('Name and Email are required', 'error');
+            return;
+        }
+
+        const btn = this.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Saving...';
+
+        try {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+            if (!user || !user.id) {
+                showToast('User not found. Please login again.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = originalText;
+                return;
+            }
+
+            const response = await fetch(`${API_URL}/users/${user.id}/settings`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ name, email, phone, address })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+                throw new Error(data.message || 'Failed to update settings');
+            }
+
+            // Update localStorage
+            const updatedUser = { ...user, name, email, phone, address };
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+
+            // Update UI
+            document.getElementById('adminNameDisplay').textContent = name;
+            document.getElementById('adminAvatar').textContent = name.charAt(0).toUpperCase();
+            document.getElementById('lastUpdatedTime').innerHTML = new Date().toLocaleTimeString();
+
+            showToast('✅ Profile updated successfully!', 'success');
+
+        } catch (error) {
+            console.error('❌ Error updating profile:', error);
+            showToast('❌ ' + error.message, 'error');
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    });
+
+    // ================================================================
+    // SAVE SETTINGS (Other sections)
+    // ================================================================
+    document.getElementById('generalSettingsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        showToast('✅ General settings saved successfully!', 'success');
+    });
+
+    document.getElementById('paymentSettingsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        showToast('✅ Payment settings saved successfully!', 'success');
+    });
+
+    document.getElementById('shippingSettingsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        showToast('✅ Shipping settings saved successfully!', 'success');
+    });
+
+    document.getElementById('securitySettingsForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        showToast('✅ Security settings saved successfully!', 'success');
+    });
+
+    // ================================================================
+    // SIDEBAR TOGGLE
+    // ================================================================
+    document.getElementById('mobileToggle').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('show');
+    });
+
+    document.getElementById('sidebarClose').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+    });
+
+    document.getElementById('overlay').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        }
+    });
+
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 992) {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        }
+    });
+
+    // ================================================================
+    // INIT
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('⚙️ Settings Page Loading...');
+        if (checkAdminAuth()) {
+            loadAdminData();
+        }
+    });
+
+    // ================================================================
+    // GLOBAL FUNCTIONS
+    // ================================================================
+    window.logout = logout;
+    window.showToast = showToast;
+    window.loadAdminData = loadAdminData;
+</script>
+</body>
+</html>

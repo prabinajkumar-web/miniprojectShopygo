@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - ShopyGo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #f8fafc; }
+        
+        .page-hero {
+            background: linear-gradient(135deg, #1a2a6c, #2563eb);
+            padding: 60px 0 50px;
+            color: white;
+            text-align: center;
+            border-radius: 0 0 40px 40px;
+            margin-bottom: 50px;
+        }
+        .page-hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+        }
+        .page-hero p {
+            font-size: 1.1rem;
+            opacity: 0.85;
+            max-width: 500px;
+            margin: 12px auto 0;
+        }
+        
+        .content-card {
+            background: white;
+            border-radius: 20px;
+            padding: 35px 40px;
+            border: 1px solid #e9eff5;
+            margin-bottom: 24px;
+        }
+        .content-card h5 {
+            font-weight: 700;
+            color: #1a2a6c;
+            margin-bottom: 12px;
+        }
+        .content-card h5 i {
+            color: #2563eb;
+            margin-right: 10px;
+        }
+        .content-card p, .content-card li {
+            color: #475569;
+            line-height: 1.8;
+            font-size: 1rem;
+        }
+        .content-card ul {
+            padding-left: 20px;
+        }
+        .content-card ul li {
+            margin-bottom: 6px;
+        }
+        
+        .last-updated {
+            color: #94a3b8;
+            font-size: 0.9rem;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        /* Navbar Styles */
+        .navbar { background: white; box-shadow: 0 4px 12px rgba(0,0,0,0.03); border-bottom: 1px solid #e9eff5; padding: 12px 0; }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+        .nav-icon { font-size: 1.4rem; color: #1e293b; transition: 0.2s; position: relative; cursor: pointer; }
+        .nav-icon:hover { color: #2563eb; }
+        .cart-badge { background-color: #2563eb; font-size: 10px; }
+        .dropdown-menu-custom {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            margin-top: 12px;
+            min-width: 220px;
+            padding: 8px;
+        }
+        .dropdown-menu-custom .dropdown-item {
+            padding: 10px 16px;
+            border-radius: 10px;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+        .dropdown-menu-custom .dropdown-item:hover {
+            background: #eff6ff;
+        }
+        .dropdown-menu-custom .dropdown-item.text-danger:hover {
+            background: #fee2e2;
+            color: #dc2626 !important;
+        }
+        
+        /* Footer Styles */
+        .footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 60px 0 30px;
+            margin-top: 60px;
+        }
+        .footer h5, .footer h6 {
+            color: white;
+            font-weight: 700;
+        }
+        .footer a {
+            color: #94a3b8;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .footer a:hover {
+            color: #3b82f6;
+        }
+        .footer .social-icons a {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background: #1e293b;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 40px;
+            color: #94a3b8;
+            transition: 0.2s;
+            margin-right: 8px;
+        }
+        .footer .social-icons a:hover {
+            background: #2563eb;
+            color: white;
+        }
+        
+        @media (max-width: 768px) {
+            .page-hero h1 { font-size: 2.2rem; }
+            .page-hero { padding: 40px 0 30px; }
+            .content-card { padding: 24px 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-3 px-lg-5">
+        <a class="navbar-brand fw-bold fs-2" href="/">ShopyGo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navRight">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navRight">
+            <div class="ms-auto d-flex align-items-center gap-3 mt-2 mt-lg-0">
+                <a href="/shop" class="text-decoration-none text-secondary">Shop</a>
+                <a href="/about" class="text-decoration-none text-secondary">About</a>
+                <a href="/terms" class="text-decoration-none text-primary fw-semibold">Terms</a>
+                <a href="#" class="nav-icon position-relative" onclick="handleCartClick(event)">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge">0</span>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="nav-icon dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user-circle fa-lg"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom" id="authDropdown">
+                        <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                        <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<section class="page-hero">
+    <div class="container">
+        <h1>Terms of Service</h1>
+        <p>Please read these terms carefully before using our services.</p>
+    </div>
+</section>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="container mb-5">
+
+    <div class="last-updated">
+        <i class="fas fa-clock me-2"></i> Last Updated: June 2025
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-handshake"></i> Acceptance of Terms</h5>
+        <p>By accessing or using ShopyGo's website and services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.</p>
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-user"></i> Account Registration</h5>
+        <p>To use certain features of our services, you must create an account. You agree to:</p>
+        <ul>
+            <li>Provide accurate and complete information during registration</li>
+            <li>Maintain the security and confidentiality of your account credentials</li>
+            <li>Notify us immediately of any unauthorized use of your account</li>
+            <li>Be at least 18 years old to create an account</li>
+        </ul>
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-shopping-bag"></i> Orders and Payments</h5>
+        <ul>
+            <li><strong>Order Acceptance:</strong> We reserve the right to refuse or cancel any order for any reason</li>
+            <li><strong>Pricing:</strong> All prices are in INR and are subject to change without notice</li>
+            <li><strong>Payment:</strong> You agree to pay all charges incurred by your account</li>
+            <li><strong>Availability:</strong> Products are subject to availability and we may limit quantities</li>
+        </ul>
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-truck"></i> Shipping and Delivery</h5>
+        <ul>
+            <li>We make every effort to deliver within the estimated timeframe</li>
+            <li>Delivery dates are estimates and not guaranteed</li>
+            <li>Risk of loss passes to you upon delivery</li>
+            <li>International shipping may be subject to customs duties and taxes</li>
+        </ul>
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-undo"></i> Returns and Refunds</h5>
+        <p>Our return policy is outlined in detail in our Returns Policy page. Key points:</p>
+        <ul>
+            <li>Returns are accepted within 7 days of delivery</li>
+            <li>Items must be unused and in original packaging</li>
+            <li>Refunds are processed within 3-5 business days</li>
+            <li>Certain items are non-returnable (see Returns Policy)</li>
+        </ul>
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-copyright"></i> Intellectual Property</h5>
+        <ul>
+            <li>All content on this site (text, images, logos, graphics) is the property of ShopyGo</li>
+            <li>You may not reproduce, distribute, or create derivative works without permission</li>
+            <li>All trademarks and logos are the property of their respective owners</li>
+        </ul>
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-user-shield"></i> User Content</h5>
+        <p>By submitting reviews, comments, or other content:</p>
+        <ul>
+            <li>You grant us a non-exclusive, royalty-free license to use your content</li>
+            <li>You represent that your content does not violate any third-party rights</li>
+            <li>We reserve the right to remove or edit any content at our discretion</li>
+        </ul>
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-shield-alt"></i> Prohibited Conduct</h5>
+        <p>You agree not to:</p>
+        <ul>
+            <li>Use our services for any illegal purpose</li>
+            <li>Attempt to gain unauthorized access to our systems</li>
+            <li>Interfere with or disrupt the operation of our website</li>
+            <li>Use our services to harass or harm others</li>
+            <li>Post false or misleading information</li>
+        </ul>
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-gavel"></i> Limitation of Liability</h5>
+        <p>ShopyGo is not liable for:</p>
+        <ul>
+            <li>Indirect, incidental, or consequential damages</li>
+            <li>Loss of profits, revenue, or data</li>
+            <li>Damages arising from your use of our services</li>
+            <li>Third-party content or services</li>
+        </ul>
+        <p class="mt-2">Our total liability is limited to the amount you paid for the product giving rise to the claim.</p>
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-gavel"></i> Indemnification</h5>
+        <p>You agree to indemnify and hold ShopyGo harmless from any claims, damages, or expenses arising from your use of our services or violation of these terms.</p>
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-edit"></i> Modifications to Terms</h5>
+        <p>We reserve the right to modify these terms at any time. Changes will be effective upon posting. Your continued use of our services constitutes acceptance of the modified terms.</p>
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-scroll"></i> Governing Law</h5>
+        <p>These terms are governed by and construed in accordance with the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts in Mumbai, India.</p>
+    </div>
+
+    <div class="content-card">
+        <h5><i class="fas fa-phone"></i> Contact Us</h5>
+        <p>If you have any questions about these Terms of Service, please contact us:</p>
+        <p><i class="fas fa-phone-alt text-primary me-2"></i> +91 1800 202 8899</p>
+        <p><i class="fas fa-envelope text-primary me-2"></i> support@shopygo.com</p>
+        <p><i class="fas fa-map-marker-alt text-primary me-2"></i> 123, Shopping Street, Mumbai - 400001</p>
+    </div>
+
+</main>
+
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-4">
+                <h4 class="fw-bold text-white mb-3"><i class="fas fa-store me-2"></i>ShopyGo</h4>
+                <p class="small">India's fastest growing e-commerce platform.</p>
+                <div class="social-icons mt-3">
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <h5 class="text-white mb-3">Company</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Support</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/help">Help</a></li>
+                    <li><a href="/returns">Returns</a></li>
+                    <li><a href="/terms">Terms</a></li>
+                    <li><a href="/privacy">Privacy</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Contact</h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-envelope me-2"></i> support@shopygo.com</li>
+                    <li><i class="fas fa-phone-alt me-2"></i> +91 1800 202 8899</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright text-center">
+            © 2025 ShopyGo — All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<!-- ===== SCRIPTS ===== -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var API_URL = 'http://localhost:5000/api';
+
+    function isLoggedIn() {
+        var token = localStorage.getItem('token');
+        if (token && token !== 'null' && token !== 'undefined' && token !== '') {
+            return true;
+        }
+        return false;
+    }
+
+    function getCart() { 
+        try {
+            return JSON.parse(localStorage.getItem('cart')) || []; 
+        } catch(e) {
+            return [];
+        }
+    }
+    
+    function updateCartCount() {
+        var cart = getCart();
+        var total = cart.reduce(function(s, i) { return s + i.quantity; }, 0);
+        var badge = document.getElementById('cartCount');
+        if (badge) { 
+            badge.textContent = total; 
+            badge.style.display = total > 0 ? 'inline-block' : 'none'; 
+        }
+    }
+
+    function handleCartClick(event) {
+        if (event) {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+        if (!isLoggedIn()) {
+            window.location.href = '/login';
+            return false;
+        }
+        window.location.href = '/cart';
+        return false;
+    }
+
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.removeItem('cart');
+            window.location.href = '/';
+        }
+    }
+
+    function updateNavbar() {
+        var token = localStorage.getItem('token');
+        var user = JSON.parse(localStorage.getItem('user') || '{}');
+        var dropdown = document.getElementById('authDropdown');
+
+        if (token && token !== 'null' && token !== 'undefined') {
+            dropdown.innerHTML = 
+                '<li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>' + (user.name || 'My Account') + '</a></li>' +
+                '<li><hr class="dropdown-divider"></li>' +
+                '<li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>' +
+                '<li><hr class="dropdown-divider"></li>' +
+                '<li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>';
+        } else {
+            dropdown.innerHTML = 
+                '<li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>' +
+                '<li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>' +
+                '<li><hr class="dropdown-divider"></li>' +
+                '<li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>';
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        updateCartCount();
+        updateNavbar();
+    });
+
+    window.handleCartClick = handleCartClick;
+    window.logout = logout;
+</script>
+</body>
+</html>

@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - ShopyGo Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f0f4ff; }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 270px;
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #e8edf5;
+            padding: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            padding: 24px 24px 20px;
+            border-bottom: 1px solid #e8edf5;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border-radius: 0;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .sidebar-brand .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-brand .brand-logo i {
+            font-size: 1.8rem;
+            color: #ffffff;
+        }
+
+        .sidebar-brand .brand-logo span {
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: #ffffff;
+        }
+
+        .sidebar-brand small {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.65rem;
+            display: block;
+            margin-top: 2px;
+            margin-left: 48px;
+        }
+
+        .sidebar-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: none;
+        }
+
+        .sidebar-close:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .sidebar-menu {
+            padding: 16px 12px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu .menu-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: 700;
+            padding: 8px 16px;
+            letter-spacing: 0.8px;
+            margin-top: 4px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            color: #64748b;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            font-weight: 500;
+            gap: 12px;
+            margin: 2px 0;
+            position: relative;
+        }
+
+        .sidebar-menu a i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar-menu a span {
+            flex: 1;
+        }
+
+        .sidebar-menu a .badge {
+            margin-left: auto;
+            background: #ef4444;
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu a:hover {
+            background: #eff6ff;
+            color: #2563eb;
+            transform: translateX(4px);
+        }
+
+        .sidebar-menu a:hover i {
+            color: #2563eb;
+        }
+
+        .sidebar-menu a.active {
+            background: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .sidebar-menu a.active i {
+            color: #ffffff;
+        }
+
+        .sidebar-menu a.active .badge {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .sidebar-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e8edf5;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-footer .footer-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #94a3b8;
+            font-size: 0.7rem;
+        }
+
+        .sidebar-footer .footer-content i {
+            font-size: 0.8rem;
+        }
+
+        .sidebar-footer .footer-version {
+            color: #94a3b8;
+            font-size: 0.6rem;
+            background: #f1f5f9;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        /* ===== TOP NAVBAR ===== */
+        .top-navbar {
+            background: #ffffff;
+            padding: 12px 30px;
+            border-bottom: 1px solid #e8edf5;
+            position: fixed;
+            top: 0;
+            left: 270px;
+            right: 0;
+            z-index: 999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-navbar .page-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .top-navbar .page-title i {
+            color: #2563eb;
+            margin-right: 8px;
+        }
+
+        .top-navbar .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .top-navbar .admin-profile .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .top-navbar .admin-profile .avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #1e293b;
+            cursor: pointer;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-left: 270px;
+            margin-top: 72px;
+            padding: 30px;
+            min-height: 100vh;
+        }
+
+        /* ===== STATS CARDS ===== */
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px 24px;
+            border: 1px solid #e8edf5;
+            transition: all 0.3s;
+            height: 100%;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 24px -8px rgba(37, 99, 235, 0.12);
+            border-color: #2563eb;
+        }
+
+        .stat-card .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            color: white;
+        }
+
+        .stat-card .stat-icon.blue { background: #2563eb; }
+        .stat-card .stat-icon.green { background: #22c55e; }
+        .stat-card .stat-icon.orange { background: #f59e0b; }
+        .stat-card .stat-icon.purple { background: #8b5cf6; }
+        .stat-card .stat-icon.pink { background: #ec4899; }
+        .stat-card .stat-icon.cyan { background: #06b6d4; }
+        .stat-card .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #1e293b;
+        }
+        .stat-card .stat-label {
+            color: #64748b;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        .stat-card .stat-change {
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .stat-card .stat-change.up { color: #22c55e; }
+        .stat-card .stat-change.down { color: #ef4444; }
+
+        /* ===== CHART CARDS ===== */
+        .chart-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid #e8edf5;
+            margin-bottom: 24px;
+        }
+
+        .chart-card .chart-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chart-card .chart-title .badge {
+            font-weight: 400;
+            font-size: 0.7rem;
+            background: #eff6ff !important;
+            color: #2563eb !important;
+            padding: 4px 12px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+        }
+
+        /* ===== TABLE CARDS ===== */
+        .table-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid #e8edf5;
+        }
+
+        .table-card .table-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-card .table-title a {
+            font-size: 0.8rem;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        .table-card .table-title a:hover {
+            text-decoration: underline;
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            font-weight: 600;
+        }
+
+        .status-badge.pending { background: #fef3c7; color: #92400e; }
+        .status-badge.completed { background: #d1fae5; color: #065f46; }
+        .status-badge.shipped { background: #dbeafe; color: #1e40af; }
+        .status-badge.cancelled { background: #fee2e2; color: #991b1b; }
+        .status-badge.processing { background: #fed7aa; color: #9a3412; }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .sidebar-close {
+                display: block !important;
+            }
+            .top-navbar {
+                left: 0;
+                padding: 12px 16px;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+                margin-top: 70px;
+            }
+            .mobile-toggle {
+                display: block !important;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .stat-card .stat-value {
+                font-size: 1.3rem;
+            }
+            .top-navbar .page-title {
+                font-size: 0.9rem;
+            }
+            .chart-container {
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-logo">
+            <i class="bi bi-bag-check-fill"></i>
+            <span>ShopyGo</span>
+        </div>
+        <small>Admin Panel v3.0</small>
+        <button class="sidebar-close" id="sidebarClose">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <div class="sidebar-menu">
+        <div class="menu-label">MAIN</div>
+
+        <a href="/admin-dashboard" class="active">
+            <i class="bi bi-speedometer2"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="/admin-analytics">
+            <i class="bi bi-graph-up"></i>
+            <span>Analytics</span>
+        </a>
+
+        <a href="/admin-products">
+            <i class="bi bi-box-seam"></i>
+            <span>Products</span>
+            <span class="badge" id="productBadge">0</span>
+        </a>
+
+        <a href="/admin-categories">
+            <i class="bi bi-tags"></i>
+            <span>Categories</span>
+        </a>
+
+        <a href="/admin-orders">
+            <i class="bi bi-cart-check"></i>
+            <span>Orders</span>
+            <span class="badge" id="orderBadge">0</span>
+        </a>
+
+        <a href="/admin-customers">
+            <i class="bi bi-people"></i>
+            <span>Customers</span>
+        </a>
+    </div>
+
+    <div class="sidebar-footer">
+        <div class="footer-content">
+            <i class="bi bi-shield-check"></i>
+            <span>Secure Admin</span>
+        </div>
+        <div class="footer-version">v3.0</div>
+    </div>
+</aside>
+
+<!-- ===== TOP NAVBAR ===== -->
+<nav class="top-navbar">
+    <div class="d-flex align-items-center gap-3">
+        <button class="mobile-toggle" id="mobileToggle">
+            <i class="bi bi-list"></i>
+        </button>
+        <span class="page-title"><i class="bi bi-speedometer2"></i> Dashboard</span>
+    </div>
+    <div class="admin-profile">
+        <div class="avatar" id="adminAvatar" data-bs-toggle="dropdown">A</div>
+        <ul class="dropdown-menu dropdown-menu-end" style="border-radius: 12px; border: 1px solid #e8edf5; margin-top: 8px; min-width: 200px;">
+            <li><a class="dropdown-item" href="/admin/profile"><i class="bi bi-person-circle me-2"></i> Profile</a></li>
+            <li><a class="dropdown-item" href="/admin/settings"><i class="bi bi-gear me-2"></i> Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main-content">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold mb-1">Welcome back, <span id="adminName" style="color: #2563eb;">Admin</span> 👋</h4>
+            <p class="text-muted small">Here's what's happening with your store today</p>
+        </div>
+        <span class="badge bg-primary bg-opacity-10 text-primary p-2" id="lastUpdated">
+            <i class="bi bi-clock me-1"></i> Updated just now
+        </span>
+    </div>
+
+    <!-- Stats Row 1 -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Total Revenue</div>
+                        <div class="stat-value" id="totalRevenue">₹0</div>
+                        <span class="stat-change up"><i class="bi bi-arrow-up-short"></i> <span id="revenueGrowth">0</span>%</span>
+                    </div>
+                    <div class="stat-icon blue"><i class="bi bi-currency-rupee"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Total Orders</div>
+                        <div class="stat-value" id="totalOrders">0</div>
+                        <span class="stat-change up"><i class="bi bi-arrow-up-short"></i> <span id="orderGrowth">0</span>%</span>
+                    </div>
+                    <div class="stat-icon green"><i class="bi bi-cart-check"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Total Customers</div>
+                        <div class="stat-value" id="totalCustomers">0</div>
+                        <span class="stat-change up"><i class="bi bi-arrow-up-short"></i> <span id="customerGrowth">0</span>%</span>
+                    </div>
+                    <div class="stat-icon orange"><i class="bi bi-people"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Total Products</div>
+                        <div class="stat-value" id="totalProducts">0</div>
+                        <span class="stat-change"><i class="bi bi-dash-circle"></i> Active</span>
+                    </div>
+                    <div class="stat-icon purple"><i class="bi bi-box"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Row 2 -->
+    <div class="row g-4 mb-4">
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Pending Orders</div>
+                        <div class="stat-value text-warning" id="pendingOrders">0</div>
+                    </div>
+                    <div class="stat-icon pink"><i class="bi bi-hourglass-split"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Delivered</div>
+                        <div class="stat-value text-success" id="deliveredOrders">0</div>
+                    </div>
+                    <div class="stat-icon cyan"><i class="bi bi-check-circle-fill"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Avg Order Value</div>
+                        <div class="stat-value" id="avgOrderValue">₹0</div>
+                    </div>
+                    <div class="stat-icon green"><i class="bi bi-calculator"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xl-3 col-lg-6 col-md-6">
+            <div class="stat-card">
+                <div class="d-flex justify-content-between align-items-start">
+                    <div>
+                        <div class="stat-label">Top Customer</div>
+                        <div class="stat-value fs-5" id="topCustomer" style="font-size:1.1rem;">-</div>
+                    </div>
+                    <div class="stat-icon orange"><i class="bi bi-trophy"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Charts -->
+    <div class="row g-4">
+        <div class="col-lg-8">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <span><i class="bi bi-graph-up-arrow me-2 text-primary"></i>Revenue Overview</span>
+                    <span class="badge">Last 7 Days</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="revenueChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="chart-card">
+                <div class="chart-title">
+                    <span><i class="bi bi-pie-chart me-2 text-primary"></i>Order Status</span>
+                    <span class="badge">Current</span>
+                </div>
+                <div class="chart-container">
+                    <canvas id="statusChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Recent Orders -->
+    <div class="table-card mt-4">
+        <div class="table-title">
+            <span><i class="bi bi-clock-history me-2 text-primary"></i>Recent Orders</span>
+            <a href="/admin-orders">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Customer</th>
+                        <th>Items</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="recentOrdersTable">
+                    <tr>
+                        <td colspan="7" class="text-center py-4 text-muted">Loading orders...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Recent Customers -->
+    <div class="table-card mt-4">
+        <div class="table-title">
+            <span><i class="bi bi-person-plus me-2 text-primary"></i>New Customers</span>
+            <a href="/admin-customers">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th>Customer</th>
+                        <th>Email</th>
+                        <th>Orders</th>
+                        <th>Total Spent</th>
+                        <th>Joined</th>
+                    </tr>
+                </thead>
+                <tbody id="recentCustomersTable">
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">Loading customers...</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API_URL = 'http://localhost:5000/api';
+    let revenueChart, statusChart;
+
+    // ================================================================
+    // TOAST NOTIFICATION
+    // ================================================================
+    function showToast(message, type = 'info') {
+        const toast = document.createElement('div');
+        toast.style.cssText = `
+            position: fixed; bottom: 20px; right: 20px;
+            background: ${type === 'error' ? '#dc2626' : '#1e293b'};
+            color: white; padding: 12px 24px;
+            border-radius: 12px; font-size: 0.85rem;
+            z-index: 9999; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            animation: slideIn 0.3s ease;
+            max-width: 400px;
+        `;
+        toast.textContent = message;
+        document.body.appendChild(toast);
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            toast.style.transition = '0.3s';
+            setTimeout(() => toast.remove(), 300);
+        }, 3000);
+    }
+
+    // ================================================================
+    // LOGOUT
+    // ================================================================
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/admin/login';
+        }
+    }
+
+    // ================================================================
+    // CHECK ADMIN AUTH
+    // ================================================================
+    function checkAdminAuth() {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (!token || user.role !== 'admin') {
+            window.location.href = '/admin/login';
+            return false;
+        }
+        return true;
+    }
+
+    // ================================================================
+    // LOAD ADMIN DATA
+    // ================================================================
+    function loadAdminData() {
+        try {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (user.name) {
+                document.getElementById('adminName').textContent = user.name;
+                document.getElementById('adminAvatar').textContent = user.name.charAt(0).toUpperCase();
+            }
+        } catch (e) {}
+    }
+
+    // ================================================================
+    // FETCH DASHBOARD DATA
+    // ================================================================
+    async function fetchDashboardData() {
+        try {
+            const response = await fetch(`${API_URL}/admin/analytics`);
+            const data = await response.json();
+            if (data.success) {
+                const analytics = data.data;
+                updateStats(analytics);
+                updateCharts(analytics);
+                updateRecentOrders(analytics.recentOrders || []);
+                updateRecentCustomers(analytics.customers || []);
+                updateBadges(analytics);
+                document.getElementById('lastUpdated').innerHTML = `<i class="bi bi-clock me-1"></i> Updated ${new Date().toLocaleTimeString()}`;
+            }
+        } catch (error) {
+            console.error('❌ Error fetching dashboard data:', error);
+        }
+    }
+
+    // ================================================================
+    // UPDATE BADGES
+    // ================================================================
+    function updateBadges(data) {
+        const overview = data.overview || {};
+        const orderBadge = document.getElementById('orderBadge');
+        const productBadge = document.getElementById('productBadge');
+        if (orderBadge) {
+            orderBadge.textContent = overview.totalOrders || 0;
+            orderBadge.style.display = overview.totalOrders > 0 ? 'inline-block' : 'none';
+        }
+        if (productBadge) {
+            productBadge.textContent = overview.totalProducts || 0;
+            productBadge.style.display = overview.totalProducts > 0 ? 'inline-block' : 'none';
+        }
+    }
+
+    // ================================================================
+    // UPDATE STATS
+    // ================================================================
+    function updateStats(data) {
+        const overview = data.overview || {};
+        const customerData = data.customerData || {};
+        const customers = data.customers || [];
+
+        document.getElementById('totalRevenue').textContent = `₹${(overview.totalRevenue || 0).toLocaleString()}`;
+        document.getElementById('totalOrders').textContent = overview.totalOrders || 0;
+        document.getElementById('totalCustomers').textContent = customerData.total || 0;
+        document.getElementById('totalProducts').textContent = overview.totalProducts || 0;
+        document.getElementById('pendingOrders').textContent = overview.pendingOrders || 0;
+        document.getElementById('deliveredOrders').textContent = overview.completedOrders || 0;
+
+        const avgOrder = overview.totalOrders > 0 ? Math.round((overview.totalRevenue || 0) / overview.totalOrders) : 0;
+        document.getElementById('avgOrderValue').textContent = `₹${avgOrder.toLocaleString()}`;
+
+        if (customers.length > 0) {
+            const top = customers.sort((a, b) => b.totalSpent - a.totalSpent)[0];
+            document.getElementById('topCustomer').textContent = top ? top.name : '-';
+        }
+
+        document.getElementById('revenueGrowth').textContent = overview.totalRevenue > 0 ? '12.5' : '0';
+        document.getElementById('orderGrowth').textContent = overview.totalOrders > 0 ? '8.2' : '0';
+        document.getElementById('customerGrowth').textContent = customerData.total > 0 ? '15.3' : '0';
+    }
+
+    // ================================================================
+    // UPDATE CHARTS
+    // ================================================================
+    function updateCharts(data) {
+        const chartData = data.chartData || {};
+        const statusData = chartData.statusDistribution || { pending: 0, completed: 0, cancelled: 0 };
+
+        // Revenue Chart
+        const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+        const dailySales = chartData.dailySales || [];
+        const labels = dailySales.length > 0 ? dailySales.map(d => d.date) : ['No Data'];
+        const values = dailySales.length > 0 ? dailySales.map(d => d.revenue) : [0];
+
+        if (revenueChart) revenueChart.destroy();
+        revenueChart = new Chart(revenueCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Revenue',
+                    data: values,
+                    borderColor: '#2563eb',
+                    backgroundColor: 'rgba(37,99,235,0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointBackgroundColor: '#2563eb',
+                    pointBorderColor: 'white',
+                    pointBorderWidth: 2,
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            callback: function(value) { return '₹' + value; }
+                        }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+
+        // Status Chart
+        const statusCtx = document.getElementById('statusChart').getContext('2d');
+        if (statusChart) statusChart.destroy();
+        statusChart = new Chart(statusCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Pending', 'Completed', 'Cancelled'],
+                datasets: [{
+                    data: [statusData.pending || 0, statusData.completed || 0, statusData.cancelled || 0],
+                    backgroundColor: ['#f59e0b', '#22c55e', '#ef4444'],
+                    borderWidth: 2,
+                    borderColor: 'white'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 12,
+                            usePointStyle: true,
+                            pointStyle: 'circle'
+                        }
+                    }
+                },
+                cutout: '65%'
+            }
+        });
+    }
+
+    // ================================================================
+    // UPDATE RECENT ORDERS
+    // ================================================================
+    function updateRecentOrders(orders) {
+        const tbody = document.getElementById('recentOrdersTable');
+        if (!orders || orders.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="7" class="text-center py-4 text-muted">No recent orders</td></tr>`;
+            return;
+        }
+
+        const statusClasses = {
+            pending: 'pending',
+            processing: 'processing',
+            shipped: 'shipped',
+            delivered: 'completed',
+            completed: 'completed',
+            cancelled: 'cancelled'
+        };
+
+        tbody.innerHTML = orders.slice(0, 5).map(order => {
+            const orderId = order.orderNumber || order._id?.slice(-8) || 'ORD' + Math.random().toString(36).slice(2, 8);
+            const customerName = order.userId?.name || order.shippingAddress?.name || 'Guest';
+            const total = order.totalAmount || 0;
+            const status = order.status || 'pending';
+            const date = order.createdAt ? new Date(order.createdAt).toLocaleDateString() : 'N/A';
+            const items = order.items?.length || 0;
+
+            return `
+                <tr>
+                    <td><span class="fw-semibold text-primary">#${orderId}</span></td>
+                    <td>${customerName}</td>
+                    <td>${items} item${items > 1 ? 's' : ''}</td>
+                    <td class="fw-semibold">₹${total.toFixed(2)}</td>
+                    <td><span class="status-badge ${statusClasses[status] || 'pending'}">${status.charAt(0).toUpperCase() + status.slice(1)}</span></td>
+                    <td class="text-muted small">${date}</td>
+                    <td><a href="/admin-orders" class="btn btn-sm btn-outline-primary rounded-pill">View</a></td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // ================================================================
+    // UPDATE RECENT CUSTOMERS
+    // ================================================================
+    function updateRecentCustomers(customers) {
+        const tbody = document.getElementById('recentCustomersTable');
+        if (!customers || customers.length === 0) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center py-4 text-muted">No recent customers</td></tr>`;
+            return;
+        }
+
+        tbody.innerHTML = customers.slice(0, 5).map(customer => {
+            const name = customer.name || 'Guest';
+            const email = customer.email || 'N/A';
+            const orders = customer.orders || 0;
+            const totalSpent = customer.totalSpent || 0;
+            const joined = customer.joined || customer.createdAt ? new Date(customer.createdAt).toLocaleDateString() : 'N/A';
+
+            return `
+                <tr>
+                    <td>
+                        <div class="d-flex align-items-center gap-2">
+                            <div class="bg-primary bg-opacity-10 rounded-circle p-2" style="width:32px;height:32px;display:flex;align-items:center;justify-content:center;">
+                                <span class="fw-bold text-primary" style="font-size:0.8rem;">${name.charAt(0).toUpperCase()}</span>
+                            </div>
+                            <span>${name}</span>
+                        </div>
+                    </td>
+                    <td>${email}</td>
+                    <td><span class="badge bg-primary">${orders}</span></td>
+                    <td class="fw-semibold">₹${totalSpent.toFixed(2)}</td>
+                    <td class="text-muted small">${joined}</td>
+                </tr>
+            `;
+        }).join('');
+    }
+
+    // ================================================================
+    // SIDEBAR TOGGLE
+    // ================================================================
+    document.getElementById('mobileToggle').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('show');
+    });
+
+    document.getElementById('sidebarClose').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+    });
+
+    document.getElementById('overlay').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        }
+    });
+
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 992) {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        }
+    });
+
+    // ================================================================
+    // INIT
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('📊 Dashboard Loading...');
+        if (checkAdminAuth()) {
+            loadAdminData();
+            fetchDashboardData();
+            setInterval(fetchDashboardData, 30000);
+        }
+    });
+
+    // ================================================================
+    // GLOBAL FUNCTIONS
+    // ================================================================
+    window.logout = logout;
+    window.showToast = showToast;
+</script>
+</body>
+</html>

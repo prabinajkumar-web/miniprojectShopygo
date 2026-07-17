@@ -1,0 +1,958 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Profile - ShopyGo Admin</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f0f4ff; }
+
+        /* ===== SIDEBAR ===== */
+        .sidebar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 270px;
+            height: 100vh;
+            background: #ffffff;
+            border-right: 1px solid #e8edf5;
+            padding: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-brand {
+            padding: 24px 24px 20px;
+            border-bottom: 1px solid #e8edf5;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            border-radius: 0;
+            flex-shrink: 0;
+            position: relative;
+        }
+
+        .sidebar-brand .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-brand .brand-logo i {
+            font-size: 1.8rem;
+            color: #ffffff;
+        }
+
+        .sidebar-brand .brand-logo span {
+            font-weight: 800;
+            font-size: 1.6rem;
+            color: #ffffff;
+        }
+
+        .sidebar-brand small {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.65rem;
+            display: block;
+            margin-top: 2px;
+            margin-left: 48px;
+        }
+
+        .sidebar-close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            font-size: 1.2rem;
+            padding: 4px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.2s;
+            display: none;
+        }
+
+        .sidebar-close:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
+        .sidebar-menu {
+            padding: 16px 12px;
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .sidebar-menu .menu-label {
+            font-size: 0.6rem;
+            text-transform: uppercase;
+            color: #94a3b8;
+            font-weight: 700;
+            padding: 8px 16px;
+            letter-spacing: 0.8px;
+            margin-top: 4px;
+        }
+
+        .sidebar-menu a {
+            display: flex;
+            align-items: center;
+            padding: 10px 16px;
+            color: #64748b;
+            text-decoration: none;
+            border-radius: 12px;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            font-weight: 500;
+            gap: 12px;
+            margin: 2px 0;
+            position: relative;
+        }
+
+        .sidebar-menu a i {
+            font-size: 1.1rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar-menu a span {
+            flex: 1;
+        }
+
+        .sidebar-menu a .badge {
+            margin-left: auto;
+            background: #ef4444;
+            color: white;
+            font-size: 0.6rem;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-weight: 600;
+            min-width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-menu a:hover {
+            background: #eff6ff;
+            color: #2563eb;
+            transform: translateX(4px);
+        }
+
+        .sidebar-menu a:hover i {
+            color: #2563eb;
+        }
+
+        .sidebar-menu a.active {
+            background: #2563eb;
+            color: #ffffff;
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+        }
+
+        .sidebar-menu a.active i {
+            color: #ffffff;
+        }
+
+        .sidebar-menu a.active .badge {
+            background: rgba(255, 255, 255, 0.3);
+            color: white;
+        }
+
+        .sidebar-footer {
+            padding: 16px 24px;
+            border-top: 1px solid #e8edf5;
+            flex-shrink: 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .sidebar-footer .footer-content {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #94a3b8;
+            font-size: 0.7rem;
+        }
+
+        .sidebar-footer .footer-content i {
+            font-size: 0.8rem;
+        }
+
+        .sidebar-footer .footer-version {
+            color: #94a3b8;
+            font-size: 0.6rem;
+            background: #f1f5f9;
+            padding: 2px 10px;
+            border-radius: 20px;
+        }
+
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+
+        /* ===== TOP NAVBAR ===== */
+        .top-navbar {
+            background: #ffffff;
+            padding: 12px 30px;
+            border-bottom: 1px solid #e8edf5;
+            position: fixed;
+            top: 0;
+            left: 270px;
+            right: 0;
+            z-index: 999;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-navbar .page-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+        }
+
+        .top-navbar .page-title i {
+            color: #2563eb;
+            margin-right: 8px;
+        }
+
+        .top-navbar .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .top-navbar .admin-profile .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #2563eb;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .top-navbar .admin-profile .avatar:hover {
+            transform: scale(1.05);
+        }
+
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: #1e293b;
+            cursor: pointer;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .main-content {
+            margin-left: 270px;
+            margin-top: 72px;
+            padding: 30px;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+        }
+
+        /* ===== PROFILE CARD ===== */
+        .profile-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            border: 1px solid #e8edf5;
+            max-width: 550px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .profile-card:hover {
+            box-shadow: 0 12px 24px -8px rgba(37, 99, 235, 0.08);
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 24px rgba(37, 99, 235, 0.25);
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .profile-field {
+            padding: 14px 0;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .profile-field:last-of-type {
+            border-bottom: none;
+        }
+
+        .profile-field .label {
+            color: #64748b;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .profile-field .label i {
+            color: #2563eb;
+            width: 20px;
+            margin-right: 8px;
+        }
+
+        .profile-field .value {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: right;
+        }
+
+        .btn-primary-custom {
+            background: #2563eb;
+            border: none;
+            border-radius: 40px;
+            padding: 10px 24px;
+            font-weight: 600;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .btn-primary-custom:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37, 99, 235, 0.25);
+        }
+
+        .btn-outline-custom {
+            border: 1.5px solid #2563eb;
+            color: #2563eb;
+            background: transparent;
+            border-radius: 40px;
+            padding: 10px 24px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-outline-custom:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        .btn-outline-danger-custom {
+            border: 1.5px solid #ef4444;
+            color: #ef4444;
+            background: transparent;
+            border-radius: 40px;
+            padding: 10px 24px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+
+        .btn-outline-danger-custom:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        .toast-notify {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .toast-notify.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .toast-notify.error {
+            background: #dc2626;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
+        /* ===== MODAL ===== */
+        .modal-custom .modal-content {
+            border-radius: 16px;
+            border: none;
+        }
+
+        .modal-custom .modal-header {
+            border-radius: 16px 16px 0 0;
+            background: #f8fafc;
+            border-bottom: 1px solid #e8edf5;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .sidebar {
+                transform: translateX(-100%);
+            }
+            .sidebar.open {
+                transform: translateX(0);
+            }
+            .sidebar-close {
+                display: block !important;
+            }
+            .top-navbar {
+                left: 0;
+                padding: 12px 16px;
+            }
+            .main-content {
+                margin-left: 0;
+                padding: 16px;
+                margin-top: 70px;
+            }
+            .mobile-toggle {
+                display: block !important;
+            }
+            .profile-card {
+                padding: 24px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .top-navbar .page-title {
+                font-size: 0.9rem;
+            }
+            .profile-avatar {
+                width: 80px;
+                height: 80px;
+                font-size: 2rem;
+            }
+            .profile-field {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            .profile-field .value {
+                text-align: left;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="overlay" id="overlay"></div>
+
+<!-- ===== SIDEBAR ===== -->
+<aside class="sidebar" id="sidebar">
+    <div class="sidebar-brand">
+        <div class="brand-logo">
+            <i class="bi bi-bag-check-fill"></i>
+            <span>ShopyGo</span>
+        </div>
+        <small>Admin Panel v3.0</small>
+        <button class="sidebar-close" id="sidebarClose">
+            <i class="bi bi-x-lg"></i>
+        </button>
+    </div>
+
+    <div class="sidebar-menu">
+        <div class="menu-label">MAIN</div>
+
+        <a href="/admin-dashboard">
+            <i class="bi bi-speedometer2"></i>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="/admin-analytics">
+            <i class="bi bi-graph-up"></i>
+            <span>Analytics</span>
+        </a>
+
+        <a href="/admin-products">
+            <i class="bi bi-box-seam"></i>
+            <span>Products</span>
+            <span class="badge" id="productBadge">0</span>
+        </a>
+
+        <a href="/admin-categories">
+            <i class="bi bi-tags"></i>
+            <span>Categories</span>
+        </a>
+
+        <a href="/admin-orders">
+            <i class="bi bi-cart-check"></i>
+            <span>Orders</span>
+            <span class="badge" id="orderBadge">0</span>
+        </a>
+
+        <a href="/admin-customers">
+            <i class="bi bi-people"></i>
+            <span>Customers</span>
+            <span class="badge" id="customerBadge">0</span>
+        </a>
+    </div>
+
+    <div class="sidebar-footer">
+        <div class="footer-content">
+            <i class="bi bi-shield-check"></i>
+            <span>Secure Admin</span>
+        </div>
+        <div class="footer-version">v3.0</div>
+    </div>
+</aside>
+
+<!-- ===== TOP NAVBAR ===== -->
+<nav class="top-navbar">
+    <div class="d-flex align-items-center gap-3">
+        <button class="mobile-toggle" id="mobileToggle">
+            <i class="bi bi-list"></i>
+        </button>
+        <span class="page-title"><i class="bi bi-person-circle"></i> My Profile</span>
+    </div>
+    <div class="admin-profile">
+        <span class="badge bg-primary bg-opacity-10 text-primary p-2" id="adminNameDisplay">Admin</span>
+        <div class="avatar" id="adminAvatar" data-bs-toggle="dropdown">A</div>
+        <ul class="dropdown-menu dropdown-menu-end" style="border-radius: 12px; border: 1px solid #e8edf5; margin-top: 8px; min-width: 200px;">
+            <li><a class="dropdown-item" href="/admin/profile"><i class="bi bi-person-circle me-2"></i> Profile</a></li>
+            <li><a class="dropdown-item" href="/admin/settings"><i class="bi bi-gear me-2"></i> Settings</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="main-content">
+    <div class="profile-card">
+        <!-- Avatar -->
+        <div class="profile-avatar" id="avatarDisplay">
+            <span id="avatarLetter">A</span>
+        </div>
+        <div class="text-center mb-4">
+            <button class="btn btn-outline-custom btn-sm" id="uploadPhotoBtn">
+                <i class="bi bi-camera me-1"></i> Change Photo
+            </button>
+            <input type="file" id="photoInput" accept="image/*" style="display: none;">
+        </div>
+
+        <!-- Profile Fields -->
+        <div class="profile-field">
+            <span class="label"><i class="bi bi-person"></i>Full Name</span>
+            <span class="value" id="nameDisplay">Loading...</span>
+        </div>
+        <div class="profile-field">
+            <span class="label"><i class="bi bi-envelope"></i>Email</span>
+            <span class="value" id="emailDisplay">Loading...</span>
+        </div>
+        <div class="profile-field">
+            <span class="label"><i class="bi bi-phone"></i>Phone</span>
+            <span class="value" id="phoneDisplay">Not set</span>
+        </div>
+        <div class="profile-field">
+            <span class="label"><i class="bi bi-shield-check"></i>Role</span>
+            <span class="value" id="roleDisplay">Admin</span>
+        </div>
+        <div class="profile-field">
+            <span class="label"><i class="bi bi-calendar3"></i>Joined</span>
+            <span class="value" id="joinedDisplay">-</span>
+        </div>
+
+        <!-- Buttons -->
+        <div class="d-flex gap-3 mt-4 flex-wrap">
+            <button class="btn btn-primary-custom flex-1" onclick="editProfile()">
+                <i class="bi bi-pencil me-2"></i> Edit Profile
+            </button>
+            <a href="/admin/change-password" class="btn btn-outline-custom flex-1">
+                <i class="bi bi-key me-2"></i> Change Password
+            </a>
+        </div>
+        <div class="mt-3">
+            <button class="btn btn-outline-danger-custom w-100" onclick="logout()">
+                <i class="bi bi-box-arrow-right me-2"></i> Logout
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ===== EDIT PROFILE MODAL ===== -->
+<div class="modal fade modal-custom" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header border-0">
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-pencil me-2 text-primary"></i>Edit Profile
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="editName" placeholder="Enter your full name">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Phone Number</label>
+                    <input type="text" class="form-control" id="editPhone" placeholder="Enter your phone number">
+                </div>
+                <!-- Email field removed from edit profile - only Name and Phone -->
+            </div>
+            <div class="modal-footer border-0">
+                <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary-custom" id="saveProfileBtn">
+                    <i class="bi bi-check-lg me-1"></i> Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API_URL = 'http://localhost:5000/api';
+    let user = null;
+    let editModal = null;
+
+    // ================================================================
+    // TOAST NOTIFICATION
+    // ================================================================
+    function showToast(message, isError = false) {
+        let toast = document.getElementById('toastMsg');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'toastMsg';
+            toast.className = 'toast-notify';
+            document.body.appendChild(toast);
+        }
+        toast.className = 'toast-notify' + (isError ? ' error' : '');
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // ================================================================
+    // LOGOUT
+    // ================================================================
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = '/admin/login';
+        }
+    }
+
+    // ================================================================
+    // CHECK ADMIN AUTH
+    // ================================================================
+    function checkAdminAuth() {
+        const token = localStorage.getItem('token');
+        const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+        if (!token || storedUser.role !== 'admin') {
+            window.location.href = '/admin/login';
+            return false;
+        }
+        return true;
+    }
+
+    // ================================================================
+    // LOAD USER DATA
+    // ================================================================
+    function loadUserData() {
+        try {
+            user = JSON.parse(localStorage.getItem('user'));
+            if (!user) {
+                window.location.href = '/admin/login';
+                return;
+            }
+
+            document.getElementById('nameDisplay').textContent = user.name || 'Admin';
+            document.getElementById('emailDisplay').textContent = user.email || 'No Email';
+            document.getElementById('phoneDisplay').textContent = user.phone || 'Not set';
+            document.getElementById('roleDisplay').textContent = user.role || 'Admin';
+            document.getElementById('adminNameDisplay').textContent = user.name || 'Admin';
+            document.getElementById('joinedDisplay').textContent = user.createdAt ? new Date(user.createdAt).toLocaleDateString() : '-';
+
+            const avatar = document.getElementById('avatarLetter');
+            const adminAvatar = document.getElementById('adminAvatar');
+            if (user.name) {
+                const initial = user.name.charAt(0).toUpperCase();
+                avatar.textContent = initial;
+                adminAvatar.textContent = initial;
+            }
+
+            // Load badges
+            loadBadges();
+
+        } catch (e) {
+            console.error('Error loading user:', e);
+            window.location.href = '/admin/login';
+        }
+    }
+
+    // ================================================================
+    // LOAD BADGES - FIXED: Gets actual counts from API
+    // ================================================================
+    async function loadBadges() {
+        try {
+            // Fetch products count - FIXED: Gets all products
+            const productsRes = await fetch(`${API_URL}/products?limit=1000`);
+            if (productsRes.ok) {
+                const data = await productsRes.json();
+                let productCount = 0;
+                if (data.products && Array.isArray(data.products)) {
+                    productCount = data.products.length;
+                } else if (Array.isArray(data)) {
+                    productCount = data.length;
+                }
+                const badge = document.getElementById('productBadge');
+                badge.textContent = productCount;
+                badge.style.display = productCount > 0 ? 'inline-block' : 'none';
+                console.log('📦 Products count:', productCount);
+            }
+
+            // Fetch orders count
+            const ordersRes = await fetch(`${API_URL}/orders`);
+            if (ordersRes.ok) {
+                const orders = await ordersRes.json();
+                if (Array.isArray(orders)) {
+                    const badge = document.getElementById('orderBadge');
+                    badge.textContent = orders.length;
+                    badge.style.display = orders.length > 0 ? 'inline-block' : 'none';
+                }
+            }
+
+            // Fetch customers count
+            const customersRes = await fetch(`${API_URL}/users`);
+            if (customersRes.ok) {
+                const customers = await customersRes.json();
+                if (Array.isArray(customers)) {
+                    const badge = document.getElementById('customerBadge');
+                    badge.textContent = customers.length;
+                    badge.style.display = customers.length > 0 ? 'inline-block' : 'none';
+                }
+            }
+
+        } catch (error) {
+            console.error('Error loading badges:', error);
+        }
+    }
+
+    // ================================================================
+    // EDIT PROFILE
+    // ================================================================
+    function editProfile() {
+        document.getElementById('editName').value = user?.name || '';
+        document.getElementById('editPhone').value = user?.phone || '';
+        if (!editModal) {
+            editModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+        }
+        editModal.show();
+    }
+
+    // ================================================================
+    // SAVE PROFILE
+    // ================================================================
+    document.getElementById('saveProfileBtn').addEventListener('click', async () => {
+        const name = document.getElementById('editName').value.trim();
+        const phone = document.getElementById('editPhone').value.trim();
+
+        if (!name) {
+            showToast('Name is required', true);
+            return;
+        }
+
+        const btn = document.getElementById('saveProfileBtn');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Saving...';
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${API_URL}/users/${user._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ name, phone })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to update profile');
+            }
+
+            const data = await response.json();
+
+            // Update localStorage
+            user.name = name;
+            user.phone = phone;
+            localStorage.setItem('user', JSON.stringify(user));
+
+            loadUserData();
+            if (editModal) editModal.hide();
+            showToast('Profile updated successfully!');
+
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            showToast('Failed to update profile: ' + error.message, true);
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    });
+
+    // ================================================================
+    // UPLOAD PHOTO
+    // ================================================================
+    document.getElementById('uploadPhotoBtn').addEventListener('click', () => {
+        document.getElementById('photoInput').click();
+    });
+
+    document.getElementById('photoInput').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('photo', file);
+
+        const btn = document.getElementById('uploadPhotoBtn');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Uploading...';
+
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch(`${API_URL}/users/${user._id}/photo`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to upload photo');
+            }
+
+            const data = await response.json();
+            if (data.success && data.photoUrl) {
+                user.photo = data.photoUrl;
+                localStorage.setItem('user', JSON.stringify(user));
+            }
+
+            showToast('Photo updated successfully!');
+            setTimeout(() => window.location.reload(), 1000);
+
+        } catch (error) {
+            console.error('Error uploading photo:', error);
+            showToast('Failed to upload photo: ' + error.message, true);
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    });
+
+    // ================================================================
+    // SIDEBAR TOGGLE
+    // ================================================================
+    document.getElementById('mobileToggle').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.toggle('open');
+        document.getElementById('overlay').classList.toggle('show');
+    });
+
+    document.getElementById('sidebarClose').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+    });
+
+    document.getElementById('overlay').addEventListener('click', function() {
+        document.getElementById('sidebar').classList.remove('open');
+        document.getElementById('overlay').classList.remove('show');
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        }
+    });
+
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 992) {
+            document.getElementById('sidebar').classList.remove('open');
+            document.getElementById('overlay').classList.remove('show');
+        }
+    });
+
+    // ================================================================
+    // INIT
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('👤 Profile Page Loaded');
+        if (checkAdminAuth()) {
+            loadUserData();
+        }
+    });
+
+    // ================================================================
+    // GLOBAL FUNCTIONS
+    // ================================================================
+    window.logout = logout;
+    window.showToast = showToast;
+    window.editProfile = editProfile;
+</script>
+</body>
+</html>

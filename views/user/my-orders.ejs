@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Orders - ShopyGo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #f8fafc; }
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1d4ed8;
+            --soft-bg: #eff6ff;
+            --border-light: #e9eff5;
+        }
+        .navbar {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 0;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+        .nav-icon {
+            font-size: 1.4rem;
+            color: #1e293b;
+            transition: 0.2s;
+            position: relative;
+            cursor: pointer;
+        }
+        .nav-icon:hover { color: var(--primary-blue); }
+        .cart-badge { background-color: #2563eb; font-size: 10px; }
+        .btn-primary-blue {
+            background-color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            color: white;
+            border-radius: 40px;
+            padding: 10px 28px;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .btn-primary-blue:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37,99,235,0.25);
+        }
+        .order-card {
+            background: white;
+            border-radius: 20px;
+            border: 1px solid var(--border-light);
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: 0.2s;
+        }
+        .order-card:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+        }
+        .order-header {
+            padding: 18px 24px;
+            background: #fafcff;
+            border-bottom: 1px solid var(--border-light);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 10px;
+        }
+        .order-id {
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 0.95rem;
+        }
+        .order-date {
+            font-size: 0.75rem;
+            color: #6c7a91;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 4px 14px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-delivered {
+            background: #d1fae5;
+            color: #065f46;
+        }
+        .status-shipped {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+        .status-processing {
+            background: #fed7aa;
+            color: #92400e;
+        }
+        .status-pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        .status-cancelled {
+            background: #fee2e2;
+            color: #dc2626;
+        }
+        .order-body {
+            padding: 16px 24px;
+        }
+        .product-item {
+            display: flex;
+            gap: 15px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-light);
+            align-items: center;
+        }
+        .product-item:last-child {
+            border-bottom: none;
+        }
+        .product-img {
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.6rem;
+            color: var(--primary-blue);
+            background: #f8fafd;
+            overflow: hidden;
+            flex-shrink: 0;
+            border: 1px solid var(--border-light);
+        }
+        .product-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .product-details {
+            flex: 1;
+            min-width: 0;
+        }
+        .product-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+            color: #1e293b;
+        }
+        .product-meta {
+            font-size: 0.7rem;
+            color: #6c7a91;
+        }
+        .product-price {
+            font-weight: 700;
+            color: var(--primary-blue);
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+        .order-footer {
+            padding: 14px 24px;
+            background: #fafcff;
+            border-top: 1px solid var(--border-light);
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+        .total-amount {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #1e293b;
+        }
+        .total-amount span {
+            color: var(--primary-blue);
+        }
+        .btn-outline {
+            padding: 6px 18px;
+            border-radius: 30px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: transparent;
+            border: 1px solid #d1d5db;
+            color: #475569;
+            transition: 0.2s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+        }
+        .btn-outline:hover {
+            border-color: var(--primary-blue);
+            color: var(--primary-blue);
+            background: var(--soft-bg);
+        }
+        .btn-outline-danger {
+            border-color: #fca5a5;
+            color: #dc2626;
+        }
+        .btn-outline-danger:hover {
+            background: #fee2e2;
+            border-color: #dc2626;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 24px;
+            border: 1px solid var(--border-light);
+        }
+        .empty-state i {
+            font-size: 4.5rem;
+            color: #cbd5e1;
+            margin-bottom: 16px;
+        }
+        .empty-state h4 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+        .toast-container { z-index: 9999; }
+        footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 48px 0 28px;
+            margin-top: 60px;
+        }
+        footer a { color: #94a3b8; text-decoration: none; }
+        footer a:hover { color: white; }
+        .copyright {
+            border-top: 1px solid #1e293b;
+            padding-top: 28px;
+            margin-top: 32px;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        /* Tracking Modal Styles */
+        .tracking-timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+        .tracking-timeline::before {
+            content: '';
+            position: absolute;
+            left: 8px;
+            top: 4px;
+            bottom: 4px;
+            width: 2px;
+            background: #e2e8f0;
+        }
+        .tracking-step {
+            position: relative;
+            margin-bottom: 24px;
+            padding-left: 8px;
+        }
+        .tracking-step:last-child { margin-bottom: 0; }
+        .tracking-step .dot {
+            position: absolute;
+            left: -22px;
+            top: 4px;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 2px solid #e2e8f0;
+            background: white;
+            transition: 0.3s;
+        }
+        .tracking-step .dot.active {
+            background: var(--primary-blue);
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 4px rgba(37,99,235,0.15);
+        }
+        .tracking-step .dot.completed {
+            background: #16a34a;
+            border-color: #16a34a;
+        }
+        .tracking-step .step-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #1e293b;
+        }
+        .tracking-step .step-date {
+            font-size: 0.75rem;
+            color: #6c7a91;
+        }
+        .tracking-step .step-desc {
+            font-size: 0.8rem;
+            color: #6c7a91;
+            margin-top: 2px;
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        .loading-spinner .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid var(--border-light);
+            border-top-color: var(--primary-blue);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 16px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .order-header { flex-direction: column; align-items: flex-start; }
+            .product-item { flex-wrap: wrap; }
+            .product-price { margin-left: auto; }
+            .order-footer { flex-direction: column; align-items: stretch; }
+            .order-footer .btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
+            .order-footer .btn-group .btn-outline { flex: 1; justify-content: center; min-width: 80px; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-3 px-lg-5">
+        <a class="navbar-brand fw-bold fs-2" href="/">🛒 ShopyGo</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navRight">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navRight">
+            <div class="d-flex align-items-center gap-3 ms-auto mt-2 mt-lg-0">
+                <a href="/cart" class="nav-icon position-relative">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge">0</span>
+                </a>
+                <div class="dropdown">
+                    <a href="#" class="nav-icon dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user-circle fa-lg"></i></a>
+                    <ul class="dropdown-menu dropdown-menu-end" style="border-radius:20px;border:none;box-shadow:0 12px 28px rgba(0,0,0,0.08);margin-top:12px;" id="authDropdown">
+                        <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                        <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<main class="container my-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
+        <h2 class="fw-bold"><i class="fas fa-box text-primary-blue me-2"></i>My Orders</h2>
+        <span class="text-muted" id="orderCount"></span>
+    </div>
+    <hr>
+
+    <!-- Orders Container -->
+    <div id="ordersContainer">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p class="text-muted">Loading your orders...</p>
+        </div>
+    </div>
+</main>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-4"><h4 class="fw-bold text-white mb-3"><i class="fas fa-store me-2"></i>ShopyGo</h4><p class="small">India's fastest growing e-commerce platform.</p></div>
+            <div class="col-md-2"><h5 class="text-white mb-3">Company</h5><ul class="list-unstyled"><li><a href="/about">About</a></li><li><a href="/careers">Careers</a></li></ul></div>
+            <div class="col-md-3"><h5 class="text-white mb-3">Support</h5><ul class="list-unstyled"><li><a href="/help">Help</a></li><li><a href="/returns">Returns</a></li></ul></div>
+            <div class="col-md-3"><h5 class="text-white mb-3">Contact</h5><ul class="list-unstyled"><li><i class="fas fa-envelope me-2"></i>support@shopygo.com</li><li><i class="fas fa-phone-alt me-2"></i>+91 1800 202 8899</li></ul></div>
+        </div>
+        <div class="copyright text-center">© 2025 ShopyGo — All rights reserved.</div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API_URL = 'http://localhost:5000/api';
+
+    // ================================================================
+    // CART FUNCTIONS
+    // ================================================================
+    function getCart() {
+        return JSON.parse(localStorage.getItem('cart')) || [];
+    }
+
+    function updateCartCount() {
+        const cart = getCart();
+        const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const badge = document.getElementById('cartCount');
+        if (badge) {
+            badge.textContent = total;
+            badge.style.display = total > 0 ? 'inline-block' : 'none';
+        }
+    }
+
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            showToast('✅ Logged out successfully!', 'success');
+            setTimeout(() => { window.location.href = '/'; }, 500);
+        }
+    }
+
+    function showToast(message, type = 'info') {
+        let container = document.getElementById('toastContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container position-fixed top-0 end-0 p-3';
+            document.body.appendChild(container);
+        }
+        const bgColor = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-primary';
+        const toast = document.createElement('div');
+        toast.className = `toast align-items-center text-white ${bgColor} border-0 show`;
+        toast.innerHTML = `
+            <div class="d-flex">
+                <div class="toast-body">${message}</div>
+                <button type="button" class="btn-close btn-close-white me-2 m-auto" onclick="this.parentElement.parentElement.remove()"></button>
+            </div>
+        `;
+        container.appendChild(toast);
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }, 3000);
+    }
+
+    // ================================================================
+    // GET ORDERS FROM LOCALSTORAGE (Backup)
+    // ================================================================
+    function getLocalOrders() {
+        return JSON.parse(localStorage.getItem('orders')) || [];
+    }
+
+    function saveLocalOrders(orders) {
+        localStorage.setItem('orders', JSON.stringify(orders));
+    }
+
+    // ================================================================
+    // FORMAT PRICE
+    // ================================================================
+    function formatPrice(p) {
+        const num = Number(p);
+        if (isNaN(num) || num === 0) return '₹0.00';
+        return `₹${num.toFixed(2)}`;
+    }
+
+    // ================================================================
+    // GET PRODUCT IMAGE
+    // ================================================================
+    async function getProductImage(productId) {
+        try {
+            if (!productId) return null;
+            const response = await fetch(`${API_URL}/products/${productId}`);
+            const data = await response.json();
+            return data.mainImage || data.image || null;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    // ================================================================
+    // GET STATUS BADGE
+    // ================================================================
+    function getStatusBadge(status) {
+        const statusMap = {
+            'pending': '<span class="status-badge status-pending"><i class="fas fa-clock"></i> Pending</span>',
+            'processing': '<span class="status-badge status-processing"><i class="fas fa-clock"></i> Processing</span>',
+            'shipped': '<span class="status-badge status-shipped"><i class="fas fa-truck"></i> Shipped</span>',
+            'delivered': '<span class="status-badge status-delivered"><i class="fas fa-check-circle"></i> Delivered</span>',
+            'cancelled': '<span class="status-badge status-cancelled"><i class="fas fa-times-circle"></i> Cancelled</span>'
+        };
+        return statusMap[status] || statusMap['pending'];
+    }
+
+    // ================================================================
+    // RENDER ORDERS - FETCHES FROM DATABASE + LOCALSTORAGE FALLBACK
+    // ================================================================
+    async function renderOrders() {
+        const container = document.getElementById('ordersContainer');
+        const orderCount = document.getElementById('orderCount');
+        
+        try {
+            // Show loading
+            container.innerHTML = `
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p class="text-muted">Loading your orders...</p>
+                </div>
+            `;
+
+            // ✅ Try to fetch from database first
+            const token = localStorage.getItem('token');
+            let orders = [];
+            let fromDB = false;
+
+            if (token && token !== 'null' && token !== 'undefined') {
+                try {
+                    const response = await fetch(`${API_URL}/orders/my-orders`, {
+                        headers: {
+                            'Authorization': `Bearer ${token}`,
+                            'Content-Type': 'application/json'
+                        }
+                    });
+
+                    if (response.ok) {
+                        const data = await response.json();
+                        if (Array.isArray(data)) {
+                            orders = data;
+                            fromDB = true;
+                            console.log('📦 Orders from database:', orders.length);
+                        } else if (data.orders && Array.isArray(data.orders)) {
+                            orders = data.orders;
+                            fromDB = true;
+                            console.log('📦 Orders from database (nested):', orders.length);
+                        }
+                    } else {
+                        console.log('⚠️ Database fetch failed, status:', response.status);
+                    }
+                } catch (dbError) {
+                    console.log('⚠️ Could not fetch from database:', dbError.message);
+                }
+            }
+
+            // ✅ Fallback to localStorage if no database orders
+            if (!fromDB || orders.length === 0) {
+                const localOrders = getLocalOrders();
+                if (localOrders.length > 0) {
+                    orders = localOrders;
+                    console.log('📦 Orders from localStorage:', orders.length);
+                    // Show info that orders are from local storage
+                    showToast('Showing orders from local storage. Login to sync orders.', 'info');
+                }
+            }
+
+            // If still no orders, show empty state
+            if (orders.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <h4>No orders yet</h4>
+                        <p class="text-muted">You haven't placed any orders. Start shopping now!</p>
+                        <a href="/shop" class="btn btn-primary-blue rounded-pill px-4 mt-3">
+                            <i class="fas fa-store me-2"></i> Start Shopping
+                        </a>
+                    </div>
+                `;
+                orderCount.textContent = '';
+                return;
+            }
+
+            orderCount.textContent = `${orders.length} order${orders.length > 1 ? 's' : ''}`;
+
+            let html = '';
+            const reversedOrders = [...orders].reverse();
+            
+            for (const order of reversedOrders) {
+                // Get order ID
+                const orderId = order.orderNumber || order.orderId || 'ORD' + String(Math.floor(Math.random() * 1000000)).padStart(6, '0');
+                
+                // Get items
+                let items = order.items || [];
+                
+                // If items have productId as object, extract it
+                items = items.map(item => {
+                    if (item.productId && typeof item.productId === 'object') {
+                        return {
+                            ...item,
+                            productId: item.productId._id || item.productId,
+                            productName: item.productId.name || item.productName || item.name || 'Product',
+                            price: item.price || item.productId?.price || 0
+                        };
+                    }
+                    return {
+                        ...item,
+                        productName: item.productName || item.name || 'Product'
+                    };
+                });
+
+                // Calculate total
+                let total = order.totalAmount || 0;
+                if (total === 0 && items.length > 0) {
+                    for (const item of items) {
+                        const price = Number(item.price) || 0;
+                        const quantity = Number(item.quantity) || 1;
+                        total += price * quantity;
+                    }
+                }
+
+                const itemCount = items.reduce((sum, item) => sum + (item.quantity || 1), 0);
+                const orderDate = new Date(order.createdAt || order.orderDate || Date.now());
+                const formattedDate = orderDate.toLocaleDateString('en-IN', {
+                    day: '2-digit',
+                    month: 'short',
+                    year: 'numeric'
+                });
+                const formattedTime = orderDate.toLocaleTimeString('en-IN', {
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+                
+                html += `
+                    <div class="order-card">
+                        <div class="order-header">
+                            <div>
+                                <div class="order-id">Order #${orderId}</div>
+                                <div class="order-date">${formattedDate} at ${formattedTime}</div>
+                            </div>
+                            <div>${getStatusBadge(order.status || 'pending')}</div>
+                        </div>
+                        <div class="order-body">
+                `;
+                
+                for (const item of items) {
+                    const productName = item.productName || item.name || 'Product';
+                    const price = Number(item.price) || 0;
+                    const quantity = Number(item.quantity) || 1;
+                    const itemTotal = price * quantity;
+                    
+                    let imageHtml = `<i class="fas fa-box"></i>`;
+                    if (item.productId) {
+                        try {
+                            const img = await getProductImage(item.productId);
+                            if (img) {
+                                imageHtml = `<img src="${img}" alt="${productName}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-box\\'></i>'">`;
+                            }
+                        } catch (e) {
+                            imageHtml = `<i class="fas fa-box"></i>`;
+                        }
+                    }
+                    
+                    html += `
+                        <div class="product-item">
+                            <div class="product-img">
+                                ${imageHtml}
+                            </div>
+                            <div class="product-details">
+                                <div class="product-name">${productName}</div>
+                                <div class="product-meta">Qty: ${quantity} × ${formatPrice(price)}</div>
+                            </div>
+                            <div class="product-price">${formatPrice(itemTotal)}</div>
+                        </div>
+                    `;
+                }
+                
+                html += `
+                        </div>
+                        <div class="order-footer">
+                            <div>
+                                <div class="total-amount">Total: <span>${formatPrice(total)}</span></div>
+                                <div class="product-meta mt-1">${itemCount} item${itemCount > 1 ? 's' : ''}</div>
+                            </div>
+                            <div class="btn-group">
+                                <button class="btn-outline" onclick="trackOrder('${orderId}')">
+                                    <i class="fas fa-location-dot"></i> Track
+                                </button>
+                                ${order.status !== 'cancelled' && order.status !== 'delivered' ? `
+                                    <button class="btn-outline btn-outline-danger" onclick="cancelOrder('${orderId}')">
+                                        <i class="fas fa-times"></i> Cancel
+                                    </button>
+                                ` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            container.innerHTML = html;
+
+            // ✅ Update localStorage as backup
+            saveLocalOrders(orders);
+
+        } catch (error) {
+            console.error('❌ Error rendering orders:', error);
+            container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-circle text-danger"></i>
+                    <h4>Error loading orders</h4>
+                    <p class="text-muted">${error.message}</p>
+                    <button class="btn btn-primary-blue rounded-pill px-4 mt-3" onclick="renderOrders()">
+                        <i class="fas fa-sync-alt me-2"></i> Retry
+                    </button>
+                </div>
+            `;
+        }
+    }
+
+    // ================================================================
+    // CANCEL ORDER
+    // ================================================================
+    function cancelOrder(orderId) {
+        if (!confirm('Are you sure you want to cancel this order?')) return;
+        
+        // Try to cancel via API
+        const token = localStorage.getItem('token');
+        
+        if (token) {
+            fetch(`${API_URL}/orders/${orderId}/cancel`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    showToast('✅ Order cancelled successfully', 'success');
+                    renderOrders();
+                } else {
+                    // Fallback to localStorage
+                    cancelLocalOrder(orderId);
+                }
+            })
+            .catch(() => {
+                // Fallback to localStorage
+                cancelLocalOrder(orderId);
+            });
+        } else {
+            cancelLocalOrder(orderId);
+        }
+    }
+
+    function cancelLocalOrder(orderId) {
+        const orders = getLocalOrders();
+        const orderIndex = orders.findIndex(o => (o.orderId === orderId || o.orderNumber === orderId));
+        
+        if (orderIndex === -1) {
+            showToast('Order not found', 'error');
+            return;
+        }
+        
+        orders[orderIndex].status = 'cancelled';
+        saveLocalOrders(orders);
+        showToast('✅ Order cancelled successfully', 'success');
+        renderOrders();
+    }
+
+    // ================================================================
+    // TRACK ORDER
+    // ================================================================
+    function trackOrder(orderId) {
+        // Try to get order from localStorage first
+        let orders = getLocalOrders();
+        let order = orders.find(o => (o.orderId === orderId || o.orderNumber === orderId));
+        
+        // If not found, use mock data
+        if (!order) {
+            order = {
+                status: 'pending',
+                orderDate: new Date().toISOString()
+            };
+        }
+        
+        const status = order.status || 'pending';
+        const orderDate = new Date(order.orderDate || order.createdAt || Date.now());
+        
+        let steps = [];
+        
+        if (status === 'cancelled') {
+            steps = [
+                { title: 'Order Placed', date: orderDate, desc: 'Your order has been confirmed', completed: true },
+                { title: 'Cancelled', date: new Date(), desc: 'Your order has been cancelled', completed: true }
+            ];
+        } else {
+            steps = [
+                { title: 'Order Placed', date: orderDate, desc: 'Your order has been confirmed', completed: true },
+                { title: 'Processing', date: new Date(orderDate.getTime() + 2 * 24 * 60 * 60 * 1000), desc: 'Your order is being prepared', completed: status !== 'pending' },
+                { title: 'Shipped', date: new Date(orderDate.getTime() + 4 * 24 * 60 * 60 * 1000), desc: 'Your order has been dispatched', completed: status === 'shipped' || status === 'delivered' },
+                { title: 'Delivered', date: new Date(orderDate.getTime() + 6 * 24 * 60 * 60 * 1000), desc: 'Your order has been delivered', completed: status === 'delivered' }
+            ];
+        }
+        
+        const formatDate = (date) => {
+            return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        };
+        
+        const timelineHtml = steps.map((step, index) => {
+            const dotClass = step.completed ? 'active' : '';
+            const titleClass = step.completed ? '' : 'text-muted';
+            return `
+                <div class="tracking-step">
+                    <div class="dot ${dotClass}"></div>
+                    <div class="step-title ${titleClass}">${step.title}</div>
+                    <div class="step-date">${formatDate(step.date)}</div>
+                    <div class="step-desc">${step.desc}</div>
+                </div>
+            `;
+        }).join('');
+        
+        const modalHtml = `
+            <div class="modal fade" id="trackingModal" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content" style="border-radius: 24px; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3);">
+                        <div class="modal-header" style="border-bottom: none; padding: 28px 30px 0;">
+                            <div>
+                                <h5 class="modal-title fw-bold">
+                                    <i class="fas fa-location-dot text-primary-blue me-2"></i> Track Order
+                                </h5>
+                                <p class="text-muted small mb-0">Order #${orderId}</p>
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body" style="padding: 24px 30px 30px;">
+                            ${status === 'cancelled' ? `
+                                <div class="alert alert-danger text-center" style="border-radius: 16px;">
+                                    <i class="fas fa-times-circle fa-2x mb-2"></i>
+                                    <p class="fw-bold mb-0">This order has been cancelled</p>
+                                </div>
+                            ` : `
+                                <div class="text-center mb-4">
+                                    <div style="font-size: 3.5rem; color: ${status === 'delivered' ? '#16a34a' : '#2563eb'};">
+                                        <i class="fas ${status === 'delivered' ? 'fa-check-circle' : 'fa-truck'}"></i>
+                                    </div>
+                                    <h6 class="fw-bold mt-2" style="color: ${status === 'delivered' ? '#16a34a' : '#1e293b'};">
+                                        ${status === 'delivered' ? '✅ Delivered' : status === 'shipped' ? '📦 Shipped' : status === 'processing' ? '⚙️ Processing' : '⏳ Pending'}
+                                    </h6>
+                                </div>
+                            `}
+                            
+                            <div class="tracking-timeline">
+                                ${timelineHtml}
+                            </div>
+                            
+                            ${status !== 'cancelled' && status !== 'delivered' ? `
+                                <div class="alert alert-info mt-4" style="border-radius: 12px; background: #eff6ff; border-color: #bfdbfe;">
+                                    <i class="fas fa-info-circle me-2"></i>
+                                    <small>You will receive email updates about your order status.</small>
+                                </div>
+                            ` : ''}
+                        </div>
+                        <div class="modal-footer" style="border-top: none; padding: 0 30px 28px;">
+                            <button type="button" class="btn btn-primary-blue w-100" data-bs-dismiss="modal">
+                                <i class="fas fa-check me-2"></i> Done
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        const existingModal = document.getElementById('trackingModal');
+        if (existingModal) {
+            existingModal.remove();
+        }
+        
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        const modal = new bootstrap.Modal(document.getElementById('trackingModal'));
+        modal.show();
+    }
+
+    // ================================================================
+    // UPDATE NAVBAR
+    // ================================================================
+    function updateNavbar() {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const dropdown = document.getElementById('authDropdown');
+
+        if (token && token !== 'null' && token !== 'undefined') {
+            dropdown.innerHTML = `
+                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>${user.name || 'My Account'}</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            `;
+        } else {
+            dropdown.innerHTML = `
+                <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+            `;
+        }
+    }
+
+    // ================================================================
+    // INIT
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('📦 My Orders page loaded');
+        updateCartCount();
+        updateNavbar();
+        renderOrders();
+    });
+
+    // Make functions globally accessible
+    window.logout = logout;
+    window.trackOrder = trackOrder;
+    window.cancelOrder = cancelOrder;
+    window.renderOrders = renderOrders;
+</script>
+</body>
+</html>
