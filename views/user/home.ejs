@@ -101,28 +101,185 @@
             margin: 6px 0;
         }
         
-        .banner-section {
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+        /* ===== 3-SLIDE CAROUSEL BANNER ===== */
+        .banner-carousel {
+            position: relative;
             border-radius: 28px;
-            padding: 50px 40px;
+            overflow: hidden;
             margin: 20px 0 30px;
+            box-shadow: 0 20px 40px -12px rgba(0,0,0,0.25);
+            min-height: 340px;
+        }
+        .banner-carousel .carousel-item {
+            min-height: 340px;
             position: relative;
             overflow: hidden;
         }
-        .banner-section h1 { color: white; font-size: 2.8rem; font-weight: 800; }
-        .banner-section h1 span { color: #fcd34d; }
-        .banner-section p { color: rgba(255,255,255,0.85); font-size: 1.1rem; }
-        .banner-section .btn-banner {
+        .banner-carousel .carousel-item .slide-bg {
+            position: absolute;
+            inset: 0;
+            background-size: cover;
+            background-position: center;
+            transition: transform 8s ease;
+            animation: zoomPan 20s infinite alternate ease-in-out;
+        }
+        @keyframes zoomPan {
+            0% { transform: scale(1) translateX(0); }
+            50% { transform: scale(1.08) translateX(-2%); }
+            100% { transform: scale(1.12) translateX(2%); }
+        }
+        .banner-carousel .carousel-item .slide-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+        }
+        .banner-carousel .carousel-item .slide-overlay.gradient-blue {
+            background: linear-gradient(135deg, rgba(15,23,42,0.75) 0%, rgba(30,58,138,0.5) 80%);
+        }
+        .banner-carousel .carousel-item .slide-overlay.gradient-dark {
+            background: linear-gradient(135deg, rgba(0,0,0,0.8) 0%, rgba(0,0,0,0.4) 80%);
+        }
+        .banner-carousel .carousel-item .slide-overlay.gradient-purple {
+            background: linear-gradient(135deg, rgba(88,28,135,0.8) 0%, rgba(139,92,246,0.4) 80%);
+        }
+        .banner-carousel .carousel-item .slide-content {
+            position: relative;
+            z-index: 2;
+            padding: 50px 40px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .banner-carousel .carousel-item .slide-content h1 {
+            color: white;
+            font-size: 2.8rem;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+            animation: fadeSlideUp 0.8s ease-out;
+        }
+        .banner-carousel .carousel-item .slide-content h1 span {
+            color: #fcd34d;
+            display: inline-block;
+        }
+        .banner-carousel .carousel-item .slide-content p {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            animation: fadeSlideUp 0.8s ease-out 0.1s both;
+        }
+        .banner-carousel .carousel-item .slide-content .btn-banner {
             background: white;
             color: var(--primary-blue);
             border: none;
             border-radius: 40px;
             padding: 12px 32px;
             font-weight: 700;
-            transition: 0.3s;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            animation: fadeSlideUp 0.8s ease-out 0.2s both;
         }
-        .banner-section .btn-banner:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0,0,0,0.15); }
-        .banner-section .banner-image i { font-size: 8rem; color: rgba(255,255,255,0.2); }
+        .banner-carousel .carousel-item .slide-content .btn-banner:hover {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 14px 35px rgba(0,0,0,0.3);
+            background: #f8fafc;
+        }
+        .banner-carousel .carousel-item .slide-content .banner-icon {
+            font-size: 7rem;
+            color: rgba(255,255,255,0.15);
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+            animation: floatIcon 4s ease-in-out infinite;
+            text-align: center;
+        }
+        @keyframes floatIcon {
+            0% { transform: translateY(0px) rotate(-2deg); }
+            50% { transform: translateY(-12px) rotate(2deg); }
+            100% { transform: translateY(0px) rotate(-2deg); }
+        }
+        @keyframes fadeSlideUp {
+            0% { transform: translateY(20px); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .banner-carousel .carousel-control-prev,
+        .banner-carousel .carousel-control-next {
+            width: 48px;
+            height: 48px;
+            background: rgba(255,255,255,0.12);
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            transition: all 0.3s;
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .banner-carousel:hover .carousel-control-prev,
+        .banner-carousel:hover .carousel-control-next {
+            opacity: 1;
+        }
+        .banner-carousel .carousel-control-prev { left: 16px; }
+        .banner-carousel .carousel-control-next { right: 16px; }
+        .banner-carousel .carousel-control-prev:hover,
+        .banner-carousel .carousel-control-next:hover {
+            background: rgba(255,255,255,0.25);
+        }
+        .banner-carousel .carousel-indicators {
+            bottom: 12px;
+            gap: 8px;
+        }
+        .banner-carousel .carousel-indicators button {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            border: 2px solid rgba(255,255,255,0.5);
+            background: transparent;
+            transition: all 0.3s;
+        }
+        .banner-carousel .carousel-indicators button.active {
+            background: white;
+            border-color: white;
+            width: 28px;
+            border-radius: 6px;
+        }
+        .banner-carousel .carousel-indicators button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        .banner-carousel .floating-badge {
+            position: absolute;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 6px 18px;
+            color: white;
+            font-size: 0.7rem;
+            border: 1px solid rgba(255,255,255,0.15);
+            animation: floatBadge 5s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 3;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .floating-badge.b1 { top: 15%; right: 10%; animation-delay: 0s; }
+        .floating-badge.b2 { bottom: 20%; right: 25%; animation-delay: 2s; }
+        @keyframes floatBadge {
+            0%, 100% { transform: translateY(0px); opacity: 0.7; }
+            50% { transform: translateY(-10px); opacity: 1; }
+        }
+
+        @media (max-width: 768px) {
+            .banner-carousel .carousel-item { min-height: 240px; }
+            .banner-carousel .carousel-item .slide-content { padding: 30px 20px; }
+            .banner-carousel .carousel-item .slide-content h1 { font-size: 1.8rem; }
+            .banner-carousel .carousel-item .slide-content .banner-icon { font-size: 4rem; }
+            .banner-carousel .carousel-control-prev,
+            .banner-carousel .carousel-control-next { display: none; }
+            .floating-badge { display: none; }
+        }
+        @media (max-width: 576px) {
+            .banner-carousel .carousel-item .slide-content h1 { font-size: 1.4rem; }
+            .banner-carousel .carousel-item .slide-content p { font-size: 0.9rem; }
+            .banner-carousel .carousel-item .slide-content .btn-banner { padding: 8px 20px; font-size: 0.85rem; }
+        }
         
         .category-card {
             background: white;
@@ -473,15 +630,9 @@
         }
         @media (max-width: 768px) {
             .subcategory-modal-card .sub-img { height: 140px; }
-            .banner-section { padding: 30px 20px; }
-            .banner-section h1 { font-size: 2rem; }
-            .banner-section .banner-image i { font-size: 5rem; }
             .login-popup { padding: 30px 20px 25px; }
             .login-popup .icon { width: 70px; height: 70px; line-height: 70px; font-size: 3.5rem; }
             .search-info-bar { padding: 12px 16px; flex-direction: column; align-items: flex-start; }
-        }
-        @media (max-width: 576px) {
-            .banner-section h1 { font-size: 1.6rem; }
         }
     </style>
 </head>
@@ -548,18 +699,81 @@
 <!-- ===== MAIN CONTENT ===== -->
 <main class="container my-3">
 
-    <!-- BANNER - Summer Sale -->
-    <div class="banner-section">
-        <div class="row align-items-center">
-            <div class="col-lg-7">
-                <h1>Summer Sale <br><span>Up to 50% OFF</span></h1>
-                <p>Discover the latest trends at unbeatable prices. Shop now and save big!</p>
-                <a href="/shop" class="btn btn-banner"><i class="fas fa-bolt me-2"></i> Shop Now</a>
-            </div>
-            <div class="col-lg-5 banner-image mt-4 mt-lg-0">
-                <i class="fas fa-tags"></i>
+    <!-- ===== 3-SLIDE CAROUSEL BANNER ===== -->
+    <div id="mainBannerCarousel" class="banner-carousel carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
+        <!-- Indicators -->
+        <div class="carousel-indicators">
+            <button type="button" data-bs-target="#mainBannerCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
+            <button type="button" data-bs-target="#mainBannerCarousel" data-bs-slide-to="1"></button>
+            <button type="button" data-bs-target="#mainBannerCarousel" data-bs-slide-to="2"></button>
+        </div>
+
+        <!-- Slide 1 - Summer Sale -->
+        <div class="carousel-item active">
+            <div class="slide-bg" style="background: url('https://images.unsplash.com/photo-1607082350899-7e105aa886ae?w=1200&q=80') center/cover no-repeat;"></div>
+            <div class="slide-overlay gradient-blue"></div>
+            <div class="floating-badge b1"><i class="fas fa-bolt me-1"></i> FLASH SALE</div>
+            <div class="slide-content">
+                <div class="row align-items-center w-100">
+                    <div class="col-lg-7">
+                        <h1>Summer Sale <br><span>Up to 50% OFF</span></h1>
+                        <p>Discover the latest trends at unbeatable prices. Shop now and save big!</p>
+                        <a href="/shop" class="btn btn-banner"><i class="fas fa-bolt me-2"></i> Shop Now</a>
+                    </div>
+                    <div class="col-lg-5 text-center">
+                        <i class="fas fa-tags banner-icon"></i>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <!-- Slide 2 - Electronics -->
+        <div class="carousel-item">
+            <div class="slide-bg" style="background: url('https://images.unsplash.com/photo-1498049794561-7780e7231661?w=1200&q=80') center/cover no-repeat;"></div>
+            <div class="slide-overlay gradient-dark"></div>
+            <div class="floating-badge b2"><i class="fas fa-gem me-1"></i> NEW ARRIVALS</div>
+            <div class="slide-content">
+                <div class="row align-items-center w-100">
+                    <div class="col-lg-7">
+                        <h1>Tech Deals <br><span>Up to 40% OFF</span></h1>
+                        <p>Latest gadgets, smartphones, laptops & accessories at amazing prices!</p>
+                        <a href="/shop?category=electronics" class="btn btn-banner"><i class="fas fa-laptop me-2"></i> Explore Tech</a>
+                    </div>
+                    <div class="col-lg-5 text-center">
+                        <i class="fas fa-laptop banner-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3 - Fashion -->
+        <div class="carousel-item">
+            <div class="slide-bg" style="background: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=80') center/cover no-repeat;"></div>
+            <div class="slide-overlay gradient-purple"></div>
+            <div class="floating-badge b1"><i class="fas fa-fire me-1"></i> TRENDING</div>
+            <div class="slide-content">
+                <div class="row align-items-center w-100">
+                    <div class="col-lg-7">
+                        <h1>Fashion Week <br><span>Up to 60% OFF</span></h1>
+                        <p>Premium clothing, footwear & accessories from top brands.</p>
+                        <a href="/shop?category=fashion" class="btn btn-banner"><i class="fas fa-tshirt me-2"></i> Shop Fashion</a>
+                    </div>
+                    <div class="col-lg-5 text-center">
+                        <i class="fas fa-tshirt banner-icon"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <button class="carousel-control-prev" type="button" data-bs-target="#mainBannerCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#mainBannerCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+        </button>
     </div>
 
     <!-- CATEGORIES -->
@@ -622,11 +836,10 @@
     </div>
 </main>
 
-<!-- ===== SUBCATEGORY MODAL - FIXED ===== -->
+<!-- ===== SUBCATEGORY MODAL ===== -->
 <div class="modal fade" id="subcategoryModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content" style="border-radius: 24px; border: none; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25);">
-            <!-- ✅ HEADER ADDED -->
             <div class="modal-header" style="border-radius: 24px 24px 0 0; padding: 20px 30px; border-bottom: 2px solid #eff6ff;">
                 <div>
                     <h5 class="modal-title fw-bold">
@@ -791,23 +1004,17 @@
     });
 
     // ================================================================
-    // SEARCH FUNCTIONALITY - Redirect to Search Page
+    // SEARCH FUNCTIONALITY
     // ================================================================
     function performSearch() {
         const query = document.getElementById('globalSearchInput').value.trim();
-        
         if (!query) {
             showToast('Please enter a search term', 'info');
             return;
         }
-
-        // 🔴 REDIRECT TO SEARCH PAGE
         window.location.href = `/search?q=${encodeURIComponent(query)}`;
     }
 
-    // ================================================================
-    // CLEAR SEARCH
-    // ================================================================
     function clearSearch() {
         document.getElementById('searchResultsSection').style.display = 'none';
         document.getElementById('trendingSection').style.display = 'block';
@@ -819,20 +1026,15 @@
         window.history.pushState({}, '', url);
     }
 
-    // ================================================================
-    // LOAD SEARCH RESULTS FROM URL
-    // ================================================================
     async function loadSearchResults() {
         const params = new URLSearchParams(window.location.search);
         const search = params.get('search');
-        
         if (!search) {
             document.getElementById('searchResultsSection').style.display = 'none';
             document.getElementById('trendingSection').style.display = 'block';
             document.getElementById('newArrivalsSection').style.display = 'block';
             return;
         }
-
         currentSearchTerm = search;
         document.getElementById('globalSearchInput').value = search;
         document.getElementById('searchResultsSection').style.display = 'block';
@@ -842,19 +1044,15 @@
 
         try {
             const data = await apiCall(`/products?search=${encodeURIComponent(search)}&limit=50`);
-            
             let products = [];
             if (data.products && Array.isArray(data.products)) {
                 products = data.products;
             } else if (Array.isArray(data)) {
                 products = data;
             }
-            
             allProducts = products;
-            console.log(`🔍 Found ${products.length} results for "${search}"`);
             document.getElementById('searchResultCount').textContent = `(${products.length} found)`;
             renderSearchResults(products);
-
         } catch (error) {
             console.error('❌ Search error:', error);
             document.getElementById('searchResultsGrid').innerHTML = `
@@ -868,12 +1066,8 @@
         }
     }
 
-    // ================================================================
-    // RENDER SEARCH RESULTS
-    // ================================================================
     function renderSearchResults(products) {
         const grid = document.getElementById('searchResultsGrid');
-        
         if (!products || products.length === 0) {
             grid.innerHTML = `
                 <div class="col-12 text-center py-5">
@@ -887,7 +1081,6 @@
             `;
             return;
         }
-
         grid.innerHTML = products.map(product => {
             const price = Number(product.price) || 0;
             const sale = product.salePrice ? Number(product.salePrice) : null;
@@ -897,7 +1090,6 @@
             const img = product.mainImage || product.image || 'https://via.placeholder.com/300x300';
             const rating = product.rating || 4.5;
             const ratingCount = product.ratingCount || 0;
-            
             return `
                 <div class="col-6 col-md-4 col-lg-3">
                     <a href="/product-detail?id=${product._id}" class="product-link">
@@ -932,12 +1124,10 @@
             event.preventDefault();
             event.stopPropagation();
         }
-        
         if (!isLoggedIn()) {
             showLoginPopup(null, 'redirect', '/cart');
             return false;
         }
-        
         window.location.href = '/cart';
         return false;
     }
@@ -1022,12 +1212,10 @@
             event.stopPropagation();
             event.preventDefault();
         }
-        
         if (!isLoggedIn()) {
             showLoginPopup(productId, 'addtocart');
             return false;
         }
-        
         let cart = getCart();
         const existing = cart.find(item => item.productId === productId);
         if (existing) {
@@ -1048,11 +1236,9 @@
             const productId = pendingProductId;
             const action = pendingAction;
             const redirect = pendingRedirect;
-            
             pendingProductId = null;
             pendingAction = null;
             pendingRedirect = null;
-            
             if (action === 'addtocart') {
                 let cart = getCart();
                 const existing = cart.find(item => item.productId === productId);
@@ -1077,13 +1263,10 @@
             const url = `${API_URL}${endpoint}`;
             console.log('📡 Fetching:', url);
             const res = await fetch(url);
-            
             console.log('📊 Response Status:', res.status);
-            
             if (!res.ok) {
                 throw new Error(`HTTP ${res.status}: ${res.statusText}`);
             }
-            
             const data = await res.json();
             console.log('✅ API Response:', data);
             return data;
@@ -1129,19 +1312,16 @@
     }
 
     // ================================================================
-    // LOAD CATEGORIES - FIXED TO SHOW ALL CATEGORIES
+    // LOAD CATEGORIES
     // ================================================================
     async function loadCategories() {
         try {
             const cats = await apiCall('/categories');
             const container = document.getElementById('categoriesList');
-            
             if (!cats || cats.length === 0) {
                 container.innerHTML = `<div class="col-12 text-center text-muted">No categories</div>`;
                 return;
             }
-            
-            // ✅ FIXED: Show ALL categories (removed .slice(0, 4))
             container.innerHTML = cats.map(cat => {
                 const subCount = cat.subcategories ? cat.subcategories.length : 0;
                 return `
@@ -1160,9 +1340,7 @@
                     </div>
                 `;
             }).join('');
-            
             console.log(`✅ Loaded ${cats.length} categories`);
-            
         } catch (e) {
             console.error('❌ Error loading categories:', e);
             document.getElementById('categoriesList').innerHTML = `
@@ -1175,40 +1353,31 @@
     }
 
     // ================================================================
-    // OPEN MODAL - FIXED
+    // OPEN MODAL
     // ================================================================
     async function openModal(categoryId) {
         try {
             console.log('📂 Opening modal for category:', categoryId);
-            
-            // Get categories
             const cats = await apiCall('/categories');
             const cat = cats.find(c => c._id === categoryId);
-            
             if (!cat) {
                 showToast('Category not found', 'error');
                 return;
             }
-            
             currentCategoryId = categoryId;
             const subs = cat.subcategories || [];
-            
-            // Update modal header
             const modalName = document.getElementById('modalCategoryName');
             const modalCount = document.getElementById('modalSubcategoryCount');
             const browseBtn = document.getElementById('browseAllBtn');
-            
             if (modalName) modalName.textContent = cat.name;
             if (modalCount) modalCount.textContent = `${subs.length} subcategories`;
             if (browseBtn) browseBtn.href = `/shop?category=${categoryId}`;
-            
             const container = document.getElementById('modalSubcategories');
             if (!container) {
                 console.error('❌ modalSubcategories element not found');
                 showToast('Modal error - please refresh', 'error');
                 return;
             }
-            
             if (subs.length === 0) {
                 container.innerHTML = `
                     <div class="col-12 text-center text-muted py-4">
@@ -1238,8 +1407,6 @@
                     `;
                 }).join('');
             }
-            
-            // Show modal
             const modalElement = document.getElementById('subcategoryModal');
             if (modalElement) {
                 const modal = new bootstrap.Modal(modalElement);
@@ -1248,7 +1415,6 @@
                 console.error('❌ Modal element not found');
                 showToast('Modal not found', 'error');
             }
-            
         } catch (e) {
             console.error('❌ Error loading subcategories:', e);
             showToast('Error loading subcategories: ' + e.message, 'error');
@@ -1256,37 +1422,28 @@
     }
 
     // ================================================================
-    // LOAD PRODUCTS (Trending & New Arrivals)
+    // LOAD PRODUCTS
     // ================================================================
     async function loadProducts() {
         try {
             console.log('🔄 Loading products...');
             const data = await apiCall('/products?limit=16');
-            
             let products = [];
-            
             if (data.products && Array.isArray(data.products)) {
                 products = data.products;
-                console.log('✅ Format 1: products array, count:', products.length);
             } else if (Array.isArray(data)) {
                 products = data;
-                console.log('✅ Format 2: direct array, count:', products.length);
             } else {
-                console.warn('⚠️ Unknown response format:', data);
                 products = [];
             }
-            
             allProducts = products;
             console.log(`📦 Total products: ${products.length}`);
-            
             const trending = products.slice(0, 8);
             const newArrivals = products.slice(8, 16);
-            
             const render = (p) => {
                 if (!p || p.length === 0) {
                     return '<div class="col-12 text-center text-muted">No products available</div>';
                 }
-                
                 return p.map(product => {
                     const price = Number(product.price) || 0;
                     const sale = product.salePrice ? Number(product.salePrice) : null;
@@ -1296,7 +1453,6 @@
                     const img = product.mainImage || product.image || 'https://via.placeholder.com/300x300';
                     const rating = product.rating || 4.5;
                     const ratingCount = product.ratingCount || 0;
-                    
                     return `
                         <div class="col-6 col-md-3">
                             <a href="/product-detail?id=${product._id}" class="product-link">
@@ -1322,12 +1478,9 @@
                     `;
                 }).join('');
             };
-            
             document.getElementById('trendingProducts').innerHTML = render(trending) || '<div class="col-12 text-center text-muted">No products</div>';
             document.getElementById('newArrivals').innerHTML = render(newArrivals) || '<div class="col-12 text-center text-muted">No products</div>';
-            
             console.log('✅ Products rendered successfully!');
-            
         } catch (e) {
             console.error('❌ Error loading products:', e);
             document.getElementById('trendingProducts').innerHTML = `
@@ -1344,19 +1497,16 @@
     }
 
     // ================================================================
-    // AUTH
+    // AUTH - FIXED: profile name redirects to /profile, logout uses confirm
     // ================================================================
     function updateNavbar() {
         const dropdown = document.getElementById('authDropdown');
         const isLoggedInStatus = isLoggedIn();
-        
         console.log('🔄 Updating navbar, logged in:', isLoggedInStatus);
-        
         if (isLoggedInStatus) {
             try {
                 const user = JSON.parse(localStorage.getItem('user') || '{}');
                 const userName = user.name || user.username || 'My Account';
-                
                 dropdown.innerHTML = `
                     <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>${userName}</a></li>
                     <li><hr class="dropdown-divider"></li>

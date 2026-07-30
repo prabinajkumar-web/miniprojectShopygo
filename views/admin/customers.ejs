@@ -11,7 +11,6 @@
         * { font-family: 'Inter', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #f0f4ff; }
 
-        /* ===== SIDEBAR ===== */
         .sidebar {
             position: fixed;
             top: 0;
@@ -135,6 +134,11 @@
             text-align: center;
         }
 
+        .sidebar-menu a .badge.zero-badge {
+            background: #e2e8f0;
+            color: #94a3b8;
+        }
+
         .sidebar-menu a:hover {
             background: #eff6ff;
             color: #2563eb;
@@ -202,7 +206,6 @@
             border-radius: 4px;
         }
 
-        /* ===== TOP NAVBAR ===== */
         .top-navbar {
             background: #ffffff;
             padding: 12px 30px;
@@ -261,7 +264,6 @@
             cursor: pointer;
         }
 
-        /* ===== MAIN CONTENT ===== */
         .main-content {
             margin-left: 270px;
             margin-top: 72px;
@@ -269,7 +271,6 @@
             min-height: 100vh;
         }
 
-        /* ===== STATS CARDS ===== */
         .stat-card {
             background: white;
             border-radius: 16px;
@@ -316,41 +317,6 @@
             font-weight: 500;
         }
 
-        .stat-card .stat-change {
-            font-size: 0.75rem;
-            font-weight: 600;
-        }
-
-        .stat-card .stat-change.up { color: #22c55e; }
-        .stat-card .stat-change.down { color: #ef4444; }
-
-        /* ===== TABLE ===== */
-        .table-card {
-            background: white;
-            border-radius: 16px;
-            padding: 24px;
-            border: 1px solid #e8edf5;
-        }
-
-        .table-card .table-title {
-            font-weight: 600;
-            font-size: 1rem;
-            margin-bottom: 16px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .table-card .table-title a {
-            font-size: 0.8rem;
-            color: #2563eb;
-            text-decoration: none;
-        }
-
-        .table-card .table-title a:hover {
-            text-decoration: underline;
-        }
-
         .status-badge {
             padding: 4px 12px;
             border-radius: 20px;
@@ -380,7 +346,37 @@
             to { transform: rotate(360deg); }
         }
 
-        /* ===== RESPONSIVE ===== */
+        .table-card {
+            background: white;
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid #e8edf5;
+        }
+
+        .table-card .table-title {
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 999;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
+        }
+
         @media (max-width: 992px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -412,21 +408,6 @@
             .top-navbar .page-title {
                 font-size: 0.9rem;
             }
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 999;
-            display: none;
-        }
-
-        .overlay.show {
-            display: block;
         }
     </style>
 </head>
@@ -514,7 +495,6 @@
 <!-- ===== MAIN CONTENT ===== -->
 <div class="main-content">
 
-    <!-- Header -->
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h4 class="fw-bold mb-1"><i class="bi bi-people-fill text-primary me-2"></i>Customer Management</h4>
@@ -635,6 +615,8 @@
     let currentPage = 1;
     const itemsPerPage = 5;
     let isLoading = false;
+    let totalProductsCount = 0;
+    let totalOrdersCount = 0;
 
     // ================================================================
     // TOAST NOTIFICATION
@@ -693,6 +675,98 @@
                 document.getElementById('adminAvatar').textContent = user.name.charAt(0).toUpperCase();
             }
         } catch (e) {}
+    }
+
+    // ================================================================
+    // FETCH PRODUCTS COUNT
+    // ================================================================
+    async function fetchProductsCount() {
+        try {
+            const response = await fetch(`${API_URL}/products?limit=10000`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.products && Array.isArray(data.products)) {
+                    totalProductsCount = data.products.length;
+                } else if (Array.isArray(data)) {
+                    totalProductsCount = data.length;
+                } else if (data.total) {
+                    totalProductsCount = data.total;
+                } else {
+                    totalProductsCount = 0;
+                }
+                updateProductBadge();
+            }
+        } catch (error) {
+            console.error('Error fetching products count:', error);
+        }
+    }
+
+    // ================================================================
+    // FETCH ORDERS COUNT
+    // ================================================================
+    async function fetchOrdersCount() {
+        try {
+            const response = await fetch(`${API_URL}/orders`);
+            if (response.ok) {
+                const data = await response.json();
+                let orders = [];
+                if (data.orders && Array.isArray(data.orders)) {
+                    orders = data.orders;
+                } else if (Array.isArray(data)) {
+                    orders = data;
+                } else if (data.data && Array.isArray(data.data)) {
+                    orders = data.data;
+                }
+                totalOrdersCount = orders.length;
+                updateOrderBadge();
+            }
+        } catch (error) {
+            console.error('Error fetching orders count:', error);
+        }
+    }
+
+    // ================================================================
+    // UPDATE PRODUCT BADGE
+    // ================================================================
+    function updateProductBadge() {
+        const badge = document.getElementById('productBadge');
+        if (badge) {
+            if (totalProductsCount > 0) {
+                badge.textContent = totalProductsCount;
+                badge.style.display = 'inline-block';
+                badge.className = 'badge';
+                badge.style.background = '#ef4444';
+                badge.style.color = 'white';
+            } else {
+                badge.textContent = '0';
+                badge.style.display = 'inline-block';
+                badge.className = 'badge zero-badge';
+                badge.style.background = '#e2e8f0';
+                badge.style.color = '#94a3b8';
+            }
+        }
+    }
+
+    // ================================================================
+    // UPDATE ORDER BADGE
+    // ================================================================
+    function updateOrderBadge() {
+        const badge = document.getElementById('orderBadge');
+        if (badge) {
+            if (totalOrdersCount > 0) {
+                badge.textContent = totalOrdersCount;
+                badge.style.display = 'inline-block';
+                badge.className = 'badge';
+                badge.style.background = '#ef4444';
+                badge.style.color = 'white';
+            } else {
+                badge.textContent = '0';
+                badge.style.display = 'inline-block';
+                badge.className = 'badge zero-badge';
+                badge.style.background = '#e2e8f0';
+                badge.style.color = '#94a3b8';
+            }
+        }
     }
 
     // ================================================================
@@ -895,6 +969,8 @@
     // ================================================================
     document.getElementById('refreshBtn')?.addEventListener('click', () => {
         fetchUsers();
+        fetchProductsCount();
+        fetchOrdersCount();
         showToast('Refreshing customers...');
     });
 
@@ -937,8 +1013,14 @@
         console.log('👥 Customer Page Loaded');
         if (checkAdminAuth()) {
             loadAdminData();
+            fetchProductsCount();
+            fetchOrdersCount();
             fetchUsers();
-            setInterval(fetchUsers, 60000);
+            setInterval(() => {
+                fetchProductsCount();
+                fetchOrdersCount();
+                fetchUsers();
+            }, 60000);
         }
     });
 

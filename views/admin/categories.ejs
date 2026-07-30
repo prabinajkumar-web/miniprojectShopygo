@@ -11,7 +11,6 @@
         * { font-family: 'Inter', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #f0f4ff; }
 
-        /* ===== SIDEBAR ===== */
         .sidebar {
             position: fixed;
             top: 0;
@@ -135,6 +134,11 @@
             text-align: center;
         }
 
+        .sidebar-menu a .badge.zero-badge {
+            background: #e2e8f0;
+            color: #94a3b8;
+        }
+
         .sidebar-menu a:hover {
             background: #eff6ff;
             color: #2563eb;
@@ -202,7 +206,6 @@
             border-radius: 4px;
         }
 
-        /* ===== TOP NAVBAR ===== */
         .top-navbar {
             background: #ffffff;
             padding: 12px 30px;
@@ -261,7 +264,6 @@
             cursor: pointer;
         }
 
-        /* ===== MAIN CONTENT ===== */
         .main-content {
             margin-left: 270px;
             margin-top: 72px;
@@ -269,7 +271,6 @@
             min-height: 100vh;
         }
 
-        /* ===== STATS CARDS ===== */
         .stat-card {
             background: white;
             border-radius: 16px;
@@ -311,7 +312,6 @@
             font-weight: 500;
         }
 
-        /* ===== CATEGORY CARDS ===== */
         .category-card {
             background: white;
             border-radius: 16px;
@@ -479,7 +479,6 @@
             display: block;
         }
 
-        /* ===== MODAL ===== */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -815,6 +814,8 @@
     const API_URL = 'http://localhost:5000/api';
     let categories = [];
     let expanded = {};
+    let totalProducts = 0;
+    let totalOrders = 0;
 
     // ================================================================
     // TOAST NOTIFICATION
@@ -897,6 +898,126 @@
     }
 
     // ================================================================
+    // FETCH PRODUCTS COUNT - FIXED: Get ALL products
+    // ================================================================
+    async function fetchProductsCount() {
+        try {
+            // Fetch ALL products with limit=10000 to get everything
+            const res = await fetch(`${API_URL}/products?limit=10000`);
+            if (res.ok) {
+                const data = await res.json();
+                console.log('📦 Products API Response:', data);
+                
+                // Handle different response formats
+                if (data.products && Array.isArray(data.products)) {
+                    totalProducts = data.products.length;
+                } else if (Array.isArray(data)) {
+                    totalProducts = data.length;
+                } else if (data.total) {
+                    totalProducts = data.total;
+                } else if (data.data && Array.isArray(data.data)) {
+                    totalProducts = data.data.length;
+                } else {
+                    // If we can't determine, try to get count from meta
+                    totalProducts = data.count || data.totalCount || 0;
+                }
+                
+                console.log(`✅ Total Products: ${totalProducts}`);
+                updateProductBadge();
+            } else {
+                console.error('Failed to fetch products:', res.status);
+                totalProducts = 0;
+                updateProductBadge();
+            }
+        } catch (err) {
+            console.error('Error fetching products count:', err);
+            totalProducts = 0;
+            updateProductBadge();
+        }
+    }
+
+    // ================================================================
+    // FETCH ORDERS COUNT
+    // ================================================================
+    async function fetchOrdersCount() {
+        try {
+            const res = await fetch(`${API_URL}/orders`, {
+                headers: {
+                    'Authorization': 'Bearer ' + (localStorage.getItem('token') || '')
+                }
+            });
+            if (res.ok) {
+                const data = await res.json();
+                console.log('📦 Orders API Response:', data);
+                
+                let orders = [];
+                if (data.orders && Array.isArray(data.orders)) {
+                    orders = data.orders;
+                } else if (Array.isArray(data)) {
+                    orders = data;
+                } else if (data.data && Array.isArray(data.data)) {
+                    orders = data.data;
+                }
+                totalOrders = orders.length;
+                console.log(`✅ Total Orders: ${totalOrders}`);
+                updateOrderBadge();
+            } else {
+                console.error('Failed to fetch orders:', res.status);
+                totalOrders = 0;
+                updateOrderBadge();
+            }
+        } catch (err) {
+            console.error('Error fetching orders count:', err);
+            totalOrders = 0;
+            updateOrderBadge();
+        }
+    }
+
+    // ================================================================
+    // UPDATE PRODUCT BADGE
+    // ================================================================
+    function updateProductBadge() {
+        const badge = document.getElementById('productBadge');
+        if (badge) {
+            if (totalProducts > 0) {
+                badge.textContent = totalProducts;
+                badge.style.display = 'inline-block';
+                badge.className = 'badge';
+                badge.style.background = '#ef4444';
+                badge.style.color = 'white';
+            } else {
+                badge.textContent = '0';
+                badge.style.display = 'inline-block';
+                badge.className = 'badge zero-badge';
+                badge.style.background = '#e2e8f0';
+                badge.style.color = '#94a3b8';
+            }
+        }
+    }
+
+    // ================================================================
+    // UPDATE ORDER BADGE
+    // ================================================================
+    function updateOrderBadge() {
+        const badge = document.getElementById('orderBadge');
+        if (badge) {
+            if (totalOrders > 0) {
+                badge.textContent = totalOrders;
+                badge.style.display = 'inline-block';
+                badge.className = 'badge';
+                badge.style.background = '#ef4444';
+                badge.style.color = 'white';
+            } else {
+                badge.textContent = '0';
+                badge.style.display = 'inline-block';
+                badge.className = 'badge zero-badge';
+                badge.style.background = '#e2e8f0';
+                badge.style.color = '#94a3b8';
+            }
+        }
+    }
+
+    // ================================================================
     // UPDATE STATS
     // ================================================================
     function updateStats() {
@@ -926,22 +1047,9 @@
 
             renderCategories();
             updateStats();
-            updateBadges();
         } catch (err) {
             console.error(err);
             showToast("Failed to load categories", true);
-        }
-    }
-
-    // ================================================================
-    // UPDATE BADGES
-    // ================================================================
-    function updateBadges() {
-        // Update product badge (from categories)
-        const badge = document.getElementById('productBadge');
-        if (badge) {
-            badge.textContent = categories.length;
-            badge.style.display = categories.length > 0 ? 'inline-block' : 'none';
         }
     }
 
@@ -1372,8 +1480,18 @@
         console.log('📂 Categories Page Loaded');
         if (checkAdminAuth()) {
             loadAdminData();
+            // Fetch counts first
+            fetchProductsCount();
+            fetchOrdersCount();
+            // Then fetch categories
             fetchCategories();
-            setInterval(fetchCategories, 60000);
+            
+            // Refresh every 60 seconds
+            setInterval(() => {
+                fetchProductsCount();
+                fetchOrdersCount();
+                fetchCategories();
+            }, 60000);
         }
     });
 

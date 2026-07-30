@@ -11,7 +11,6 @@
         * { font-family: 'Inter', sans-serif; margin: 0; padding: 0; box-sizing: border-box; }
         body { background: #f0f4ff; }
 
-        /* ===== SIDEBAR ===== */
         .sidebar {
             position: fixed;
             top: 0;
@@ -135,6 +134,11 @@
             text-align: center;
         }
 
+        .sidebar-menu a .badge.zero-badge {
+            background: #e2e8f0;
+            color: #94a3b8;
+        }
+
         .sidebar-menu a:hover {
             background: #eff6ff;
             color: #2563eb;
@@ -202,7 +206,6 @@
             border-radius: 4px;
         }
 
-        /* ===== TOP NAVBAR ===== */
         .top-navbar {
             background: #ffffff;
             padding: 12px 30px;
@@ -261,7 +264,6 @@
             cursor: pointer;
         }
 
-        /* ===== MAIN CONTENT ===== */
         .main-content {
             margin-left: 270px;
             margin-top: 72px;
@@ -269,7 +271,6 @@
             min-height: 100vh;
         }
 
-        /* ===== STATS CARDS ===== */
         .stat-card {
             background: white;
             border-radius: 16px;
@@ -311,7 +312,6 @@
             font-weight: 500;
         }
 
-        /* ===== ORDER TABLE ===== */
         .order-table {
             background: white;
             border-radius: 16px;
@@ -478,7 +478,6 @@
             to { transform: rotate(360deg); }
         }
 
-        /* ===== MODAL ===== */
         .modal-custom .modal-content {
             border-radius: 16px;
             border: none;
@@ -490,7 +489,6 @@
             border-bottom: 1px solid #e8edf5;
         }
 
-        /* ===== RESPONSIVE ===== */
         @media (max-width: 992px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -793,6 +791,7 @@
     let isLoading = false;
     let currentOrderId = null;
     let modal = null;
+    let totalProductsCount = 0;
 
     // ================================================================
     // TOAST NOTIFICATION
@@ -851,6 +850,52 @@
     }
 
     // ================================================================
+    // FETCH PRODUCTS COUNT - FIXED: Gets ALL products
+    // ================================================================
+    async function fetchProductsCount() {
+        try {
+            const response = await fetch(`${API_URL}/products?limit=10000`);
+            if (response.ok) {
+                const data = await response.json();
+                if (data.products && Array.isArray(data.products)) {
+                    totalProductsCount = data.products.length;
+                } else if (Array.isArray(data)) {
+                    totalProductsCount = data.length;
+                } else if (data.total) {
+                    totalProductsCount = data.total;
+                } else {
+                    totalProductsCount = 0;
+                }
+                updateProductBadge();
+            }
+        } catch (error) {
+            console.error('Error fetching products count:', error);
+        }
+    }
+
+    // ================================================================
+    // UPDATE PRODUCT BADGE
+    // ================================================================
+    function updateProductBadge() {
+        const badge = document.getElementById('productBadge');
+        if (badge) {
+            if (totalProductsCount > 0) {
+                badge.textContent = totalProductsCount;
+                badge.style.display = 'inline-block';
+                badge.className = 'badge';
+                badge.style.background = '#ef4444';
+                badge.style.color = 'white';
+            } else {
+                badge.textContent = '0';
+                badge.style.display = 'inline-block';
+                badge.className = 'badge zero-badge';
+                badge.style.background = '#e2e8f0';
+                badge.style.color = '#94a3b8';
+            }
+        }
+    }
+
+    // ================================================================
     // FORMAT DATE
     // ================================================================
     function formatDate(dateStr) {
@@ -883,7 +928,7 @@
     }
 
     // ================================================================
-    // FETCH ORDERS - FIXED with better error handling
+    // FETCH ORDERS - FIXED with proper data handling
     // ================================================================
     async function fetchOrders() {
         try {
@@ -892,24 +937,16 @@
             
             console.log('🔄 Fetching orders...');
             
-            // Add timeout to prevent infinite loading
-            const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
-            
-            const response = await fetch(`${API_URL}/orders`, {
-                signal: controller.signal
-            });
-            
-            clearTimeout(timeoutId);
+            const response = await fetch(`${API_URL}/orders`);
             
             if (!response.ok) {
                 throw new Error(`HTTP ${response.status}: ${response.statusText}`);
             }
             
             const data = await response.json();
-            console.log('✅ Orders received:', data);
+            console.log('✅ Orders API Response:', data);
             
-            // Check if data is array or has orders property
+            // Handle multiple response formats
             let ordersData = [];
             if (Array.isArray(data)) {
                 ordersData = data;
@@ -917,74 +954,60 @@
                 ordersData = data.orders;
             } else if (data.data && Array.isArray(data.data)) {
                 ordersData = data.data;
+            } else if (data.orders && typeof data.orders === 'object') {
+                // Maybe it's an object with orders
+                ordersData = Object.values(data.orders);
             } else {
                 console.warn('⚠️ Unexpected data format:', data);
                 ordersData = [];
             }
             
+            console.log(`✅ Found ${ordersData.length} orders`);
+            
+            // Map orders to consistent format
             orders = ordersData.map(order => ({
                 id: order.orderNumber || order._id?.slice(-8) || 'ORD' + Math.random().toString(36).slice(2, 8),
                 _id: order._id,
-                customer: order.userId?.name || order.shippingAddress?.name || 'Guest',
-                email: order.userId?.email || order.shippingAddress?.email || 'guest@email.com',
-                products: order.items || [],
+                customer: order.userId?.name || order.shippingAddress?.name || order.customerName || 'Guest',
+                email: order.userId?.email || order.shippingAddress?.email || order.email || 'guest@email.com',
+                products: order.items || order.products || [],
                 total: order.totalAmount || order.total || 0,
-                date: order.createdAt || new Date().toISOString(),
-                status: order.status || 'pending',
-                address: order.shippingAddress?.address || 'N/A'
+                date: order.createdAt || order.date || new Date().toISOString(),
+                status: order.status || order.orderStatus || 'pending',
+                address: order.shippingAddress?.address || order.address || 'N/A'
             }));
             
-            console.log('✅ Orders loaded:', orders.length);
-            
-            // Update badge
-            document.getElementById('orderBadge').textContent = orders.length;
-            document.getElementById('orderBadge').style.display = orders.length > 0 ? 'inline-block' : 'none';
-            
-            // Update product badge too
-            updateProductBadge();
+            // Update order badge
+            const orderBadge = document.getElementById('orderBadge');
+            if (orderBadge) {
+                const count = orders.length;
+                if (count > 0) {
+                    orderBadge.textContent = count;
+                    orderBadge.style.display = 'inline-block';
+                    orderBadge.className = 'badge';
+                    orderBadge.style.background = '#ef4444';
+                    orderBadge.style.color = 'white';
+                } else {
+                    orderBadge.textContent = '0';
+                    orderBadge.style.display = 'inline-block';
+                    orderBadge.className = 'badge zero-badge';
+                    orderBadge.style.background = '#e2e8f0';
+                    orderBadge.style.color = '#94a3b8';
+                }
+            }
             
             updateStats();
             renderOrders();
             document.getElementById('lastUpdatedTime').innerHTML = new Date().toLocaleTimeString();
             
         } catch (error) {
-            if (error.name === 'AbortError') {
-                console.error('❌ Request timeout:', error);
-                showToast('Request timed out. Please try again.', true);
-            } else {
-                console.error('❌ Error fetching orders:', error);
-                showToast('Failed to load orders: ' + error.message, true);
-            }
+            console.error('❌ Error fetching orders:', error);
+            showToast('Failed to load orders: ' + error.message, true);
             orders = [];
             renderOrders();
             updateStats();
         } finally {
             isLoading = false;
-        }
-    }
-
-    // ================================================================
-    // UPDATE PRODUCT BADGE
-    // ================================================================
-    async function updateProductBadge() {
-        try {
-            const response = await fetch(`${API_URL}/products?limit=1`);
-            if (response.ok) {
-                const data = await response.json();
-                let count = 0;
-                if (data.products && Array.isArray(data.products)) {
-                    count = data.products.length;
-                } else if (Array.isArray(data)) {
-                    count = data.length;
-                }
-                const badge = document.getElementById('productBadge');
-                if (badge) {
-                    badge.textContent = count;
-                    badge.style.display = count > 0 ? 'inline-block' : 'none';
-                }
-            }
-        } catch (error) {
-            console.error('Error updating product badge:', error);
         }
     }
 
@@ -1000,15 +1023,16 @@
             });
             
             if (!response.ok) {
-                throw new Error('Failed to update status');
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to update status');
             }
             
-            showToast('Order status updated successfully!');
+            showToast('✅ Order status updated successfully!');
             await fetchOrders();
             return true;
         } catch (error) {
             console.error('❌ Error updating status:', error);
-            showToast('Failed to update status', true);
+            showToast('Failed to update status: ' + error.message, true);
             return false;
         }
     }
@@ -1039,9 +1063,9 @@
         if (currentSearch) {
             const searchLower = currentSearch.toLowerCase();
             filtered = filtered.filter(order => 
-                order.id.toLowerCase().includes(searchLower) || 
-                order.customer.toLowerCase().includes(searchLower) || 
-                order.email.toLowerCase().includes(searchLower)
+                (order.id && order.id.toLowerCase().includes(searchLower)) || 
+                (order.customer && order.customer.toLowerCase().includes(searchLower)) || 
+                (order.email && order.email.toLowerCase().includes(searchLower))
             );
         }
         return filtered;
@@ -1055,7 +1079,7 @@
         const showingInfo = document.getElementById('showingInfo');
         const pagination = document.getElementById('pagination');
         
-        if (isLoading) {
+        if (isLoading && orders.length === 0) {
             tbody.innerHTML = `
                 <tr>
                     <td colspan="7" class="text-center py-4">
@@ -1095,8 +1119,8 @@
             <tr>
                 <td><span class="fw-semibold">#${order.id}</span></td>
                 <td>
-                    <div class="fw-semibold">${order.customer}</div>
-                    <small class="text-muted">${order.email}</small>
+                    <div class="fw-semibold">${order.customer || 'Guest'}</div>
+                    <small class="text-muted">${order.email || ''}</small>
                 </td>
                 <td>${order.products?.length || 0} item(s)</td>
                 <td class="fw-bold">₹${(order.total || 0).toFixed(2)}</td>
@@ -1170,12 +1194,12 @@
             </div>
             <div class="mb-3">
                 <small class="text-muted">Customer</small>
-                <div class="fw-semibold">${order.customer}</div>
-                <div class="small text-secondary">${order.email}</div>
+                <div class="fw-semibold">${order.customer || 'Guest'}</div>
+                <div class="small text-secondary">${order.email || ''}</div>
             </div>
             <div class="mb-3">
                 <small class="text-muted">Shipping Address</small>
-                <div>${order.address}</div>
+                <div>${order.address || 'N/A'}</div>
             </div>
             <div class="mb-3">
                 <small class="text-muted">Products</small>
@@ -1245,7 +1269,7 @@
         a.download = `orders_${new Date().toISOString().slice(0,19)}.csv`;
         a.click();
         URL.revokeObjectURL(blob);
-        showToast('Export complete');
+        showToast('✅ Export complete');
     });
 
     document.getElementById('updateOrderStatusBtn')?.addEventListener('click', async () => {
@@ -1290,8 +1314,12 @@
         console.log('📦 Orders Page Loaded');
         if (checkAdminAuth()) {
             loadAdminData();
-            fetchOrders();
-            setInterval(fetchOrders, 60000);
+            fetchProductsCount(); // Get product count for badge
+            fetchOrders(); // Get orders
+            setInterval(() => {
+                fetchProductsCount();
+                fetchOrders();
+            }, 60000); // Refresh every minute
         }
     });
 

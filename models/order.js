@@ -25,7 +25,7 @@ const orderSchema = new mongoose.Schema({
     },
     paymentMethod: {
         type: String,
-        enum: ['cod', 'card', 'upi', 'netbanking'],
+        enum: ['cod', 'online', 'card', 'upi', 'netbanking'],
         default: 'cod'
     },
     paymentStatus: {
@@ -33,6 +33,9 @@ const orderSchema = new mongoose.Schema({
         enum: ['pending', 'paid', 'failed'],
         default: 'pending'
     },
+    razorpayOrderId: { type: String },
+    razorpayPaymentId: { type: String },
+    razorpaySignature: { type: String },
     shippingAddress: {
         name: String,
         email: String,
@@ -42,8 +45,11 @@ const orderSchema = new mongoose.Schema({
         pincode: String,
         phone: String
     },
+    orderNote: { type: String, default: '' },
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now }
 });
+
+// ✅ NO pre('save') middleware - completely removed
 
 module.exports = mongoose.model('Order', orderSchema);

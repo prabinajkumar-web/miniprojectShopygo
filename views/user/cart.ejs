@@ -275,22 +275,42 @@
     });
 
     // ================================================================
-    // CART FUNCTIONS
+    // CART FUNCTIONS - FIXED: Now stores productId and quantity only
     // ================================================================
-    function getCart() { return JSON.parse(localStorage.getItem('cart')) || []; }
-    function saveCart(c) { localStorage.setItem('cart', JSON.stringify(c)); updateCartCount(); }
-    function clearCart() { localStorage.removeItem('cart'); updateCartCount(); }
+    function getCart() { 
+        try {
+            return JSON.parse(localStorage.getItem('cart')) || []; 
+        } catch(e) { return []; }
+    }
+    
+    function saveCart(c) { 
+        localStorage.setItem('cart', JSON.stringify(c)); 
+        updateCartCount(); 
+    }
+    
+    function clearCart() { 
+        localStorage.removeItem('cart'); 
+        updateCartCount(); 
+    }
     
     function updateCartCount() {
         const cart = getCart();
         const total = cart.reduce((s, i) => s + i.quantity, 0);
         const badge = document.getElementById('cartCount');
-        if (badge) { badge.textContent = total; badge.style.display = total > 0 ? 'inline-block' : 'none'; }
+        if (badge) { 
+            badge.textContent = total; 
+            badge.style.display = total > 0 ? 'inline-block' : 'none'; 
+        }
     }
 
     function showToast(msg, type = 'info') {
         let container = document.getElementById('toastContainer');
-        if (!container) { container = document.createElement('div'); container.id = 'toastContainer'; container.className = 'toast-container position-fixed top-0 end-0 p-3'; document.body.appendChild(container); }
+        if (!container) { 
+            container = document.createElement('div'); 
+            container.id = 'toastContainer'; 
+            container.className = 'toast-container position-fixed top-0 end-0 p-3'; 
+            document.body.appendChild(container); 
+        }
         const bg = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-primary';
         const toast = document.createElement('div');
         toast.className = `toast align-items-center text-white ${bg} border-0 show`;
@@ -300,8 +320,19 @@
     }
 
     function formatPrice(p) { return `₹${Number(p).toFixed(2)}`; }
+    
     function getIcon(cat) {
-        const map = { 'clothing': 'fa-tshirt', 'fashion': 'fa-tshirt', 'electronics': 'fa-laptop', 'mobile': 'fa-mobile-alt', 'jewellery': 'fa-gem', 'jewelry': 'fa-gem', 'footwear': 'fa-shoe-prints', 'shoes': 'fa-shoe-prints', 'accessories': 'fa-glasses', 'beauty': 'fa-mask', 'home': 'fa-couch', 'furniture': 'fa-couch', 'sports': 'fa-running', 'books': 'fa-book', 'toys': 'fa-robot', 'gaming': 'fa-gamepad', 'default': 'fa-folder' };
+        const map = { 
+            'clothing': 'fa-tshirt', 'fashion': 'fa-tshirt', 
+            'electronics': 'fa-laptop', 'mobile': 'fa-mobile-alt', 
+            'jewellery': 'fa-gem', 'jewelry': 'fa-gem', 
+            'footwear': 'fa-shoe-prints', 'shoes': 'fa-shoe-prints', 
+            'accessories': 'fa-glasses', 'beauty': 'fa-mask', 
+            'home': 'fa-couch', 'furniture': 'fa-couch', 
+            'sports': 'fa-running', 'books': 'fa-book', 
+            'toys': 'fa-robot', 'gaming': 'fa-gamepad', 
+            'default': 'fa-folder' 
+        };
         const l = cat?.toLowerCase() || '';
         for (const [k, v] of Object.entries(map)) { if (l.includes(k)) return v; }
         return map.default;
@@ -323,12 +354,10 @@
             showToast('Cart is empty', 'error'); 
             return; 
         }
-        
         if (!isLoggedIn()) {
             showLoginPopup();
             return;
         }
-        
         window.location.href = '/checkout';
     }
 
@@ -355,7 +384,7 @@
     }
 
     // ================================================================
-    // RENDER CART
+    // RENDER CART - FIXED: No duplicate entries, quantity updates correctly
     // ================================================================
     async function renderCart() {
         const cart = getCart();
@@ -374,11 +403,25 @@
             return;
         }
 
+        // Group cart items by productId to ensure no duplicates
+        const groupedCart = [];
+        const productMap = new Map();
+        
+        for (let item of cart) {
+            if (productMap.has(item.productId)) {
+                productMap.get(item.productId).quantity += item.quantity;
+            } else {
+                productMap.set(item.productId, { ...item });
+            }
+        }
+        
+        const uniqueCart = Array.from(productMap.values());
+        
         let html = '';
         let subtotal = 0;
         let totalItems = 0;
 
-        for (let item of cart) {
+        for (let item of uniqueCart) {
             try {
                 const product = await apiCall(`/products/${item.productId}`);
                 const itemTotal = product.price * item.quantity;
@@ -386,7 +429,7 @@
                 totalItems += item.quantity;
 
                 html += `
-                    <div class="cart-item">
+                    <div class="cart-item" data-product-id="${product._id}">
                         <div class="row align-items-center">
                             <div class="col-3 col-md-2">
                                 <img src="${product.mainImage || product.image || 'https://via.placeholder.com/100x100'}" alt="${product.name}" onerror="this.src='https://via.placeholder.com/100x100'">
@@ -414,7 +457,7 @@
                     </div>
                 `;
             } catch (e) {
-                console.error(e);
+                console.error('Error loading product:', e);
             }
         }
 
@@ -436,10 +479,13 @@
             <button onclick="proceedToCheckout()" class="btn-checkout">
                 <i class="fas fa-lock"></i> Proceed to Checkout
             </button>
-            <a href="/shop" class="btn btn-outline-secondary w-100 mt-2 rounded-pill">
+            <a href="/" class="btn btn-outline-secondary w-100 mt-2 rounded-pill">
                 <i class="fas fa-arrow-left"></i> Continue Shopping
             </a>
         `;
+        
+        // Update the cart count badge
+        updateCartCount();
     }
 
     // ================================================================
@@ -462,7 +508,7 @@
 
         if (token) {
             dropdown.innerHTML = `
-                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>${user.name || 'My Account'}</a></li>
+                <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>${user.name || 'My Account'}</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
                 <li><hr class="dropdown-divider"></li>
@@ -487,11 +533,13 @@
         updateNavbar();
     });
 
+    // Make functions globally accessible
     window.updateQty = updateQty;
     window.removeItem = removeItem;
     window.proceedToCheckout = proceedToCheckout;
     window.logout = logout;
     window.closeLoginPopup = closeLoginPopup;
+    window.renderCart = renderCart;
 </script>
 </body>
 </html>

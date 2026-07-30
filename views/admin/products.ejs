@@ -135,6 +135,11 @@
             text-align: center;
         }
 
+        .sidebar-menu a .badge.zero-badge {
+            background: #e2e8f0;
+            color: #94a3b8;
+        }
+
         .sidebar-menu a:hover {
             background: #eff6ff;
             color: #2563eb;
@@ -816,6 +821,7 @@
     let mainImageFile = null;
     let subImageFiles = [];
     let existingSubImages = [];
+    let totalOrders = 0;
 
     // ================================================================
     // TOAST NOTIFICATION
@@ -900,6 +906,70 @@
     }
 
     // ================================================================
+    // FETCH ORDERS COUNT - FIXED: Shows TOTAL orders
+    // ================================================================
+    async function fetchOrdersCount() {
+        try {
+            const response = await fetch(`${API_URL}/orders`, {
+                headers: {
+                    'Authorization': 'Bearer ' + (localStorage.getItem('token') || '')
+                }
+            });
+            
+            if (response.ok) {
+                const data = await response.json();
+                console.log('📦 Orders API Response:', data);
+                
+                // Handle different response formats
+                let orders = [];
+                if (data.orders && Array.isArray(data.orders)) {
+                    orders = data.orders;
+                } else if (Array.isArray(data)) {
+                    orders = data;
+                } else if (data.data && Array.isArray(data.data)) {
+                    orders = data.data;
+                }
+                
+                // ✅ FIXED: Count ALL orders, not just pending
+                totalOrders = orders.length;
+                
+                console.log(`📦 Total orders: ${totalOrders}`);
+                updateOrderBadge();
+            } else {
+                console.log('⚠️ Orders API returned:', response.status);
+                totalOrders = 0;
+                updateOrderBadge();
+            }
+        } catch (error) {
+            console.error('❌ Error fetching orders:', error);
+            totalOrders = 0;
+            updateOrderBadge();
+        }
+    }
+
+    // ================================================================
+    // UPDATE ORDER BADGE
+    // ================================================================
+    function updateOrderBadge() {
+        const badge = document.getElementById('orderBadge');
+        if (badge) {
+            if (totalOrders > 0) {
+                badge.textContent = totalOrders;
+                badge.style.display = 'inline-block';
+                badge.className = 'badge';
+                badge.style.background = '#ef4444';
+                badge.style.color = 'white';
+            } else {
+                badge.textContent = '0';
+                badge.style.display = 'inline-block';
+                badge.className = 'badge zero-badge';
+                badge.style.background = '#e2e8f0';
+                badge.style.color = '#94a3b8';
+            }
+        }
+    }
+
+    // ================================================================
     // FETCH PRODUCTS
     // ================================================================
     async function fetchProducts() {
@@ -908,7 +978,7 @@
             if (!response.ok) throw new Error('Failed to fetch products');
             
             const data = await response.json();
-            console.log('📦 API Response:', data);
+            console.log('📦 Products API Response:', data);
             
             if (data.products && Array.isArray(data.products)) {
                 products = data.products;
@@ -940,9 +1010,17 @@
     function updateBadges() {
         const badge = document.getElementById('productBadge');
         if (badge) {
-            badge.textContent = products.length;
-            badge.style.display = products.length > 0 ? 'inline-block' : 'none';
+            if (products.length > 0) {
+                badge.textContent = products.length;
+                badge.style.display = 'inline-block';
+                badge.className = 'badge';
+            } else {
+                badge.textContent = '0';
+                badge.style.display = 'inline-block';
+                badge.className = 'badge zero-badge';
+            }
         }
+        updateOrderBadge();
     }
 
     // ================================================================
@@ -1293,8 +1371,15 @@
         console.log('📦 Products Page Loaded');
         if (checkAdminAuth()) {
             loadAdminData();
+            // Fetch orders count first
+            fetchOrdersCount();
+            // Then fetch products
             fetchProducts();
-            setInterval(fetchProducts, 60000);
+            // Auto-refresh every 60 seconds
+            setInterval(() => {
+                fetchOrdersCount();
+                fetchProducts();
+            }, 60000);
         }
     });
 
