@@ -11,7 +11,7 @@ const nodemailer = require('nodemailer');
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST || 'smtp.gmail.com',
     port: parseInt(process.env.EMAIL_PORT) || 587,
-    secure: false, // true for 465, false for other ports
+    secure: false,
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
@@ -47,7 +47,7 @@ function generateOTP() {
 // ================================================================
 // ✅ SEND OTP EMAIL
 // ================================================================
-async function sendOTPEmail(email, otp, name = 'Admin', type = 'login') {
+async function sendOTPEmail(email, otp, name = 'Admin', type = 'register') {
     try {
         const subject = type === 'login' 
             ? '🔐 ShopyGo Admin - OTP for Login' 
@@ -123,17 +123,21 @@ async function sendOTPEmail(email, otp, name = 'Admin', type = 'login') {
 }
 
 // ================================================================
-// ✅ ADMIN LOGIN - SEND OTP
+// ✅ ADMIN LOGIN - NO OTP REQUIRED
 // ================================================================
-router.post('/send-login-otp', async (req, res) => {
+router.post('/login', async (req, res) => {
     try {
-        const { email } = req.body;
-        console.log('📧 Login OTP requested for:', email);
+        const { email, password } = req.body;
+        console.log('🔐 Admin login attempt for:', email);
 
-        if (!email) {
-            return res.status(400).json({ success: false, message: 'Email is required' });
+        if (!email || !password) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Email and password are required' 
+            });
         }
 
+        // Find user
         const user = await User.findOne({ email: email.toLowerCase() });
         
         if (!user) {
@@ -143,6 +147,7 @@ router.post('/send-login-otp', async (req, res) => {
             });
         }
 
+        // Check if user is admin
         if (user.role !== 'admin') {
             return res.status(403).json({ 
                 success: false, 
@@ -150,92 +155,16 @@ router.post('/send-login-otp', async (req, res) => {
             });
         }
 
-        const otp = generateOTP();
-        const expiryTime = Date.now() + (parseInt(process.env.OTP_EXPIRY_MINUTES) || 5) * 60 * 1000;
-
-        otpStore[email] = {
-            otp: otp,
-            expiry: expiryTime,
-            userId: user._id,
-            name: user.name,
-            type: 'login'
-        };
-
-        // Send email with OTP
-        const emailSent = await sendOTPEmail(email, otp, user.name, 'login');
-        
-        if (!emailSent) {
-            // Even if email fails, we still want to show OTP in console for testing
-            console.log(`⚠️ Email failed. OTP for ${email}: ${otp}`);
-            return res.status(500).json({ 
+        // Verify password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ 
                 success: false, 
-                message: 'Failed to send OTP email. Please check email configuration.',
-                devOTP: otp // Only in development
+                message: 'Invalid credentials. Please check your password.' 
             });
         }
 
-        console.log(`📧 Login OTP for ${email}: ${otp}`);
-
-        res.json({ 
-            success: true, 
-            message: 'OTP sent successfully to your email',
-            devOTP: process.env.NODE_ENV === 'development' ? otp : undefined
-        });
-
-    } catch (error) {
-        console.error('❌ Error sending login OTP:', error);
-        res.status(500).json({ success: false, message: error.message });
-    }
-});
-
-// ================================================================
-// ✅ ADMIN LOGIN - VERIFY OTP
-// ================================================================
-router.post('/verify-login-otp', async (req, res) => {
-    try {
-        const { email, otp } = req.body;
-        console.log('🔐 Verifying login OTP for:', email);
-
-        if (!email || !otp) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Email and OTP are required' 
-            });
-        }
-
-        const storedData = otpStore[email];
-        
-        if (!storedData) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'OTP not found. Please request a new OTP.' 
-            });
-        }
-
-        if (Date.now() > storedData.expiry) {
-            delete otpStore[email];
-            return res.status(400).json({ 
-                success: false, 
-                message: 'OTP has expired. Please request a new OTP.' 
-            });
-        }
-
-        if (storedData.otp !== otp) {
-            return res.status(400).json({ 
-                success: false, 
-                message: 'Invalid OTP. Please try again.' 
-            });
-        }
-
-        const user = await User.findById(storedData.userId);
-        
-        if (!user) {
-            return res.status(404).json({ 
-                success: false, 
-                message: 'User not found' 
-            });
-        }
-
+        // Generate JWT Token
         const token = jwt.sign(
             { 
                 userId: user._id, 
@@ -245,8 +174,6 @@ router.post('/verify-login-otp', async (req, res) => {
             process.env.JWT_SECRET || 'shopygo_super_secret_key_2025',
             { expiresIn: '7d' }
         );
-
-        delete otpStore[email];
 
         const userData = {
             id: user._id,
@@ -259,6 +186,7 @@ router.post('/verify-login-otp', async (req, res) => {
 
         console.log(`✅ Admin logged in: ${user.email}`);
         
+        // Set cookie
         res.cookie('token', token, { 
             httpOnly: true, 
             maxAge: 7 * 24 * 60 * 60 * 1000,
@@ -274,7 +202,7 @@ router.post('/verify-login-otp', async (req, res) => {
         });
 
     } catch (error) {
-        console.error('❌ Error verifying login OTP:', error);
+        console.error('❌ Error during admin login:', error);
         res.status(500).json({ success: false, message: error.message });
     }
 });
@@ -294,6 +222,7 @@ router.post('/send-register-otp', async (req, res) => {
             });
         }
 
+        // Check if user already exists
         const existingUser = await User.findOne({ email: email.toLowerCase() });
         if (existingUser) {
             return res.status(400).json({ 
@@ -302,9 +231,11 @@ router.post('/send-register-otp', async (req, res) => {
             });
         }
 
+        // Generate OTP
         const otp = generateOTP();
         const expiryTime = Date.now() + (parseInt(process.env.OTP_EXPIRY_MINUTES) || 5) * 60 * 1000;
 
+        // Store OTP
         otpStore[email] = {
             otp: otp,
             expiry: expiryTime,
@@ -353,6 +284,7 @@ router.post('/verify-register-otp', async (req, res) => {
             });
         }
 
+        // Check OTP in store
         const storedData = otpStore[email];
         
         if (!storedData) {
@@ -362,6 +294,7 @@ router.post('/verify-register-otp', async (req, res) => {
             });
         }
 
+        // Check OTP expiry
         if (Date.now() > storedData.expiry) {
             delete otpStore[email];
             return res.status(400).json({ 
@@ -370,6 +303,7 @@ router.post('/verify-register-otp', async (req, res) => {
             });
         }
 
+        // Verify OTP
         if (storedData.otp !== otp) {
             return res.status(400).json({ 
                 success: false, 
@@ -377,8 +311,10 @@ router.post('/verify-register-otp', async (req, res) => {
             });
         }
 
+        // Hash password
         const hashedPassword = await bcrypt.hash(password, 10);
 
+        // Create new admin user
         const newUser = new User({
             name: name,
             email: email.toLowerCase(),
@@ -390,6 +326,8 @@ router.post('/verify-register-otp', async (req, res) => {
         });
 
         await newUser.save();
+
+        // Remove OTP from store
         delete otpStore[email];
 
         console.log(`✅ New admin registered: ${email}`);

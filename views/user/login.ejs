@@ -4,6 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login - ShopyGo</title>
+    
+    <!-- ✅ DISABLE CACHING -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -36,6 +42,11 @@
             transition: 0.3s;
         }
         .btn-primary-custom:hover { transform: scale(1.02); color: white; }
+        .btn-primary-custom:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
         .btn-outline-custom {
             border: 2px solid var(--primary-blue);
             color: var(--primary-blue);
@@ -50,6 +61,30 @@
         .auth-card a { color: var(--primary-blue); text-decoration: none; font-weight: 500; }
         .auth-card a:hover { text-decoration: underline; }
         .toast-container { z-index: 9999; }
+        .password-wrapper {
+            position: relative;
+        }
+        .password-wrapper .toggle-password {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #94a3b8;
+            cursor: pointer;
+            padding: 4px 8px;
+            font-size: 1.1rem;
+            transition: 0.2s;
+            z-index: 10;
+        }
+        .password-wrapper .toggle-password:hover { color: var(--primary-blue); }
+        .step { display: none; }
+        .step.active { display: block; }
+        .timer-text { color: #64748b; font-size: 0.9rem; }
+        .resend-btn { background: none; border: none; color: var(--primary-blue); font-weight: 600; cursor: pointer; }
+        .resend-btn:hover { text-decoration: underline; }
+        .resend-btn:disabled { opacity: 0.5; cursor: not-allowed; }
         .otp-input-group {
             display: flex;
             gap: 10px;
@@ -72,11 +107,6 @@
             outline: none;
         }
         .otp-input-filled { border-color: var(--primary-blue); background: #eff6ff; }
-        .step { display: none; }
-        .step.active { display: block; }
-        .timer-text { color: #64748b; font-size: 0.9rem; }
-        .resend-btn { background: none; border: none; color: var(--primary-blue); font-weight: 600; cursor: pointer; }
-        .resend-btn:hover { text-decoration: underline; }
         @media (max-width: 480px) {
             .auth-card { padding: 30px 20px; margin: 15px; }
             .auth-card h3 { font-size: 1.5rem; }
@@ -90,16 +120,27 @@
     <div class="auth-card">
         <h3><i class="fas fa-user-circle" style="color: var(--primary-blue);"></i> Welcome Back</h3>
         
-        <!-- Step 1: Email Input -->
+        <!-- ============================================================ -->
+        <!-- STEP 1: LOGIN - NO OTP REQUIRED -->
+        <!-- ============================================================ -->
         <div id="step1" class="step active">
-            <p class="text-muted text-center">Enter your email to receive OTP</p>
-            <form id="emailForm">
+            <p class="text-muted text-center">Login to your account</p>
+            <form id="loginForm">
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Email</label>
                     <input type="email" id="loginEmail" class="form-control" placeholder="your@email.com" required>
                 </div>
-                <button type="submit" class="btn-primary-custom" id="sendOtpBtn">
-                    <i class="fas fa-paper-plane"></i> Send OTP
+                <div class="mb-3">
+                    <label class="form-label fw-semibold">Password</label>
+                    <div class="password-wrapper">
+                        <input type="password" id="loginPassword" class="form-control" placeholder="Enter your password" required>
+                        <button type="button" class="toggle-password" onclick="togglePassword('loginPassword')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <button type="submit" class="btn-primary-custom" id="loginBtn">
+                    <i class="fas fa-sign-in-alt"></i> Login
                 </button>
             </form>
             <div class="text-center mt-3">
@@ -113,32 +154,10 @@
             </p>
         </div>
 
-        <!-- Step 2: OTP Verification -->
+        <!-- ============================================================ -->
+        <!-- STEP 2: FORGOT PASSWORD -->
+        <!-- ============================================================ -->
         <div id="step2" class="step">
-            <p class="text-muted text-center">Enter the OTP sent to <strong id="otpEmailDisplay"></strong></p>
-            <div class="otp-input-group" id="otpContainer">
-                <input type="text" class="otp-input" maxlength="1" data-index="0" autofocus>
-                <input type="text" class="otp-input" maxlength="1" data-index="1">
-                <input type="text" class="otp-input" maxlength="1" data-index="2">
-                <input type="text" class="otp-input" maxlength="1" data-index="3">
-                <input type="text" class="otp-input" maxlength="1" data-index="4">
-                <input type="text" class="otp-input" maxlength="1" data-index="5">
-            </div>
-            <div class="text-center">
-                <span class="timer-text" id="timerDisplay">⏱️ 05:00</span>
-                <br>
-                <button class="resend-btn" id="resendOtpBtn" style="display:none;">Resend OTP</button>
-            </div>
-            <button class="btn-primary-custom mt-3" id="verifyOtpBtn">
-                <i class="fas fa-check"></i> Verify & Login
-            </button>
-            <button class="btn-outline-custom mt-2" onclick="goBackToEmail()">
-                <i class="fas fa-arrow-left"></i> Back
-            </button>
-        </div>
-
-        <!-- Step 3: Forgot Password -->
-        <div id="step3" class="step">
             <h4 class="text-center">Reset Password</h4>
             <p class="text-muted text-center">Enter your email to receive OTP</p>
             <form id="forgotPasswordForm">
@@ -155,8 +174,10 @@
             </button>
         </div>
 
-        <!-- Step 4: Reset Password with OTP -->
-        <div id="step4" class="step">
+        <!-- ============================================================ -->
+        <!-- STEP 3: RESET PASSWORD WITH OTP -->
+        <!-- ============================================================ -->
+        <div id="step3" class="step">
             <h4 class="text-center">Set New Password</h4>
             <p class="text-muted text-center">Enter OTP and new password</p>
             <div class="otp-input-group" id="resetOtpContainer">
@@ -167,13 +188,28 @@
                 <input type="text" class="otp-input" maxlength="1" data-index="4">
                 <input type="text" class="otp-input" maxlength="1" data-index="5">
             </div>
+            <div class="text-center">
+                <span class="timer-text" id="resetTimerDisplay">⏱️ 05:00</span>
+                <br>
+                <button class="resend-btn" id="resendResetOtpBtn" style="display:none;">Resend OTP</button>
+            </div>
             <div class="mb-3">
                 <label class="form-label fw-semibold">New Password</label>
-                <input type="password" id="newPassword" class="form-control" placeholder="At least 6 characters" required>
+                <div class="password-wrapper">
+                    <input type="password" id="newPassword" class="form-control" placeholder="At least 6 characters" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword('newPassword')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
             </div>
             <div class="mb-3">
                 <label class="form-label fw-semibold">Confirm Password</label>
-                <input type="password" id="confirmNewPassword" class="form-control" placeholder="Re-enter password" required>
+                <div class="password-wrapper">
+                    <input type="password" id="confirmNewPassword" class="form-control" placeholder="Re-enter password" required>
+                    <button type="button" class="toggle-password" onclick="togglePassword('confirmNewPassword')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>
             </div>
             <button class="btn-primary-custom" id="resetPasswordBtn">
                 <i class="fas fa-check"></i> Reset Password
@@ -187,11 +223,67 @@
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 <script>
+    // ✅ FIXED: Use correct API URL
     const API_URL = 'http://localhost:5000/api';
+    
     let timerInterval = null;
     let otpExpiry = 5 * 60;
     let currentEmail = '';
 
+    // ================================================================
+    // ✅ CHECK EXISTING SESSION
+    // ================================================================
+    (function checkExistingSession() {
+        console.log('🔍 Checking existing session...');
+        
+        const token = localStorage.getItem('token');
+        const user = localStorage.getItem('user');
+        
+        if (token && user) {
+            console.log('📡 Token found, verifying with server...');
+            
+            try {
+                const userData = JSON.parse(user);
+                console.log('👤 User:', userData.email);
+                
+                fetch(`${API_URL}/auth/check-status`, {
+                    headers: { 
+                        'Authorization': `Bearer ${token}`,
+                        'Cache-Control': 'no-cache'
+                    }
+                })
+                .then(res => {
+                    console.log('📊 Response status:', res.status);
+                    return res.json();
+                })
+                .then(data => {
+                    console.log('🔐 Server response:', data);
+                    
+                    if (data.success) {
+                        console.log('✅ Session valid! Redirecting to home...');
+                        window.location.replace('/');
+                    } else {
+                        console.log('⚠️ Session invalid, clearing data...');
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('user');
+                    }
+                })
+                .catch((error) => {
+                    console.log('⚠️ Session check failed:', error);
+                });
+            } catch (e) {
+                console.log('⚠️ Invalid user data, clearing...');
+                localStorage.removeItem('token');
+                localStorage.removeItem('user');
+            }
+        } else {
+            console.log('📡 No session found, showing login page');
+        }
+    })();
+
+    // ================================================================
+    // TOAST NOTIFICATIONS
+    // ================================================================
     function showToast(msg, type = 'info') {
         let container = document.getElementById('toastContainer');
         if (!container) { 
@@ -215,10 +307,27 @@
                 toast.classList.remove('show'); 
                 setTimeout(() => toast.remove(), 300); 
             } 
-        }, 3000);
+        }, 4000);
     }
 
-    // OTP Input Auto-Focus
+    // ================================================================
+    // TOGGLE PASSWORD VISIBILITY
+    // ================================================================
+    function togglePassword(inputId) {
+        const input = document.getElementById(inputId);
+        const icon = input.parentElement.querySelector('.toggle-password i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.className = 'fas fa-eye-slash';
+        } else {
+            input.type = 'password';
+            icon.className = 'fas fa-eye';
+        }
+    }
+
+    // ================================================================
+    // OTP INPUT AUTO-FOCUS
+    // ================================================================
     document.querySelectorAll('.otp-input').forEach((input, index, inputs) => {
         input.addEventListener('input', function() {
             this.value = this.value.replace(/[^0-9]/g, '');
@@ -258,9 +367,10 @@
         return otp;
     }
 
-    function startTimer(displayId) {
+    function startTimer(displayId, resendBtnId) {
         let seconds = otpExpiry;
         const display = document.getElementById(displayId);
+        const resendBtn = document.getElementById(resendBtnId);
         if (timerInterval) clearInterval(timerInterval);
         timerInterval = setInterval(() => {
             seconds--;
@@ -270,127 +380,148 @@
             if (seconds <= 0) {
                 clearInterval(timerInterval);
                 display.textContent = '⏱️ OTP Expired';
-                document.getElementById('resendOtpBtn').style.display = 'inline-block';
+                if (resendBtn) resendBtn.style.display = 'inline-block';
             }
         }, 1000);
     }
 
-    // Step Navigation
+    // ================================================================
+    // STEP NAVIGATION
+    // ================================================================
     function showStep(stepId) {
         document.querySelectorAll('.step').forEach(s => s.classList.remove('active'));
         document.getElementById(stepId).classList.add('active');
     }
 
-    function showForgotPassword() { showStep('step3'); }
-    function goBackToEmail() { showStep('step1'); if (timerInterval) clearInterval(timerInterval); }
-    function goBackToLogin() { showStep('step1'); if (timerInterval) clearInterval(timerInterval); }
+    function showForgotPassword() { showStep('step2'); }
+    function goBackToLogin() { 
+        showStep('step1'); 
+        if (timerInterval) clearInterval(timerInterval); 
+    }
 
     // ================================================================
-    // ✅ LOGIN - SEND OTP (FIXED ENDPOINT)
+    // ✅ LOGIN - NO OTP REQUIRED
     // ================================================================
-    document.getElementById('emailForm').addEventListener('submit', async (e) => {
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         
         const email = document.getElementById('loginEmail').value.trim();
+        const password = document.getElementById('loginPassword').value;
+        
+        if (!email || !password) {
+            showToast('Please enter email and password', 'error');
+            return;
+        }
+        
+        const btn = document.getElementById('loginBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+        
+        try {
+            console.log('🔐 Sending login request...');
+            
+            // ✅ FIXED: Correct endpoint
+            const response = await fetch(`${API_URL}/auth/login`, {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ email, password })
+            });
+            
+            console.log('📊 Response status:', response.status);
+            
+            const data = await response.json();
+            console.log('🔐 Login Response:', data);
+            
+            if (!data.success) {
+                throw new Error(data.message);
+            }
+            
+            // ✅ Save to localStorage
+            localStorage.setItem('token', data.token);
+            localStorage.setItem('user', JSON.stringify(data.user));
+            
+            showToast('✅ Login successful! Redirecting...', 'success');
+            
+            // ✅ Use replace() to prevent back button issue
+            setTimeout(() => {
+                window.location.replace('/');
+            }, 1500);
+            
+        } catch (error) {
+            console.error('❌ Login error:', error);
+            showToast(error.message || 'Login failed. Please try again.', 'error');
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+        }
+    });
+
+    // ================================================================
+    // ✅ FORGOT PASSWORD - SEND OTP
+    // ================================================================
+    document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('resetEmail').value.trim();
         if (!email) {
             showToast('Please enter your email', 'error');
             return;
         }
         
-        const sendBtn = document.getElementById('sendOtpBtn');
-        sendBtn.disabled = true;
-        sendBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+        const btn = document.getElementById('sendResetOtpBtn');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
         
         try {
-            // ✅ FIXED: Use correct endpoint
-            const response = await fetch(`${API_URL}/auth/send-login-otp`, {
+            console.log('📧 Sending forgot password OTP...');
+            
+            // ✅ FIXED: Correct endpoint
+            const response = await fetch(`${API_URL}/auth/send-forgot-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email })
             });
             
             const data = await response.json();
-            console.log('📊 Response:', data);
+            console.log('📧 Forgot OTP Response:', data);
             
-            if (!data.success) {
-                throw new Error(data.message);
-            }
+            if (!data.success) throw new Error(data.message);
             
             currentEmail = email;
-            document.getElementById('otpEmailDisplay').textContent = email;
             
             if (data.devOTP) {
-                showToast(`🔑 Dev OTP: ${data.devOTP} (Check console)`, 'info');
+                showToast(`🔑 Dev OTP: ${data.devOTP}`, 'info');
                 console.log('🔑 OTP:', data.devOTP);
             } else {
                 showToast('✅ OTP sent to your email!', 'success');
             }
             
-            showStep('step2');
-            startTimer('timerDisplay');
+            showStep('step3');
+            startTimer('resetTimerDisplay', 'resendResetOtpBtn');
             
-            document.querySelectorAll('#otpContainer .otp-input').forEach(input => {
+            document.querySelectorAll('#resetOtpContainer .otp-input').forEach(input => {
                 input.value = '';
                 input.classList.remove('otp-input-filled');
             });
-            document.querySelector('#otpContainer .otp-input').focus();
+            document.querySelector('#resetOtpContainer .otp-input').focus();
             
         } catch (error) {
+            console.error('❌ Forgot password error:', error);
             showToast(error.message || 'Failed to send OTP', 'error');
         }
         
-        sendBtn.disabled = false;
-        sendBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
     });
 
     // ================================================================
-    // ✅ VERIFY LOGIN OTP (FIXED ENDPOINT)
+    // ✅ RESEND FORGOT PASSWORD OTP
     // ================================================================
-    document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
-        const otp = getOTP('otpContainer');
-        if (otp.length !== 6) {
-            showToast('Please enter complete 6-digit OTP', 'error');
-            return;
-        }
-        
-        const btn = document.getElementById('verifyOtpBtn');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
-        
+    document.getElementById('resendResetOtpBtn').addEventListener('click', async () => {
         try {
-            // ✅ FIXED: Use correct endpoint
-            const response = await fetch(`${API_URL}/auth/verify-login-otp`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: currentEmail, otp })
-            });
-            
-            const data = await response.json();
-            console.log('📊 Response:', data);
-            
-            if (!data.success) {
-                throw new Error(data.message);
-            }
-            
-            localStorage.setItem('token', data.token);
-            localStorage.setItem('user', JSON.stringify(data.user));
-            
-            showToast('✅ Login successful! Redirecting...', 'success');
-            setTimeout(() => { window.location.href = '/'; }, 1500);
-            
-        } catch (error) {
-            showToast(error.message || 'Verification failed', 'error');
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fas fa-check"></i> Verify & Login';
-        }
-    });
-
-    // ================================================================
-    // RESEND OTP
-    // ================================================================
-    async function resendOTP() {
-        try {
-            const response = await fetch(`${API_URL}/auth/send-login-otp`, {
+            const response = await fetch(`${API_URL}/auth/send-forgot-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: currentEmail })
@@ -406,57 +537,23 @@
                 showToast('✅ OTP resent!', 'success');
             }
             
-            document.getElementById('resendOtpBtn').style.display = 'none';
-            startTimer('timerDisplay');
+            document.getElementById('resendResetOtpBtn').style.display = 'none';
+            startTimer('resetTimerDisplay', 'resendResetOtpBtn');
             
-            document.querySelectorAll('#otpContainer .otp-input').forEach(input => {
+            document.querySelectorAll('#resetOtpContainer .otp-input').forEach(input => {
                 input.value = '';
                 input.classList.remove('otp-input-filled');
             });
-            document.querySelector('#otpContainer .otp-input').focus();
+            document.querySelector('#resetOtpContainer .otp-input').focus();
             
         } catch (error) {
             showToast(error.message || 'Failed to resend OTP', 'error');
         }
-    }
-
-    // Forgot Password - Send OTP
-    document.getElementById('forgotPasswordForm').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const email = document.getElementById('resetEmail').value.trim();
-        if (!email) {
-            showToast('Please enter your email', 'error');
-            return;
-        }
-        
-        const btn = document.getElementById('sendResetOtpBtn');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-        
-        try {
-            const response = await fetch(`${API_URL}/auth/send-forgot-otp`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email })
-            });
-            
-            const data = await response.json();
-            if (!data.success) throw new Error(data.message);
-            
-            currentEmail = email;
-            showToast('✅ OTP sent to your email!', 'success');
-            showStep('step4');
-            
-        } catch (error) {
-            showToast(error.message || 'Failed to send OTP', 'error');
-        }
-        
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
     });
 
-    // Reset Password
+    // ================================================================
+    // ✅ RESET PASSWORD
+    // ================================================================
     document.getElementById('resetPasswordBtn').addEventListener('click', async () => {
         const otp = getOTP('resetOtpContainer');
         const newPassword = document.getElementById('newPassword').value;
@@ -493,7 +590,7 @@
             const data = await response.json();
             if (!data.success) throw new Error(data.message);
             
-            showToast('✅ Password reset successfully!', 'success');
+            showToast('✅ Password reset successfully! Please login.', 'success');
             setTimeout(() => { goBackToLogin(); }, 1500);
             
         } catch (error) {
@@ -503,6 +600,23 @@
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-check"></i> Reset Password';
     });
+
+    // ================================================================
+    // ✅ LOGOUT FUNCTION
+    // ================================================================
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            localStorage.clear();
+            sessionStorage.clear();
+            document.cookie.split(";").forEach(function(c) { 
+                document.cookie = c.replace(/^ +/, "")
+                    .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+            });
+            window.location.replace('/login');
+        }
+    }
 </script>
 </body>
 </html>
