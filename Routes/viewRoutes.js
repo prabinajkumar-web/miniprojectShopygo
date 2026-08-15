@@ -219,6 +219,10 @@ router.get('/careers', (req, res) => {
     console.log('📄 Careers page requested');
     res.render('user/careers');
 });
+router.get('/profile', (req, res) => {
+    console.log('📄 profile page requested');
+    res.render('user/profile');
+});
 
 router.get('/orders-help', (req, res) => {
     res.redirect('/help');

@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Checkout - ShopyGo</title>
     
+    <!-- ✅ FAVICON - Browser Tab Icon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+    
     <!-- Bootstrap 5 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Font Awesome -->
@@ -21,38 +25,82 @@
             min-height: 100vh;
         }
         
+        /* ===== OLD STYLE NAVBAR ===== */
         .navbar {
             background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            padding: 12px 0;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
             border-bottom: 1px solid #e8edf2;
+            padding: 12px 0;
         }
         .navbar-brand {
             font-weight: 800;
-            font-size: 1.6rem;
+            font-size: 1.8rem;
             background: linear-gradient(135deg, #2563eb, #3b82f6);
             background-clip: text;
             -webkit-background-clip: text;
             color: transparent;
             text-decoration: none;
         }
+        .search-bar { max-width: 450px; width: 100%; }
+        .search-bar .input-group {
+            border-radius: 48px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .search-bar input {
+            border: 1px solid #e8edf2;
+            border-right: none;
+            padding: 10px 18px;
+            font-size: 0.9rem;
+        }
+        .search-bar button {
+            background: white;
+            border: 1px solid #e8edf2;
+            border-left: none;
+            color: #2563eb;
+        }
         .nav-icon {
+            font-size: 1.4rem;
             color: #1e293b;
-            font-size: 1.2rem;
             transition: 0.2s;
             position: relative;
+            cursor: pointer;
             text-decoration: none;
         }
         .nav-icon:hover { color: #2563eb; }
         .cart-badge {
-            background: #2563eb;
-            color: white;
+            background-color: #2563eb;
             font-size: 10px;
-            padding: 2px 6px;
-            border-radius: 50%;
             position: absolute;
-            top: -6px;
-            right: -10px;
+            top: -8px;
+            right: -12px;
+            border-radius: 50%;
+            padding: 2px 6px;
+            color: white;
+        }
+        .dropdown-menu-custom {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            margin-top: 12px;
+            min-width: 220px;
+            padding: 8px;
+        }
+        .dropdown-menu-custom .dropdown-item {
+            padding: 10px 16px;
+            border-radius: 10px;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+        .dropdown-menu-custom .dropdown-item:hover {
+            background: #eff6ff;
+        }
+        .dropdown-menu-custom .dropdown-item.text-danger:hover {
+            background: #fee2e2;
+            color: #dc2626 !important;
+        }
+        .dropdown-menu-custom .dropdown-divider {
+            margin: 6px 0;
         }
         
         .checkout-wrapper {
@@ -220,11 +268,12 @@
             letter-spacing: 0.5px;
         }
         
-        /* Payment icons */
+        /* ✅ Payment icons - FIXED with background-clip */
         .payment-icon-gpay { 
             background: linear-gradient(135deg, #4285f4, #34a853);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
             font-weight: 900;
         }
         .payment-icon-phonepe { color: #5f259f; font-weight: 900; }
@@ -365,6 +414,10 @@
         
         .toast-container { z-index: 9999; }
         
+        @media (max-width: 992px) {
+            .search-bar { order: 3; margin-top: 12px; width: 100%; max-width: 100%; }
+            .navbar .container-fluid { flex-wrap: wrap; }
+        }
         @media (max-width: 768px) {
             .checkout-wrapper { padding: 0 12px; margin: 16px auto; }
             .card-checkout { padding: 20px; }
@@ -385,28 +438,39 @@
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
-<nav class="navbar">
+<!-- ===== OLD STYLE NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg sticky-top">
     <div class="container-fluid px-3 px-lg-5">
-        <a class="navbar-brand" href="/">🛒 ShopyGo</a>
-        <div class="d-flex align-items-center gap-3">
-            <a href="/wishlist" class="nav-icon"><i class="far fa-heart"></i></a>
-            <a href="/cart" class="nav-icon position-relative">
-                <i class="fas fa-shopping-bag"></i>
-                <span class="cart-badge" id="cartCount">0</span>
-            </a>
-            <div class="dropdown">
-                <a href="#" class="nav-icon dropdown-toggle" data-bs-toggle="dropdown">
-                    <i class="fas fa-user-circle fa-lg"></i>
+        <a class="navbar-brand fw-bold fs-2" href="/" style="background: linear-gradient(135deg, #2563eb, #3b82f6); background-clip: text; -webkit-background-clip: text; color: transparent;">ShopyGo</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navRightContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navRightContent">
+            <div class="mx-auto search-bar my-2 my-lg-0">
+                <div class="input-group">
+                    <!-- <input type="text" class="form-control" placeholder="Search for products..." id="globalSearchInput"> -->
+                    <!-- <button class="btn" type="button" id="globalSearchBtn"><i class="fas fa-search"></i></button> -->
+                </div>
+            </div>
+            
+            <div class="d-flex align-items-center gap-3 ms-auto mt-2 mt-lg-0">
+                <!-- Cart Icon -->
+                <a href="#" class="nav-icon position-relative" onclick="handleCartClick(event)">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    <span id="cartCount" class="cart-badge">0</span>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-end" id="authDropdown" style="border-radius:12px;border:1px solid #e8edf2;margin-top:10px;min-width:180px;">
-                    <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
-                    <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
-                    <li><hr class="dropdown-divider"></li>
-                    <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                </ul>
+                
+                <!-- Profile Dropdown -->
+                <div class="dropdown">
+                    <a href="#" class="nav-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none;" id="profileDropdown">
+                        <i class="fas fa-user-circle fa-lg"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom" id="authDropdown">
+                        <!-- Dynamically populated -->
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

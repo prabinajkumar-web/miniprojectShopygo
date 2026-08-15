@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>My Profile - ShopyGo</title>
+    
+    <!-- ✅ FAVICON -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { font-family: 'Inter', sans-serif; }
+        body { background: #f8fafc; }
+        :root {
+            --primary-blue: #2563eb;
+            --primary-dark: #1d4ed8;
+            --soft-bg: #eff6ff;
+            --border-light: #e9eff5;
+        }
+        
+        /* ===== OLD STYLE NAVBAR ===== */
+        .navbar {
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border-bottom: 1px solid var(--border-light);
+            padding: 12px 0;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-decoration: none;
+        }
+        .search-bar { max-width: 450px; width: 100%; }
+        .search-bar .input-group {
+            border-radius: 48px;
+            overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.05);
+        }
+        .search-bar input {
+            border: 1px solid var(--border-light);
+            border-right: none;
+            padding: 10px 18px;
+            font-size: 0.9rem;
+        }
+        .search-bar button {
+            background: white;
+            border: 1px solid var(--border-light);
+            border-left: none;
+            color: var(--primary-blue);
+        }
+        .nav-icon {
+            font-size: 1.4rem;
+            color: #1e293b;
+            transition: 0.2s;
+            position: relative;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        .nav-icon:hover { color: var(--primary-blue); }
+        .cart-badge {
+            background-color: #2563eb;
+            font-size: 10px;
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            border-radius: 50%;
+            padding: 2px 6px;
+            color: white;
+        }
+        .dropdown-menu-custom {
+            border-radius: 20px;
+            border: none;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.08);
+            margin-top: 12px;
+            min-width: 220px;
+            padding: 8px;
+        }
+        .dropdown-menu-custom .dropdown-item {
+            padding: 10px 16px;
+            border-radius: 10px;
+            transition: 0.2s;
+            font-size: 0.95rem;
+        }
+        .dropdown-menu-custom .dropdown-item:hover {
+            background: var(--soft-bg);
+        }
+        .dropdown-menu-custom .dropdown-item.text-danger:hover {
+            background: #fee2e2;
+            color: #dc2626 !important;
+        }
+        .dropdown-menu-custom .dropdown-divider {
+            margin: 6px 0;
+        }
+
+        /* ===== SIDEBAR ===== */
+        .profile-sidebar {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            padding: 24px 0;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            position: sticky;
+            top: 90px;
+        }
+        .profile-sidebar .sidebar-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 12px 24px;
+            color: #64748b;
+            text-decoration: none;
+            transition: 0.2s;
+            font-weight: 500;
+            font-size: 0.9rem;
+            border-left: 3px solid transparent;
+            cursor: pointer;
+        }
+        .profile-sidebar .sidebar-item:hover {
+            background: var(--soft-bg);
+            color: var(--primary-blue);
+        }
+        .profile-sidebar .sidebar-item.active {
+            background: var(--soft-bg);
+            color: var(--primary-blue);
+            border-left-color: var(--primary-blue);
+            font-weight: 600;
+        }
+        .profile-sidebar .sidebar-item i {
+            width: 22px;
+            font-size: 1.1rem;
+        }
+        .profile-sidebar .sidebar-divider {
+            height: 1px;
+            background: var(--border-light);
+            margin: 8px 20px;
+        }
+
+        /* ===== PROFILE CARD ===== */
+        .profile-card {
+            background: white;
+            border-radius: 16px;
+            border: 1px solid var(--border-light);
+            padding: 32px;
+            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            font-weight: 700;
+            margin: 0 auto 16px;
+            box-shadow: 0 8px 24px rgba(37,99,235,0.25);
+            position: relative;
+            flex-shrink: 0;
+        }
+        .profile-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .profile-avatar .edit-photo-btn {
+            position: absolute;
+            bottom: 4px;
+            right: 4px;
+            background: #2563eb;
+            border: 3px solid white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 0.7rem;
+        }
+        .profile-avatar .edit-photo-btn:hover {
+            background: #1d4ed8;
+            transform: scale(1.05);
+        }
+        .profile-field {
+            padding: 14px 0;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .profile-field:last-of-type {
+            border-bottom: none;
+        }
+        .profile-field .label {
+            color: #64748b;
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+        .profile-field .label i {
+            color: #2563eb;
+            width: 22px;
+            margin-right: 10px;
+        }
+        .profile-field .value {
+            color: #1e293b;
+            font-weight: 600;
+            font-size: 0.95rem;
+            text-align: right;
+        }
+        .profile-field .value .edit-btn {
+            background: none;
+            border: none;
+            color: #2563eb;
+            font-size: 0.8rem;
+            cursor: pointer;
+            margin-left: 8px;
+            padding: 2px 8px;
+            border-radius: 6px;
+            transition: 0.2s;
+        }
+        .profile-field .value .edit-btn:hover {
+            background: #eef2ff;
+        }
+        
+        .btn-primary-custom {
+            background: #2563eb;
+            border: none;
+            border-radius: 40px;
+            padding: 10px 28px;
+            font-weight: 600;
+            color: white;
+            transition: 0.3s;
+        }
+        .btn-primary-custom:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(37,99,235,0.25);
+        }
+        .btn-outline-custom {
+            border: 1.5px solid #2563eb;
+            color: #2563eb;
+            background: transparent;
+            border-radius: 40px;
+            padding: 10px 28px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-outline-custom:hover {
+            background: #2563eb;
+            color: white;
+        }
+        .btn-outline-danger-custom {
+            border: 1.5px solid #ef4444;
+            color: #ef4444;
+            background: transparent;
+            border-radius: 40px;
+            padding: 10px 28px;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .btn-outline-danger-custom:hover {
+            background: #ef4444;
+            color: white;
+        }
+
+        /* ===== TOAST ===== */
+        .toast-notify {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1e293b;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            z-index: 9999;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+        .toast-notify.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .toast-notify.error {
+            background: #dc2626;
+        }
+        .toast-notify.success {
+            background: #16a34a;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: #0f172a;
+            color: #cbd5e1;
+            padding: 48px 0 28px;
+            margin-top: 60px;
+        }
+        footer a { color: #94a3b8; text-decoration: none; transition: 0.2s; }
+        footer a:hover { color: white; }
+        .social-icons i {
+            font-size: 1.3rem;
+            margin-right: 18px;
+            color: #cbd5e1;
+            transition: 0.2s;
+        }
+        .social-icons i:hover { color: white; }
+        .copyright {
+            border-top: 1px solid #1e293b;
+            padding-top: 28px;
+            margin-top: 32px;
+            font-size: 0.75rem;
+            text-align: center;
+        }
+
+        /* ===== LOADING ===== */
+        .loading-spinner {
+            text-align: center;
+            padding: 40px;
+        }
+        .loading-spinner .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #e2e8f0;
+            border-top-color: #2563eb;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin: 0 auto 12px;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 992px) {
+            .search-bar { order: 3; margin-top: 12px; width: 100%; max-width: 100%; }
+            .navbar .container-fluid { flex-wrap: wrap; }
+            .profile-sidebar {
+                position: static;
+                margin-bottom: 20px;
+                display: flex;
+                flex-wrap: wrap;
+                padding: 12px 0;
+            }
+            .profile-sidebar .sidebar-item {
+                padding: 8px 16px;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+                flex: 1;
+                justify-content: center;
+                min-width: 100px;
+            }
+            .profile-sidebar .sidebar-item.active {
+                border-bottom-color: var(--primary-blue);
+                border-left-color: transparent;
+            }
+            .profile-sidebar .sidebar-divider { display: none; }
+        }
+        @media (max-width: 768px) {
+            .profile-card { padding: 24px; }
+            .profile-avatar { width: 80px; height: 80px; font-size: 2rem; }
+            .profile-field {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 4px;
+            }
+            .profile-field .value {
+                text-align: left;
+                width: 100%;
+            }
+        }
+        @media (max-width: 576px) {
+            .navbar-brand { font-size: 1.3rem; }
+            .profile-sidebar .sidebar-item { font-size: 0.75rem; padding: 6px 10px; min-width: 70px; }
+            .profile-sidebar .sidebar-item i { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+<!-- ===== NAVBAR ===== -->
+<nav class="navbar navbar-expand-lg sticky-top">
+    <div class="container-fluid px-3 px-lg-5">
+        <a class="navbar-brand fw-bold fs-2" href="/" style="background: linear-gradient(135deg, #2563eb, #3b82f6); background-clip: text; -webkit-background-clip: text; color: transparent;">ShopyGo</a>
+        
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navRightContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navRightContent">
+            <div class="mx-auto search-bar my-2 my-lg-0">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Search for products..." id="globalSearchInput">
+                    <button class="btn" type="button" id="globalSearchBtn"><i class="fas fa-search"></i></button>
+                </div>
+            </div>
+            
+            <div class="d-flex align-items-center gap-3 ms-auto mt-2 mt-lg-0">
+                <a href="/cart" class="nav-icon position-relative">
+                    <i class="fas fa-shopping-cart fa-lg"></i>
+                    <span id="cartCount" class="cart-badge">0</span>
+                </a>
+                
+                <div class="dropdown">
+                    <a href="#" class="nav-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none;" id="profileDropdown">
+                        <i class="fas fa-user-circle fa-lg"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-custom" id="authDropdown">
+                        <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>My Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- ===== MAIN CONTENT ===== -->
+<div class="container my-4">
+    <!-- Loading State -->
+    <div id="loadingState" class="text-center py-5">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p class="text-muted">Loading profile...</p>
+        </div>
+    </div>
+
+    <!-- Error State -->
+    <div id="errorState" class="text-center py-5" style="display: none;">
+        <i class="fas fa-exclamation-triangle fs-1 text-warning"></i>
+        <p class="text-muted mt-2" id="errorMessage">Failed to load profile</p>
+        <button class="btn btn-primary-custom btn-sm mt-2" onclick="window.location.reload()">
+            <i class="fas fa-sync me-1"></i> Try Again
+        </button>
+    </div>
+
+    <!-- Profile Content -->
+    <div id="profileContent" style="display: none;">
+        <div class="row g-4">
+            <!-- ===== SIDEBAR ===== -->
+            <div class="col-lg-3">
+                <div class="profile-sidebar">
+                    <a href="/profile" class="sidebar-item active">
+                        <i class="fas fa-user"></i> My Profile
+                    </a>
+                    <a href="/my-orders" class="sidebar-item">
+                        <i class="fas fa-box"></i> My Orders
+                    </a>
+                    <div class="sidebar-divider"></div>
+                    <a href="#" class="sidebar-item text-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </a>
+                </div>
+            </div>
+
+            <!-- ===== PROFILE CARD ===== -->
+            <div class="col-lg-9">
+                <div class="profile-card">
+                    <!-- Avatar -->
+                    <div class="profile-avatar" id="avatarDisplay">
+                        <span id="avatarLetter">U</span>
+                        <button class="edit-photo-btn" id="uploadPhotoBtn" title="Change Photo">
+                            <i class="fas fa-camera"></i>
+                        </button>
+                        <input type="file" id="photoInput" accept="image/*" style="display: none;">
+                    </div>
+                    <div class="text-center mb-4">
+                        <h4 class="fw-bold" id="profileName">User</h4>
+                        <span class="badge bg-success" id="profileStatus">Active</span>
+                    </div>
+
+                    <!-- Profile Fields -->
+                    <div class="profile-field">
+                        <span class="label"><i class="fas fa-envelope"></i>Email</span>
+                        <span class="value" id="profileEmail">Loading...</span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="label"><i class="fas fa-phone"></i>Phone</span>
+                        <span class="value" id="profilePhone">
+                            Not set
+                            <button class="edit-btn" onclick="editField('phone')"><i class="fas fa-pencil-alt"></i></button>
+                        </span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="label"><i class="fas fa-map-marker-alt"></i>Address</span>
+                        <span class="value" id="profileAddress">
+                            Not set
+                            <button class="edit-btn" onclick="editField('address')"><i class="fas fa-pencil-alt"></i></button>
+                        </span>
+                    </div>
+                    <div class="profile-field">
+                        <span class="label"><i class="fas fa-calendar-alt"></i>Joined</span>
+                        <span class="value" id="profileJoined">-</span>
+                    </div>
+
+                    <!-- Buttons -->
+                    <div class="d-flex gap-3 mt-4 flex-wrap">
+                        <button class="btn btn-primary-custom flex-1" onclick="editProfile()">
+                            <i class="fas fa-pencil-alt me-2"></i> Edit Profile
+                        </button>
+                        <a href="/my-orders" class="btn btn-outline-custom flex-1">
+                            <i class="fas fa-clock me-2"></i> Order History
+                        </a>
+                    </div>
+                    <div class="mt-3">
+                        <button class="btn btn-outline-danger-custom w-100" onclick="logout()">
+                            <i class="fas fa-sign-out-alt me-2"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== EDIT PROFILE MODAL ===== -->
+<div class="modal fade" id="editProfileModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content" style="border-radius: 16px; border: none;">
+            <div class="modal-header border-0" style="background: #f8fafc; border-radius: 16px 16px 0 0;">
+                <h5 class="modal-title fw-bold">
+                    <i class="fas fa-pencil-alt me-2 text-primary"></i>Edit Profile
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="editProfileForm">
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                        <input type="text" class="form-control" id="editName" placeholder="Enter your full name">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Phone Number</label>
+                        <input type="text" class="form-control" id="editPhone" placeholder="Enter your phone number">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Address</label>
+                        <textarea class="form-control" id="editAddress" rows="2" placeholder="Enter your address"></textarea>
+                    </div>
+                    <div class="text-muted small">
+                        <i class="fas fa-info-circle me-1"></i> Email cannot be changed. Contact support for email changes.
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer border-0" style="border-radius: 0 0 16px 16px;">
+                <button type="button" class="btn btn-outline-secondary rounded-pill" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary-custom" id="saveProfileBtn">
+                    <i class="fas fa-check me-1"></i> Save Changes
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+    <div class="container">
+        <div class="row gy-4">
+            <div class="col-md-4">
+                <h4 class="fw-bold text-white mb-3"><i class="fas fa-store me-2"></i>ShopyGo</h4>
+                <p class="small">India's fastest growing e-commerce platform.</p>
+                <div class="social-icons mt-3">
+                    <i class="fab fa-instagram"></i>
+                    <i class="fab fa-facebook-f"></i>
+                    <i class="fab fa-twitter"></i>
+                    <i class="fab fa-youtube"></i>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <h5 class="text-white mb-3">Company</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/about">About</a></li>
+                    <li><a href="/careers">Careers</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Support</h5>
+                <ul class="list-unstyled">
+                    <li><a href="/help">Help</a></li>
+                    <li><a href="/returns">Returns</a></li>
+                    <li><a href="/terms">Terms</a></li>
+                    <li><a href="/privacy">Privacy</a></li>
+                </ul>
+            </div>
+            <div class="col-md-3">
+                <h5 class="text-white mb-3">Contact</h5>
+                <ul class="list-unstyled">
+                    <li><i class="fas fa-envelope me-2"></i> support@shopygo.com</li>
+                    <li><i class="fas fa-phone-alt me-2"></i> +91 1800 202 8899</li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright text-center">
+            © 2025 ShopyGo — All rights reserved.
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const API_URL = 'http://localhost:5000/api';
+    let currentUser = null;
+    let editModal = null;
+
+    // ================================================================
+    // TOAST NOTIFICATION
+    // ================================================================
+    function showToast(message, isError = false) {
+        let toast = document.getElementById('toastMsg');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.id = 'toastMsg';
+            toast.className = 'toast-notify';
+            document.body.appendChild(toast);
+        }
+        toast.className = 'toast-notify' + (isError ? ' error' : '');
+        toast.textContent = message;
+        toast.classList.add('show');
+        clearTimeout(toast._timeout);
+        toast._timeout = setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
+
+    // ================================================================
+    // LOGOUT
+    // ================================================================
+    function logout() {
+        if (confirm('Are you sure you want to logout?')) {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            showToast('✅ Logged out successfully!');
+            setTimeout(() => { window.location.href = '/login'; }, 500);
+        }
+    }
+
+    // ================================================================
+    // CHECK USER AUTH
+    // ================================================================
+    function checkUserAuth() {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        if (!token || user.role === 'admin') {
+            window.location.href = '/login';
+            return false;
+        }
+        return true;
+    }
+
+    // ================================================================
+    // ✅ LOAD USER DATA FROM LOCALSTORAGE
+    // ================================================================
+    function loadUserData() {
+        try {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            currentUser = user;
+            
+            console.log('👤 User data from localStorage:', user);
+
+            if (!user || !user.email) {
+                throw new Error('User not found');
+            }
+
+            // ✅ Update UI with user data from localStorage
+            if (user.name) {
+                document.getElementById('avatarLetter').textContent = user.name.charAt(0).toUpperCase();
+                document.getElementById('profileName').textContent = user.name;
+            }
+            if (user.email) {
+                document.getElementById('profileEmail').textContent = user.email;
+            }
+            if (user.phone) {
+                document.getElementById('profilePhone').innerHTML = user.phone + 
+                    ' <button class="edit-btn" onclick="editField(\'phone\')"><i class="fas fa-pencil-alt"></i></button>';
+            }
+            if (user.address) {
+                document.getElementById('profileAddress').innerHTML = user.address + 
+                    ' <button class="edit-btn" onclick="editField(\'address\')"><i class="fas fa-pencil-alt"></i></button>';
+            }
+            if (user.createdAt) {
+                const joinedDate = new Date(user.createdAt).toLocaleDateString('en-IN', {
+                    day: '2-digit', month: 'long', year: 'numeric'
+                });
+                document.getElementById('profileJoined').textContent = joinedDate;
+            }
+
+            // Set edit form values
+            document.getElementById('editName').value = user.name || '';
+            document.getElementById('editPhone').value = user.phone || '';
+            document.getElementById('editAddress').value = user.address || '';
+
+            // ✅ Show profile and hide loading
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'none';
+            document.getElementById('profileContent').style.display = 'block';
+
+            // ✅ Update navbar
+            updateNavbar();
+
+        } catch (error) {
+            console.error('❌ Error loading user data:', error);
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+            document.getElementById('errorMessage').textContent = error.message || 'Failed to load profile';
+        }
+    }
+
+    // ================================================================
+    // EDIT PROFILE
+    // ================================================================
+    function editProfile() {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        document.getElementById('editName').value = user.name || '';
+        document.getElementById('editPhone').value = user.phone || '';
+        document.getElementById('editAddress').value = user.address || '';
+        if (!editModal) {
+            editModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+        }
+        editModal.show();
+    }
+
+    // ================================================================
+    // EDIT FIELD (Quick Edit)
+    // ================================================================
+    function editField(field) {
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        document.getElementById('editName').value = user.name || '';
+        document.getElementById('editPhone').value = user.phone || '';
+        document.getElementById('editAddress').value = user.address || '';
+        
+        if (field === 'phone') {
+            setTimeout(() => document.getElementById('editPhone').focus(), 300);
+        } else if (field === 'address') {
+            setTimeout(() => document.getElementById('editAddress').focus(), 300);
+        }
+        
+        if (!editModal) {
+            editModal = new bootstrap.Modal(document.getElementById('editProfileModal'));
+        }
+        editModal.show();
+    }
+
+    // ================================================================
+    // ✅ SAVE PROFILE - Update Database
+    // ================================================================
+    document.getElementById('saveProfileBtn').addEventListener('click', async () => {
+        const name = document.getElementById('editName').value.trim();
+        const phone = document.getElementById('editPhone').value.trim();
+        const address = document.getElementById('editAddress').value.trim();
+
+        if (!name) {
+            showToast('Name is required', true);
+            return;
+        }
+
+        const btn = document.getElementById('saveProfileBtn');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span> Saving...';
+
+        try {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+            if (!user._id) {
+                throw new Error('User ID not found');
+            }
+
+            // ✅ Update user in database
+            const response = await fetch(`${API_URL}/users/${user._id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify({ name, phone, address })
+            });
+
+            if (!response.ok) {
+                const errorData = await response.json();
+                throw new Error(errorData.message || 'Failed to update profile');
+            }
+
+            const updatedUser = await response.json();
+            console.log('✅ Profile updated:', updatedUser);
+
+            // ✅ Update localStorage
+            localStorage.setItem('user', JSON.stringify(updatedUser));
+
+            // ✅ Reload user data
+            loadUserData();
+
+            if (editModal) editModal.hide();
+            showToast('✅ Profile updated successfully!');
+
+        } catch (error) {
+            console.error('Error updating profile:', error);
+            showToast('❌ ' + error.message, true);
+        }
+
+        btn.disabled = false;
+        btn.innerHTML = originalText;
+    });
+
+    // ================================================================
+    // UPLOAD PHOTO
+    // ================================================================
+    document.getElementById('uploadPhotoBtn').addEventListener('click', () => {
+        document.getElementById('photoInput').click();
+    });
+
+    document.getElementById('photoInput').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('photo', file);
+
+        const btn = document.getElementById('uploadPhotoBtn');
+        const originalHtml = btn.innerHTML;
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm"></span>';
+        btn.disabled = true;
+
+        try {
+            const token = localStorage.getItem('token');
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+
+            const response = await fetch(`${API_URL}/users/${user._id}/photo`, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to upload photo');
+            }
+
+            const data = await response.json();
+            if (data.success && data.photoUrl) {
+                user.photo = data.photoUrl;
+                localStorage.setItem('user', JSON.stringify(user));
+            }
+
+            showToast('✅ Photo updated successfully!');
+            setTimeout(() => window.location.reload(), 1000);
+
+        } catch (error) {
+            console.error('Error uploading photo:', error);
+            showToast('❌ ' + error.message, true);
+        }
+
+        btn.innerHTML = originalHtml;
+        btn.disabled = false;
+    });
+
+    // ================================================================
+    // SEARCH
+    // ================================================================
+    document.getElementById('globalSearchBtn').addEventListener('click', () => {
+        const query = document.getElementById('globalSearchInput').value.trim();
+        if (query) {
+            window.location.href = `/search?q=${encodeURIComponent(query)}`;
+        }
+    });
+
+    document.getElementById('globalSearchInput').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('globalSearchBtn').click();
+        }
+    });
+
+    // ================================================================
+    // CART COUNT
+    // ================================================================
+    function updateCartCount() {
+        const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const total = cart.reduce((sum, item) => sum + (item.quantity || 0), 0);
+        document.getElementById('cartCount').textContent = total;
+    }
+
+    // ================================================================
+    // UPDATE NAVBAR
+    // ================================================================
+    function updateNavbar() {
+        const token = localStorage.getItem('token');
+        const user = JSON.parse(localStorage.getItem('user') || '{}');
+        const dropdown = document.getElementById('authDropdown');
+
+        if (token && token !== 'null' && token !== 'undefined') {
+            dropdown.innerHTML = `
+                <li><a class="dropdown-item" href="/profile"><i class="fas fa-user me-2"></i>${user?.name || 'My Account'}</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+            `;
+        } else {
+            dropdown.innerHTML = `
+                <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                <li><hr class="dropdown-divider"></li>
+                <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+            `;
+        }
+    }
+
+    // ================================================================
+    // ✅ INIT - Load data from localStorage
+    // ================================================================
+    document.addEventListener('DOMContentLoaded', function() {
+        console.log('👤 Profile Page Loaded');
+        if (checkUserAuth()) {
+            updateCartCount();
+            updateNavbar();
+            loadUserData();
+        }
+    });
+
+    // Make functions globally accessible
+    window.logout = logout;
+    window.showToast = showToast;
+    window.editProfile = editProfile;
+    window.editField = editField;
+</script>
+</body>
+</html>

@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>ShopyGo - Home</title>
     
+    <!-- ✅ FAVICON - Browser Tab Icon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+    <link rel="shortcut icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🛒</text></svg>">
+    
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
@@ -44,11 +48,22 @@
             background-color: var(--primary-blue);
             color: white;
         }
+        
+        /* ===== OLD STYLE NAVBAR ===== */
         .navbar {
             background: white;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
             border-bottom: 1px solid var(--border-light);
             padding: 12px 0;
+        }
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, #2563eb, #3b82f6);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-decoration: none;
         }
         .search-bar { max-width: 450px; width: 100%; }
         .search-bar .input-group {
@@ -74,8 +89,19 @@
             transition: 0.2s;
             position: relative;
             cursor: pointer;
+            text-decoration: none;
         }
         .nav-icon:hover { color: var(--primary-blue); }
+        .cart-badge {
+            background-color: #2563eb;
+            font-size: 10px;
+            position: absolute;
+            top: -8px;
+            right: -12px;
+            border-radius: 50%;
+            padding: 2px 6px;
+            color: white;
+        }
         .dropdown-menu-custom {
             border-radius: 20px;
             border: none;
@@ -101,7 +127,7 @@
             margin: 6px 0;
         }
         
-        /* ===== 3-SLIDE CAROUSEL BANNER ===== */
+        /* ===== BANNER CAROUSEL ===== */
         .banner-carousel {
             position: relative;
             border-radius: 28px;
@@ -281,6 +307,7 @@
             .banner-carousel .carousel-item .slide-content .btn-banner { padding: 8px 20px; font-size: 0.85rem; }
         }
         
+        /* ===== CATEGORY CARDS ===== */
         .category-card {
             background: white;
             border-radius: 28px;
@@ -327,6 +354,7 @@
             font-weight: 600;
         }
         
+        /* ===== SUBCATEGORY MODAL ===== */
         .subcategory-modal-card {
             border-radius: 20px;
             border: 1px solid var(--border-light);
@@ -377,6 +405,7 @@
             color: var(--primary-blue);
         }
         
+        /* ===== PRODUCT CARDS ===== */
         .product-card {
             border-radius: 24px;
             border: 1px solid var(--border-light);
@@ -443,6 +472,7 @@
             color: inherit;
         }
         
+        /* ===== FOOTER ===== */
         footer {
             background: #0f172a;
             color: #cbd5e1;
@@ -467,11 +497,7 @@
         }
         
         .toast-container { z-index: 9999; }
-        .cart-badge { background-color: #2563eb; font-size: 10px; }
         
-        .modal-header { border-bottom: 2px solid var(--soft-bg); }
-        .modal-footer { border-top: 2px solid var(--soft-bg); }
-
         /* ===== LOGIN POPUP ===== */
         .login-popup-overlay {
             position: fixed;
@@ -607,22 +633,7 @@
             color: #ef4444;
         }
         
-        .debug-badge {
-            position: fixed;
-            bottom: 10px;
-            right: 10px;
-            background: #1e293b;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 10px;
-            z-index: 9997;
-            opacity: 0.7;
-            cursor: pointer;
-        }
-        .debug-badge:hover {
-            opacity: 1;
-        }
+        /* ✅ DEBUG BADGE REMOVED - No more unnecessary debug icon at bottom */
         
         @media (max-width: 992px) {
             .search-bar { order: 3; margin-top: 12px; width: 100%; max-width: 100%; }
@@ -638,7 +649,7 @@
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
+<!-- ===== OLD STYLE NAVBAR ===== -->
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container-fluid px-3 px-lg-5">
         <a class="navbar-brand fw-bold fs-2" href="/" style="background: linear-gradient(135deg, #2563eb, #3b82f6); background-clip: text; -webkit-background-clip: text; color: transparent;">ShopyGo</a>
@@ -656,11 +667,13 @@
             </div>
             
             <div class="d-flex align-items-center gap-3 ms-auto mt-2 mt-lg-0">
+                <!-- Cart Icon -->
                 <a href="#" class="nav-icon position-relative" onclick="handleCartClick(event)">
                     <i class="fas fa-shopping-cart fa-lg"></i>
-                    <span id="cartCount" class="position-absolute top-0 start-100 translate-middle badge rounded-pill cart-badge">0</span>
+                    <span id="cartCount" class="cart-badge">0</span>
                 </a>
                 
+                <!-- Profile Dropdown -->
                 <div class="dropdown">
                     <a href="#" class="nav-icon dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false" style="text-decoration: none;" id="profileDropdown">
                         <i class="fas fa-user-circle fa-lg"></i>
@@ -699,16 +712,15 @@
 <!-- ===== MAIN CONTENT ===== -->
 <main class="container my-3">
 
-    <!-- ===== 3-SLIDE CAROUSEL BANNER ===== -->
+    <!-- ===== BANNER CAROUSEL ===== -->
     <div id="mainBannerCarousel" class="banner-carousel carousel slide" data-bs-ride="carousel" data-bs-interval="5000">
-        <!-- Indicators -->
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#mainBannerCarousel" data-bs-slide-to="0" class="active" aria-current="true"></button>
             <button type="button" data-bs-target="#mainBannerCarousel" data-bs-slide-to="1"></button>
             <button type="button" data-bs-target="#mainBannerCarousel" data-bs-slide-to="2"></button>
         </div>
 
-        <!-- Slide 1 - Summer Sale -->
+        <!-- Slide 1 -->
         <div class="carousel-item active">
             <div class="slide-bg" style="background: url('https://images.unsplash.com/photo-1607082350899-7e105aa886ae?w=1200&q=80') center/cover no-repeat;"></div>
             <div class="slide-overlay gradient-blue"></div>
@@ -727,7 +739,7 @@
             </div>
         </div>
 
-        <!-- Slide 2 - Electronics -->
+        <!-- Slide 2 -->
         <div class="carousel-item">
             <div class="slide-bg" style="background: url('https://images.unsplash.com/photo-1498049794561-7780e7231661?w=1200&q=80') center/cover no-repeat;"></div>
             <div class="slide-overlay gradient-dark"></div>
@@ -746,7 +758,7 @@
             </div>
         </div>
 
-        <!-- Slide 3 - Fashion -->
+        <!-- Slide 3 -->
         <div class="carousel-item">
             <div class="slide-bg" style="background: url('https://images.unsplash.com/photo-1483985988355-763728e1935b?w=1200&q=80') center/cover no-repeat;"></div>
             <div class="slide-overlay gradient-purple"></div>
@@ -765,7 +777,6 @@
             </div>
         </div>
 
-        <!-- Controls -->
         <button class="carousel-control-prev" type="button" data-bs-target="#mainBannerCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="visually-hidden">Previous</span>
@@ -788,7 +799,7 @@
         </div>
     </div>
 
-    <!-- SEARCH RESULTS SECTION -->
+    <!-- SEARCH RESULTS -->
     <div id="searchResultsSection" style="display: none;">
         <div class="search-info-bar" id="searchInfoBar">
             <span>
@@ -800,9 +811,7 @@
                 <i class="fas fa-times me-1"></i> Clear Search
             </a>
         </div>
-        <div class="row g-4" id="searchResultsGrid">
-            <!-- Results will be populated here -->
-        </div>
+        <div class="row g-4" id="searchResultsGrid"></div>
     </div>
 
     <!-- TRENDING PRODUCTS -->
@@ -915,10 +924,7 @@
     </div>
 </footer>
 
-<!-- Debug badge -->
-<div class="debug-badge" id="debugBadge" onclick="showDebugInfo()">
-    🔍 Debug
-</div>
+<!-- ✅ DEBUG BADGE REMOVED - No more unnecessary debug icon at bottom -->
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -930,21 +936,6 @@
     let pendingRedirect = null;
     let allProducts = [];
     let currentSearchTerm = '';
-
-    // ================================================================
-    // DEBUG FUNCTION
-    // ================================================================
-    function showDebugInfo() {
-        const token = localStorage.getItem('token');
-        const user = localStorage.getItem('user');
-        console.log('🔍 DEBUG INFO:');
-        console.log('Token:', token);
-        console.log('User:', user);
-        console.log('Is Logged In:', isLoggedIn());
-        console.log('All Products Count:', allProducts.length);
-        alert(`🔍 Debug Info:\n\nLogged In: ${isLoggedIn()}\nToken: ${token ? '✅ Present' : '❌ Missing'}\nUser: ${user ? JSON.stringify(JSON.parse(user)) : '❌ Missing'}\nProducts Loaded: ${allProducts.length}`);
-        updateNavbar();
-    }
 
     // ================================================================
     // CHECK LOGIN STATUS
@@ -1497,7 +1488,7 @@
     }
 
     // ================================================================
-    // AUTH - FIXED: profile name redirects to /profile, logout uses confirm
+    // AUTH - NAVBAR
     // ================================================================
     function updateNavbar() {
         const dropdown = document.getElementById('authDropdown');
@@ -1548,7 +1539,7 @@
     }
 
     // ================================================================
-    // TEST: Set a dummy login for testing
+    // TEST LOGIN
     // ================================================================
     function setTestLogin() {
         localStorage.setItem('token', 'test-token-12345');
@@ -1594,7 +1585,6 @@
     window.checkPendingAction = checkPendingAction;
     window.handleCartClick = handleCartClick;
     window.loadProducts = loadProducts;
-    window.showDebugInfo = showDebugInfo;
     window.setTestLogin = setTestLogin;
     window.isLoggedIn = isLoggedIn;
     window.updateNavbar = updateNavbar;
