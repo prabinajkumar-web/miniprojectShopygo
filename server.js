@@ -23,15 +23,27 @@ const app = express();
 // ================================================================
 // ===== MIDDLEWARE =====
 // ================================================================
+
+// ✅ CORS — 5200 port included
 app.use(cors({
-    origin: ['http://localhost:3000', 'http://localhost:5000', 'http://127.0.0.1:5500', 'http://localhost:5500'],
+    origin: [
+        'http://localhost:3000',
+        'http://localhost:5200',
+        'http://localhost:5200',
+        'http://127.0.0.1:5200',
+        'http://localhost:5500',
+        'http://127.0.0.1:5500'
+    ],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
+
+// ✅ Static file serving — uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname)));
 
@@ -54,7 +66,6 @@ const checkAdmin = (req, res, next) => {
     
     if (!token) {
         console.log('❌ No token found, redirecting to login');
-        // For API requests, return JSON
         if (req.path.startsWith('/api/')) {
             return res.status(401).json({ 
                 success: false, 
@@ -81,7 +92,7 @@ const checkAdmin = (req, res, next) => {
         
         req.user = decoded;
         console.log('✅ Admin authenticated:', decoded.email);
-        next(); // ✅ IMPORTANT: Call next() to continue
+        next();
     } catch (error) {
         console.log('❌ Token verification failed:', error.message);
         if (req.path.startsWith('/api/')) {
@@ -291,9 +302,9 @@ app.use((err, req, res, next) => {
 // ================================================================
 connectDB();
 
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5200;
 app.listen(PORT, () => {
-    console.log('\n🚀 ==================================');
+    console.log('\n ==================================');
     console.log('   🚀 Server running on http://localhost:' + PORT);
     console.log('   🔐 Admin Login: http://localhost:' + PORT + '/admin/login');
     console.log('   💳 Checkout: http://localhost:' + PORT + '/checkout');
