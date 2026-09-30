@@ -9,70 +9,42 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
-        /* Same styles as login page */
         * { font-family: 'Inter', sans-serif; }
         html, body { height: 100%; margin: 0; padding: 0; }
         body { background: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
         :root { --primary-blue: #2563eb; --primary-dark: #1d4ed8; }
         .auth-card {
-            max-width: 420px;
-            width: 100%;
-            background: white;
-            border-radius: 28px;
-            padding: 40px;
+            max-width: 420px; width: 100%; background: white;
+            border-radius: 28px; padding: 40px;
             box-shadow: 0 20px 40px rgba(0,0,0,0.06);
-            border: 1px solid #e9eff5;
-            margin: 20px;
+            border: 1px solid #e9eff5; margin: 20px;
         }
         .auth-card h3 { font-weight: 700; text-align: center; margin-bottom: 20px; }
         .auth-card .form-control { border-radius: 14px; padding: 12px 16px; border: 1px solid #e9eff5; }
         .auth-card .form-control:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 0.2rem rgba(37,99,235,0.12); }
         .btn-primary-custom {
             background: linear-gradient(135deg, #2563eb, #1d4ed8);
-            color: white;
-            border: none;
-            border-radius: 40px;
-            padding: 12px;
-            font-weight: 600;
-            width: 100%;
-            transition: 0.3s;
+            color: white; border: none; border-radius: 40px;
+            padding: 12px; font-weight: 600; width: 100%; transition: 0.3s;
         }
         .btn-primary-custom:hover { transform: scale(1.02); color: white; }
+        .btn-primary-custom:disabled { opacity: 0.6; cursor: not-allowed; }
         .btn-outline-custom {
-            border: 2px solid var(--primary-blue);
-            color: var(--primary-blue);
-            border-radius: 40px;
-            padding: 10px;
-            font-weight: 600;
-            width: 100%;
-            background: transparent;
-            transition: 0.3s;
+            border: 2px solid var(--primary-blue); color: var(--primary-blue);
+            border-radius: 40px; padding: 10px; font-weight: 600;
+            width: 100%; background: transparent; transition: 0.3s;
         }
         .btn-outline-custom:hover { background: var(--primary-blue); color: white; }
         .auth-card a { color: var(--primary-blue); text-decoration: none; font-weight: 500; }
         .auth-card a:hover { text-decoration: underline; }
         .toast-container { z-index: 9999; }
-        .otp-input-group {
-            display: flex;
-            gap: 10px;
-            justify-content: center;
-            margin: 20px 0;
-        }
+        .otp-input-group { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
         .otp-input {
-            width: 50px;
-            height: 60px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: 700;
-            border: 2px solid #e9eff5;
-            border-radius: 12px;
-            transition: 0.3s;
+            width: 50px; height: 60px; text-align: center;
+            font-size: 24px; font-weight: 700;
+            border: 2px solid #e9eff5; border-radius: 12px; transition: 0.3s;
         }
-        .otp-input:focus {
-            border-color: var(--primary-blue);
-            box-shadow: 0 0 0 0.2rem rgba(37,99,235,0.12);
-            outline: none;
-        }
+        .otp-input:focus { border-color: var(--primary-blue); box-shadow: 0 0 0 0.2rem rgba(37,99,235,0.12); outline: none; }
         .otp-input-filled { border-color: var(--primary-blue); background: #eff6ff; }
         .step { display: none; }
         .step.active { display: block; }
@@ -100,7 +72,7 @@
             <form id="registerForm">
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Full Name</label>
-                    <input type="text" id="regName" class="form-control" placeholder="Your full name" required>
+                    <input type="text" id="regName" class="form-control" placeholder="Your full name" required minlength="2">
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Email</label>
@@ -108,7 +80,7 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label fw-semibold">Password</label>
-                    <input type="password" id="regPassword" class="form-control" placeholder="At least 6 characters" required>
+                    <input type="password" id="regPassword" class="form-control" placeholder="At least 6 characters" required minlength="6">
                     <div class="password-requirements" id="passwordRequirements">
                         <span id="lengthReq">❌ At least 6 characters</span>
                     </div>
@@ -166,11 +138,11 @@
 
     function showToast(msg, type = 'info') {
         let container = document.getElementById('toastContainer');
-        if (!container) { 
-            container = document.createElement('div'); 
-            container.id = 'toastContainer'; 
-            container.className = 'toast-container position-fixed top-0 end-0 p-3'; 
-            document.body.appendChild(container); 
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container position-fixed top-0 end-0 p-3';
+            document.body.appendChild(container);
         }
         const bg = type === 'success' ? 'bg-success' : type === 'error' ? 'bg-danger' : 'bg-primary';
         const toast = document.createElement('div');
@@ -182,11 +154,11 @@
             </div>
         `;
         container.appendChild(toast);
-        setTimeout(() => { 
-            if (toast.parentElement) { 
-                toast.classList.remove('show'); 
-                setTimeout(() => toast.remove(), 300); 
-            } 
+        setTimeout(() => {
+            if (toast.parentElement) {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }
         }, 3000);
     }
 
@@ -211,13 +183,13 @@
             }
             this.classList.toggle('otp-input-filled', this.value.length === 1);
         });
-        
+
         input.addEventListener('keydown', function(e) {
             if (e.key === 'Backspace' && this.value === '' && index > 0) {
                 inputs[index - 1].focus();
             }
         });
-        
+
         input.addEventListener('paste', function(e) {
             e.preventDefault();
             const paste = (e.clipboardData || window.clipboardData).getData('text');
@@ -271,16 +243,16 @@
     }
 
     // ================================================================
-    // ✅ REGISTER - SEND OTP (FIXED ENDPOINT)
+    // ✅ REGISTER - SEND OTP (FIXED — name, email, password all sent)
     // ================================================================
     document.getElementById('registerForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const name = document.getElementById('regName').value.trim();
         const email = document.getElementById('regEmail').value.trim();
         const password = document.getElementById('regPassword').value;
         const confirmPassword = document.getElementById('regConfirmPassword').value;
-        
+
         if (!name || !email || !password || !confirmPassword) {
             showToast('Please fill all fields', 'error');
             return;
@@ -293,57 +265,61 @@
             showToast('Password must be at least 6 characters', 'error');
             return;
         }
-        
+
         const btn = document.getElementById('registerBtn');
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-        
+
         try {
-            // ✅ FIXED: Use correct endpoint
+            // ✅ FIXED: name + email + password all sent
             const response = await fetch(`${API_URL}/auth/send-register-otp`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email })
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ name, email, password })
             });
-            
+
             const data = await response.json();
             console.log('📊 Response:', data);
-            
+
             if (!data.success) {
-                throw new Error(data.message);
+                throw new Error(data.message || 'Failed to send OTP');
             }
-            
+
             currentEmail = email;
             currentName = name;
             currentPassword = password;
             document.getElementById('otpEmailDisplay').textContent = email;
-            
+
             if (data.devOTP) {
                 showToast(`🔑 Dev OTP: ${data.devOTP} (Check console)`, 'info');
                 console.log('🔑 OTP:', data.devOTP);
             } else {
                 showToast('✅ OTP sent to your email!', 'success');
             }
-            
+
             showStep('step2');
             startTimer();
-            
+
             document.querySelectorAll('#otpContainer .otp-input').forEach(input => {
                 input.value = '';
                 input.classList.remove('otp-input-filled');
             });
             document.querySelector('#otpContainer .otp-input').focus();
-            
+
         } catch (error) {
+            console.error('❌ Error:', error);
             showToast(error.message || 'Failed to send OTP', 'error');
         }
-        
+
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-paper-plane"></i> Send OTP';
     });
 
     // ================================================================
-    // ✅ VERIFY REGISTRATION OTP (FIXED ENDPOINT)
+    // ✅ VERIFY REGISTRATION OTP
     // ================================================================
     document.getElementById('verifyOtpBtn').addEventListener('click', async () => {
         const otp = getOTP();
@@ -351,38 +327,32 @@
             showToast('Please enter complete 6-digit OTP', 'error');
             return;
         }
-        
+
         const btn = document.getElementById('verifyOtpBtn');
         btn.disabled = true;
         btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
-        
+
         try {
-            // ✅ FIXED: Use correct endpoint
             const response = await fetch(`${API_URL}/auth/verify-register-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ 
-                    email: currentEmail, 
-                    otp, 
-                    name: currentName, 
-                    password: currentPassword 
-                })
+                body: JSON.stringify({ email: currentEmail, otp })
             });
-            
+
             const data = await response.json();
             console.log('📊 Response:', data);
-            
+
             if (!data.success) {
                 throw new Error(data.message);
             }
-            
+
             showToast('✅ Registration successful! Please login.', 'success');
             setTimeout(() => { window.location.href = '/login'; }, 1500);
-            
+
         } catch (error) {
             showToast(error.message || 'Verification failed', 'error');
         }
-        
+
         btn.disabled = false;
         btn.innerHTML = '<i class="fas fa-check"></i> Verify & Register';
     });
@@ -390,37 +360,41 @@
     // ================================================================
     // RESEND OTP
     // ================================================================
-    async function resendOTP() {
+    document.getElementById('resendOtpBtn').addEventListener('click', async () => {
         try {
             const response = await fetch(`${API_URL}/auth/send-register-otp`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: currentEmail })
+                body: JSON.stringify({
+                    name: currentName,
+                    email: currentEmail,
+                    password: currentPassword
+                })
             });
-            
+
             const data = await response.json();
             if (!data.success) throw new Error(data.message);
-            
+
             if (data.devOTP) {
                 showToast(`🔑 Dev OTP: ${data.devOTP}`, 'info');
                 console.log('🔑 OTP:', data.devOTP);
             } else {
                 showToast('✅ OTP resent!', 'success');
             }
-            
+
             document.getElementById('resendOtpBtn').style.display = 'none';
             startTimer();
-            
+
             document.querySelectorAll('#otpContainer .otp-input').forEach(input => {
                 input.value = '';
                 input.classList.remove('otp-input-filled');
             });
             document.querySelector('#otpContainer .otp-input').focus();
-            
+
         } catch (error) {
             showToast(error.message || 'Failed to resend OTP', 'error');
         }
-    }
+    });
 </script>
 </body>
 </html>
