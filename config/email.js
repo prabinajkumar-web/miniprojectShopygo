@@ -169,7 +169,7 @@ async function sendWelcomeEmail(email, name, isAdmin = false) {
                     <p>Thank you for joining ${appName}. We're excited to have you on board!</p>
                     <p>You can now start shopping and exploring our products.</p>
                     <br>
-                    <a href="http://localhost:5200" class="btn">Visit Store</a>
+                    <a href="${process.env.SITE_URL || 'https://efa.genzcodershub.com'}" class="btn">Visit Store</a>
                 </div>
                 <div class="footer">
                     &copy; ${new Date().getFullYear()} ShopyGo - All rights reserved.
