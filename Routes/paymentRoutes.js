@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 const razorpay = require('../config/razorpay');
 const crypto = require('crypto');
-const Order = require('../models/Order');  // ✅ Import at top
+const Order = require('../models/order');  // ✅ Import at top
 
 // ============================================================
 // GET RAZORPAY KEY

@@ -1,6 +1,6 @@
-const Product = require('../models/Product');
-const Category = require('../models/Category');
-const Subcategory = require('../models/Subcategory');
+const Product = require('../models/product');
+const Category = require('../models/category');
+const Subcategory = require('../models/subcategory');
 const mongoose = require('mongoose'); // ✅ இது MUST!
 
 // Get all products with filters

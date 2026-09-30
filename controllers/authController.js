@@ -1,4 +1,4 @@
-const User = require('../models/User');
+const User = require('../models/user');
 const bcrypt = require('bcryptjs');
 const { generateOTP, storeOTP, verifyOTP } = require('../utils/otp');
 const { sendOTPEmail } = require('../config/email');

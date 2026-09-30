@@ -1,5 +1,5 @@
 const { User } = require('../models');
-const Order = require('../models/Order');
+const Order = require('../models/order');
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const { generateOTP, sendOTPEmail, otpStore } = require('../utils/otp');

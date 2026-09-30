@@ -5,16 +5,16 @@ const cookieParser = require('cookie-parser');
 require('dotenv').config();
 
 // Import routes
-const userRoutes = require('./routes/userRoutes');
-const authRoutes = require('./routes/authRoutes');
-const productRoutes = require('./routes/productRoutes');
-const categoryRoutes = require('./routes/categoryRoutes');
-const subcategoryRoutes = require('./routes/subcategoryRoutes');
-const orderRoutes = require('./routes/orderRoutes');
-const analyticsRoutes = require('./routes/analyticsRoutes');
-const viewRoutes = require('./routes/viewRoutes');
-const adminAuthRoutes = require('./routes/adminAuthRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
+const userRoutes = require('./Routes/userRoutes');
+const authRoutes = require('./Routes/authRoutes');
+const productRoutes = require('./Routes/productRoutes');
+const categoryRoutes = require('./Routes/categoryRoutes');
+const subcategoryRoutes = require('./Routes/subcategoryRoutes');
+const orderRoutes = require('./Routes/orderRoutes');
+const analyticsRoutes = require('./Routes/analyticsRoutes');
+const viewRoutes = require('./Routes/viewRoutes');
+const adminAuthRoutes = require('./Routes/adminAuthRoutes');
+const paymentRoutes = require('./Routes/paymentRoutes');
 
 const connectDB = require('./config/database');
 
