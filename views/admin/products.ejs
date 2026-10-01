@@ -194,18 +194,9 @@
             border-radius: 20px;
         }
 
-        .sidebar::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .sidebar::-webkit-scrollbar-track {
-            background: transparent;
-        }
-
-        .sidebar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
-        }
+        .sidebar::-webkit-scrollbar { width: 4px; }
+        .sidebar::-webkit-scrollbar-track { background: transparent; }
+        .sidebar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
 
         /* ===== TOP NAVBAR ===== */
         .top-navbar {
@@ -253,9 +244,7 @@
             transition: 0.2s;
         }
 
-        .top-navbar .admin-profile .avatar:hover {
-            transform: scale(1.05);
-        }
+        .top-navbar .admin-profile .avatar:hover { transform: scale(1.05); }
 
         .mobile-toggle {
             display: none;
@@ -305,16 +294,8 @@
         .stat-card .stat-icon.green { background: #22c55e; }
         .stat-card .stat-icon.orange { background: #f59e0b; }
         .stat-card .stat-icon.purple { background: #8b5cf6; }
-        .stat-card .stat-value {
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: #1e293b;
-        }
-        .stat-card .stat-label {
-            color: #64748b;
-            font-size: 0.85rem;
-            font-weight: 500;
-        }
+        .stat-card .stat-value { font-size: 1.8rem; font-weight: 700; color: #1e293b; }
+        .stat-card .stat-label { color: #64748b; font-size: 0.85rem; font-weight: 500; }
 
         /* ===== PRODUCT CARDS ===== */
         .products-grid {
@@ -347,29 +328,17 @@
             overflow: hidden;
         }
 
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .product-image img { width: 100%; height: 100%; object-fit: cover; }
 
-        .product-info {
-            padding: 1rem;
-        }
+        .product-info { padding: 1rem; }
 
         .product-title {
             font-weight: 700;
             font-size: 1rem;
             margin-bottom: 0.5rem;
             display: -webkit-box;
-            display: -moz-box;
-            display: box;
             -webkit-line-clamp: 2;
-            -moz-line-clamp: 2;
-            line-clamp: 2;
             -webkit-box-orient: vertical;
-            -moz-box-orient: vertical;
-            box-orient: vertical;
             overflow: hidden;
         }
 
@@ -384,11 +353,7 @@
             color: #2563eb;
         }
 
-        .product-price {
-            font-size: 1.2rem;
-            font-weight: 800;
-            color: #2563eb;
-        }
+        .product-price { font-size: 1.2rem; font-weight: 800; color: #2563eb; }
 
         .product-footer {
             display: flex;
@@ -424,10 +389,7 @@
             transition: 0.3s;
         }
 
-        .btn-outline-custom:hover {
-            background: #2563eb;
-            color: white;
-        }
+        .btn-outline-custom:hover { background: #2563eb; color: white; }
 
         .category-tabs {
             display: flex;
@@ -448,16 +410,8 @@
             color: #64748b;
         }
 
-        .category-tab:hover {
-            background: #eef2ff;
-            color: #2563eb;
-        }
-
-        .category-tab.active {
-            background: #2563eb;
-            color: white;
-            border-color: #2563eb;
-        }
+        .category-tab:hover { background: #eef2ff; color: #2563eb; }
+        .category-tab.active { background: #2563eb; color: white; border-color: #2563eb; }
 
         .toast-notify {
             position: fixed;
@@ -475,29 +429,19 @@
             pointer-events: none;
         }
 
-        .toast-notify.show {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .toast-notify.error {
-            background: #dc2626;
-        }
+        .toast-notify.show { opacity: 1; pointer-events: auto; }
+        .toast-notify.error { background: #dc2626; }
 
         .overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.4);
             z-index: 999;
             display: none;
         }
 
-        .overlay.show {
-            display: block;
-        }
+        .overlay.show { display: block; }
 
         /* ===== IMAGE PREVIEW ===== */
         .image-preview-area {
@@ -515,21 +459,15 @@
             position: relative;
             background: #f8fafc;
         }
-        .preview-card img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .preview-card img { width: 100%; height: 100%; object-fit: cover; }
         .preview-card .remove-img {
             position: absolute;
-            top: 2px;
-            right: 2px;
+            top: 2px; right: 2px;
             background: rgba(220, 38, 38, 0.9);
             color: white;
             border: none;
             border-radius: 50%;
-            width: 20px;
-            height: 20px;
+            width: 20px; height: 20px;
             font-size: 10px;
             cursor: pointer;
             display: flex;
@@ -538,8 +476,7 @@
         }
         .preview-card .main-badge {
             position: absolute;
-            bottom: 2px;
-            left: 2px;
+            bottom: 2px; left: 2px;
             background: #2563eb;
             color: white;
             font-size: 8px;
@@ -548,36 +485,17 @@
         }
 
         @media (max-width: 992px) {
-            .sidebar {
-                transform: translateX(-100%);
-            }
-            .sidebar.open {
-                transform: translateX(0);
-            }
-            .sidebar-close {
-                display: block !important;
-            }
-            .top-navbar {
-                left: 0;
-                padding: 12px 16px;
-            }
-            .main-content {
-                margin-left: 0;
-                padding: 16px;
-                margin-top: 70px;
-            }
-            .mobile-toggle {
-                display: block !important;
-            }
+            .sidebar { transform: translateX(-100%); }
+            .sidebar.open { transform: translateX(0); }
+            .sidebar-close { display: block !important; }
+            .top-navbar { left: 0; padding: 12px 16px; }
+            .main-content { margin-left: 0; padding: 16px; margin-top: 70px; }
+            .mobile-toggle { display: block !important; }
         }
 
         @media (max-width: 576px) {
-            .stat-card .stat-value {
-                font-size: 1.3rem;
-            }
-            .top-navbar .page-title {
-                font-size: 0.9rem;
-            }
+            .stat-card .stat-value { font-size: 1.3rem; }
+            .top-navbar .page-title { font-size: 0.9rem; }
         }
     </style>
 </head>
@@ -769,16 +687,17 @@
                             <label class="form-label fw-semibold">Category <span class="text-danger">*</span></label>
                             <select class="form-select" id="prodCategory" required>
                                 <option value="">Select Category</option>
-                                <option value="Clothing">Clothing</option>
-                                <option value="Jewellery">Jewellery</option>
-                                <option value="Footwear">Footwear</option>
-                                <option value="Accessories">Accessories</option>
-                                <option value="Electronics">Electronics</option>
                             </select>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">Subcategory</label>
-                            <input type="text" class="form-control" id="prodSubcategory" placeholder="e.g. Men, Women, Kids">
+                            <select class="form-select" id="prodSubcategory">
+                                <option value="">Select Subcategory</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Custom Subcategory (optional)</label>
+                            <input type="text" class="form-control" id="prodSubcategoryCustom" placeholder="Or type new subcategory">
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-semibold">Main Product Image <span class="text-danger">*</span></label>
@@ -822,6 +741,79 @@
     let subImageFiles = [];
     let existingSubImages = [];
     let totalOrders = 0;
+
+    // ================================================================
+    // CATEGORY & SUBCATEGORY STRUCTURE (Only your 4 categories)
+    // ================================================================
+    const CATEGORY_STRUCTURE = {
+        "Clothing": [
+            "Men's Wear", "Women's Wear", "Kids Wear", "Traditional Wear",
+            "Western Wear", "Innerwear", "Nightwear", "Sportswear",
+            "Winter Wear", "Ethnic Fusion"
+        ],
+        "Jewellery": [
+            "Necklace", "Earrings", "Bangles & Bracelets", "Rings",
+            "Anklets", "Nose Pins", "Bridal Jewellery", "Temple Jewellery",
+            "Artificial Jewellery", "Men's Jewellery"
+        ],
+        "Accessories": [
+            "Bags & Handbags", "Wallets", "Belts", "Hats & Caps",
+            "Scarves & Stoles", "Sunglasses", "Watches",
+            "Hair Accessories", "Gloves", "Ties & Bow Ties"
+        ],
+        "Footwear": [
+            "Men's Footwear", "Women's Footwear", "Kids Footwear",
+            "Sports Shoes", "Casual Shoes", "Formal Shoes",
+            "Sandals & Slippers", "Boots", "Traditional Footwear",
+            "Ethnic/Party Footwear"
+        ]
+    };
+
+    // ================================================================
+    // POPULATE CATEGORY DROPDOWN (Only 4 fixed categories)
+    // ================================================================
+    function populateCategoryDropdown() {
+        const select = document.getElementById('prodCategory');
+        if (!select) return;
+
+        const currentValue = select.value;
+        const categories = Object.keys(CATEGORY_STRUCTURE);
+
+        select.innerHTML = '<option value="">Select Category</option>' +
+            categories.map(cat => `<option value="${escapeHtml(cat)}">${escapeHtml(cat)}</option>`).join('');
+
+        if (currentValue) select.value = currentValue;
+    }
+
+    // ================================================================
+    // POPULATE SUBCATEGORY DROPDOWN based on selected category
+    // ================================================================
+    function populateSubcategoryDropdown(category, selectedSub = '') {
+        const select = document.getElementById('prodSubcategory');
+        if (!select) return;
+
+        const subcats = CATEGORY_STRUCTURE[category] || [];
+
+        select.innerHTML = '<option value="">Select Subcategory</option>' +
+            subcats.map(sub => `<option value="${escapeHtml(sub)}">${escapeHtml(sub)}</option>`).join('');
+
+        if (selectedSub) {
+            if (subcats.includes(selectedSub)) {
+                select.value = selectedSub;
+            } else {
+                document.getElementById('prodSubcategoryCustom').value = selectedSub;
+            }
+        }
+    }
+
+    // ================================================================
+    // GET FINAL SUBCATEGORY VALUE (dropdown OR custom field)
+    // ================================================================
+    function getFinalSubcategory() {
+        const custom = document.getElementById('prodSubcategoryCustom').value.trim();
+        const dropdown = document.getElementById('prodSubcategory').value;
+        return custom || dropdown || '';
+    }
 
     // ================================================================
     // TOAST NOTIFICATION
@@ -906,7 +898,7 @@
     }
 
     // ================================================================
-    // FETCH ORDERS COUNT - FIXED: Shows TOTAL orders
+    // FETCH ORDERS COUNT
     // ================================================================
     async function fetchOrdersCount() {
         try {
@@ -918,9 +910,6 @@
             
             if (response.ok) {
                 const data = await response.json();
-                console.log('📦 Orders API Response:', data);
-                
-                // Handle different response formats
                 let orders = [];
                 if (data.orders && Array.isArray(data.orders)) {
                     orders = data.orders;
@@ -929,14 +918,9 @@
                 } else if (data.data && Array.isArray(data.data)) {
                     orders = data.data;
                 }
-                
-                // ✅ FIXED: Count ALL orders, not just pending
                 totalOrders = orders.length;
-                
-                console.log(`📦 Total orders: ${totalOrders}`);
                 updateOrderBadge();
             } else {
-                console.log('⚠️ Orders API returned:', response.status);
                 totalOrders = 0;
                 updateOrderBadge();
             }
@@ -978,7 +962,6 @@
             if (!response.ok) throw new Error('Failed to fetch products');
             
             const data = await response.json();
-            console.log('📦 Products API Response:', data);
             
             if (data.products && Array.isArray(data.products)) {
                 products = data.products;
@@ -992,6 +975,7 @@
             renderStats();
             renderCategoryTabs();
             renderProductsGrid();
+            populateCategoryDropdown();
             document.getElementById('lastUpdatedTime').innerHTML = new Date().toLocaleTimeString();
             
         } catch (error) {
@@ -1157,7 +1141,7 @@
             const productData = {
                 name,
                 category,
-                subcategory: document.getElementById('prodSubcategory').value || '',
+                subcategory: getFinalSubcategory(),
                 price,
                 salePrice: document.getElementById('prodSalePrice').value ? parseFloat(document.getElementById('prodSalePrice').value) : null,
                 stock: parseInt(document.getElementById('prodStock').value) || 0,
@@ -1226,6 +1210,10 @@
         document.getElementById('mainImageEmptyWarning').innerHTML = '';
         document.getElementById('prodStock').value = '0';
         
+        populateSubcategoryDropdown('');
+        document.getElementById('prodSubcategoryCustom').value = '';
+        populateCategoryDropdown();
+        
         document.getElementById('addProductModalLabel').innerHTML = '<i class="bi bi-bag-plus-fill me-2"></i>Add New Product';
         document.getElementById('saveProductBtn').innerHTML = '<i class="bi bi-check-lg me-1"></i> Save Product';
     }
@@ -1247,11 +1235,16 @@
             document.getElementById('prodSalePrice').value = product.salePrice || '';
             document.getElementById('prodStock').value = product.stock || 0;
             document.getElementById('prodSKU').value = product.sku || '';
-            document.getElementById('prodCategory').value = product.category || '';
-            document.getElementById('prodSubcategory').value = product.subcategory || '';
             document.getElementById('prodShortDesc').value = product.shortDesc || '';
             document.getElementById('prodDesc').value = product.fullDesc || '';
             document.getElementById('editProductId').value = id;
+            
+            // Populate categories first, then set value
+            populateCategoryDropdown();
+            document.getElementById('prodCategory').value = product.category || '';
+            
+            // Populate subcategories based on category, then set value
+            populateSubcategoryDropdown(product.category || '', product.subcategory || '');
             
             // Show existing main image
             if (product.mainImage) {
@@ -1325,6 +1318,12 @@
     document.getElementById('saveProductBtn').addEventListener('click', saveProduct);
     document.getElementById('addProductModal').addEventListener('hidden.bs.modal', resetForm);
 
+    // Category Change → Update Subcategories
+    document.getElementById('prodCategory').addEventListener('change', function() {
+        populateSubcategoryDropdown(this.value);
+        document.getElementById('prodSubcategoryCustom').value = '';
+    });
+
     // Main Image Upload
     document.getElementById('mainImageInput').addEventListener('change', function(e) {
         if (this.files && this.files[0]) {
@@ -1354,7 +1353,7 @@
                 reader.onload = function(ev) {
                     container.innerHTML += `
                         <div class="preview-card">
-                            <img src="${ev.target.result}" alt="Sub image">
+                            <img src="${ev.target.src || ev.target.result}" alt="Sub image">
                             <button type="button" class="remove-img" onclick="this.parentElement.remove(); subImageFiles = subImageFiles.filter(f => f !== file);">×</button>
                         </div>
                     `;
@@ -1369,13 +1368,11 @@
     // ================================================================
     document.addEventListener('DOMContentLoaded', function() {
         console.log('📦 Products Page Loaded');
+        populateCategoryDropdown();   // Initialize category dropdown on load
         if (checkAdminAuth()) {
             loadAdminData();
-            // Fetch orders count first
             fetchOrdersCount();
-            // Then fetch products
             fetchProducts();
-            // Auto-refresh every 60 seconds
             setInterval(() => {
                 fetchOrdersCount();
                 fetchProducts();
