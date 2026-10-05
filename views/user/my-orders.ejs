@@ -63,9 +63,7 @@
             overflow: hidden;
             transition: 0.2s;
         }
-        .order-card:hover {
-            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
-        }
+        .order-card:hover { box-shadow: 0 8px 25px rgba(0,0,0,0.06); }
         .order-header {
             padding: 18px 24px;
             background: #fafcff;
@@ -81,10 +79,7 @@
             color: var(--primary-blue);
             font-size: 0.95rem;
         }
-        .order-date {
-            font-size: 0.75rem;
-            color: #6c7a91;
-        }
+        .order-date { font-size: 0.75rem; color: #6c7a91; }
         .status-badge {
             display: inline-flex;
             align-items: center;
@@ -94,39 +89,52 @@
             font-size: 0.75rem;
             font-weight: 600;
         }
-        .status-delivered {
-            background: #d1fae5;
-            color: #065f46;
-        }
-        .status-shipped {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-        .status-processing {
-            background: #fed7aa;
-            color: #92400e;
-        }
-        .status-pending {
-            background: #fef3c7;
-            color: #92400e;
-        }
-        .status-cancelled {
-            background: #fee2e2;
-            color: #dc2626;
-        }
-        .order-body {
-            padding: 16px 24px;
-        }
+        .status-delivered { background: #d1fae5; color: #065f46; }
+        .status-shipped { background: #dbeafe; color: #1e40af; }
+        .status-processing { background: #fed7aa; color: #92400e; }
+        .status-pending { background: #fef3c7; color: #92400e; }
+        .status-cancelled { background: #fee2e2; color: #dc2626; }
+
+        .order-body { padding: 16px 24px; }
+
+        /* ✅ Clickable product item */
         .product-item {
             display: flex;
             gap: 15px;
-            padding: 12px 0;
+            padding: 12px 8px;
             border-bottom: 1px solid var(--border-light);
             align-items: center;
+            border-radius: 12px;
+            transition: all 0.2s;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
         }
-        .product-item:last-child {
-            border-bottom: none;
+        .product-item:last-child { border-bottom: none; }
+        .product-item:hover {
+            background: #f8fafd;
+            transform: translateX(4px);
         }
+        .product-item:hover .product-name {
+            color: var(--primary-blue);
+        }
+        .product-item:hover .product-img {
+            border-color: var(--primary-blue);
+            box-shadow: 0 4px 12px rgba(37,99,235,0.15);
+        }
+        .product-item:hover .view-product-arrow {
+            opacity: 1;
+            transform: translateX(0);
+        }
+        .view-product-arrow {
+            opacity: 0;
+            transform: translateX(-8px);
+            transition: 0.2s;
+            color: var(--primary-blue);
+            font-size: 0.9rem;
+            margin-left: 8px;
+        }
+
         .product-img {
             width: 60px;
             height: 60px;
@@ -140,26 +148,20 @@
             overflow: hidden;
             flex-shrink: 0;
             border: 1px solid var(--border-light);
+            transition: 0.2s;
         }
-        .product-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        .product-details {
-            flex: 1;
-            min-width: 0;
-        }
+        .product-img img { width: 100%; height: 100%; object-fit: cover; }
+        .product-details { flex: 1; min-width: 0; }
         .product-name {
             font-weight: 600;
             font-size: 0.9rem;
             margin-bottom: 2px;
             color: #1e293b;
+            transition: 0.2s;
+            display: flex;
+            align-items: center;
         }
-        .product-meta {
-            font-size: 0.7rem;
-            color: #6c7a91;
-        }
+        .product-meta { font-size: 0.7rem; color: #6c7a91; }
         .product-price {
             font-weight: 700;
             color: var(--primary-blue);
@@ -176,14 +178,8 @@
             align-items: center;
             gap: 12px;
         }
-        .total-amount {
-            font-weight: 700;
-            font-size: 1rem;
-            color: #1e293b;
-        }
-        .total-amount span {
-            color: var(--primary-blue);
-        }
+        .total-amount { font-weight: 700; font-size: 1rem; color: #1e293b; }
+        .total-amount span { color: var(--primary-blue); }
         .btn-outline {
             padding: 6px 18px;
             border-radius: 30px;
@@ -204,13 +200,16 @@
             color: var(--primary-blue);
             background: var(--soft-bg);
         }
-        .btn-outline-danger {
-            border-color: #fca5a5;
-            color: #dc2626;
+        .btn-outline:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            pointer-events: none;
         }
+        .btn-outline-danger { border-color: #fca5a5; color: #dc2626; }
         .btn-outline-danger:hover {
             background: #fee2e2;
             border-color: #dc2626;
+            color: #dc2626;
         }
         .empty-state {
             text-align: center;
@@ -224,10 +223,7 @@
             color: #cbd5e1;
             margin-bottom: 16px;
         }
-        .empty-state h4 {
-            font-size: 1.3rem;
-            margin-bottom: 8px;
-        }
+        .empty-state h4 { font-size: 1.3rem; margin-bottom: 8px; }
         .toast-container { z-index: 9999; }
         footer {
             background: #0f172a;
@@ -245,11 +241,7 @@
             text-align: center;
         }
 
-        /* Tracking Modal Styles */
-        .tracking-timeline {
-            position: relative;
-            padding-left: 30px;
-        }
+        .tracking-timeline { position: relative; padding-left: 30px; }
         .tracking-timeline::before {
             content: '';
             position: absolute;
@@ -259,11 +251,7 @@
             width: 2px;
             background: #e2e8f0;
         }
-        .tracking-step {
-            position: relative;
-            margin-bottom: 24px;
-            padding-left: 8px;
-        }
+        .tracking-step { position: relative; margin-bottom: 24px; padding-left: 8px; }
         .tracking-step:last-child { margin-bottom: 0; }
         .tracking-step .dot {
             position: absolute;
@@ -285,26 +273,11 @@
             background: #16a34a;
             border-color: #16a34a;
         }
-        .tracking-step .step-title {
-            font-weight: 600;
-            font-size: 0.95rem;
-            color: #1e293b;
-        }
-        .tracking-step .step-date {
-            font-size: 0.75rem;
-            color: #6c7a91;
-        }
-        .tracking-step .step-desc {
-            font-size: 0.8rem;
-            color: #6c7a91;
-            margin-top: 2px;
-        }
+        .tracking-step .step-title { font-weight: 600; font-size: 0.95rem; color: #1e293b; }
+        .tracking-step .step-date { font-size: 0.75rem; color: #6c7a91; }
+        .tracking-step .step-desc { font-size: 0.8rem; color: #6c7a91; margin-top: 2px; }
 
-        /* Loading Spinner */
-        .loading-spinner {
-            text-align: center;
-            padding: 60px 20px;
-        }
+        .loading-spinner { text-align: center; padding: 60px 20px; }
         .loading-spinner .spinner {
             width: 50px;
             height: 50px;
@@ -314,9 +287,7 @@
             animation: spin 0.8s linear infinite;
             margin: 0 auto 16px;
         }
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
         @media (max-width: 768px) {
             .order-header { flex-direction: column; align-items: flex-start; }
@@ -330,7 +301,7 @@
 </head>
 <body>
 
-<!-- ===== NAVBAR ===== -->
+<!-- NAVBAR -->
 <nav class="navbar navbar-expand-lg sticky-top">
     <div class="container-fluid px-3 px-lg-5">
         <a class="navbar-brand fw-bold fs-2" href="/">🛒 ShopyGo</a>
@@ -345,29 +316,26 @@
                 </a>
                 <div class="dropdown">
                     <a href="#" class="nav-icon dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user-circle fa-lg"></i></a>
-                    <ul class="dropdown-menu dropdown-menu-end" style="border-radius:20px;border:none;box-shadow:0 12px 28px rgba(0,0,0,0.08);margin-top:12px;" id="authDropdown">
-                        <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
-                        <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
-                        <li><hr class="dropdown-divider"></li>
-                        <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
-                    </ul>
+                    <ul class="dropdown-menu dropdown-menu-end" style="border-radius:20px;border:none;box-shadow:0 12px 28px rgba(0,0,0,0.08);margin-top:12px;" id="authDropdown"></ul>
                 </div>
             </div>
         </div>
     </div>
 </nav>
 
-<!-- ===== MAIN CONTENT ===== -->
+<!-- MAIN -->
 <main class="container my-4">
     <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
         <h2 class="fw-bold"><i class="fas fa-box text-primary-blue me-2"></i>My Orders</h2>
-        <span class="text-muted" id="orderCount"></span>
+        <div class="d-flex align-items-center gap-3">
+            <span class="text-muted" id="orderCount"></span>
+            <button class="btn-outline" onclick="renderOrders()" title="Refresh">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </button>
+        </div>
     </div>
     <hr>
 
-    <!-- Orders Container -->
     <div id="ordersContainer">
         <div class="loading-spinner">
             <div class="spinner"></div>
@@ -376,7 +344,7 @@
     </div>
 </main>
 
-<!-- ===== FOOTER ===== -->
+<!-- FOOTER -->
 <footer>
     <div class="container">
         <div class="row gy-4">
@@ -393,16 +361,21 @@
 <script>
     const API_URL = '/api';
 
-    // ================================================================
-    // CART FUNCTIONS
-    // ================================================================
-    function getCart() {
-        return JSON.parse(localStorage.getItem('cart')) || [];
-    }
+    // ✅ Product detail page URL — query string format
+    const PRODUCT_URL = '/product-detail?id=';
 
+    // ✅ Profile page URL
+    const PROFILE_URL = '/profile';
+
+    let orders = [];
+    const productImageCache = new Map();
+
+    // ================================================================
+    // CART
+    // ================================================================
+    function getCart() { return JSON.parse(localStorage.getItem('cart')) || []; }
     function updateCartCount() {
-        const cart = getCart();
-        const total = cart.reduce((sum, item) => sum + item.quantity, 0);
+        const total = getCart().reduce((sum, item) => sum + item.quantity, 0);
         const badge = document.getElementById('cartCount');
         if (badge) {
             badge.textContent = total;
@@ -446,18 +419,7 @@
     }
 
     // ================================================================
-    // GET ORDERS FROM LOCALSTORAGE (Backup)
-    // ================================================================
-    function getLocalOrders() {
-        return JSON.parse(localStorage.getItem('orders')) || [];
-    }
-
-    function saveLocalOrders(orders) {
-        localStorage.setItem('orders', JSON.stringify(orders));
-    }
-
-    // ================================================================
-    // FORMAT PRICE
+    // HELPERS
     // ================================================================
     function formatPrice(p) {
         const num = Number(p);
@@ -465,95 +427,103 @@
         return `₹${num.toFixed(2)}`;
     }
 
-    // ================================================================
-    // GET PRODUCT IMAGE
-    // ================================================================
-    async function getProductImage(productId) {
-        try {
-            if (!productId) return null;
-            const response = await fetch(`${API_URL}/products/${productId}`);
-            const data = await response.json();
-            return data.mainImage || data.image || null;
-        } catch (e) {
-            return null;
-        }
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>"']/g, m => ({
+            '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+        }[m]));
     }
 
-    // ================================================================
-    // GET STATUS BADGE
-    // ================================================================
     function getStatusBadge(status) {
-        const statusMap = {
+        const map = {
             'pending': '<span class="status-badge status-pending"><i class="fas fa-clock"></i> Pending</span>',
             'processing': '<span class="status-badge status-processing"><i class="fas fa-clock"></i> Processing</span>',
             'shipped': '<span class="status-badge status-shipped"><i class="fas fa-truck"></i> Shipped</span>',
             'delivered': '<span class="status-badge status-delivered"><i class="fas fa-check-circle"></i> Delivered</span>',
             'cancelled': '<span class="status-badge status-cancelled"><i class="fas fa-times-circle"></i> Cancelled</span>'
         };
-        return statusMap[status] || statusMap['pending'];
+        return map[status] || map['pending'];
     }
 
     // ================================================================
-    // RENDER ORDERS - FETCHES FROM DATABASE + LOCALSTORAGE FALLBACK
+    // PRODUCT IMAGE
+    // ================================================================
+    async function getProductImage(productId) {
+        if (!productId) return null;
+        const key = String(productId);
+        if (productImageCache.has(key)) return productImageCache.get(key);
+        try {
+            const res = await fetch(`${API_URL}/products/${key}`);
+            if (!res.ok) { productImageCache.set(key, null); return null; }
+            const data = await res.json();
+            const img = data.mainImage || data.image || data.img || null;
+            productImageCache.set(key, img);
+            return img;
+        } catch (e) {
+            productImageCache.set(key, null);
+            return null;
+        }
+    }
+
+    // ================================================================
+    // RENDER ORDERS
     // ================================================================
     async function renderOrders() {
         const container = document.getElementById('ordersContainer');
         const orderCount = document.getElementById('orderCount');
-        
-        try {
-            // Show loading
+
+        container.innerHTML = `
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+                <p class="text-muted">Loading your orders...</p>
+            </div>
+        `;
+
+        const token = localStorage.getItem('token');
+
+        if (!token || token === 'null' || token === 'undefined') {
             container.innerHTML = `
-                <div class="loading-spinner">
-                    <div class="spinner"></div>
-                    <p class="text-muted">Loading your orders...</p>
+                <div class="empty-state">
+                    <i class="fas fa-lock"></i>
+                    <h4>Please Login</h4>
+                    <p class="text-muted">You need to be logged in to view your orders.</p>
+                    <a href="/login" class="btn btn-primary-blue rounded-pill px-4 mt-3">
+                        <i class="fas fa-sign-in-alt me-2"></i> Login Now
+                    </a>
                 </div>
             `;
+            orderCount.textContent = '';
+            return;
+        }
 
-            // ✅ Try to fetch from database first
-            const token = localStorage.getItem('token');
-            let orders = [];
-            let fromDB = false;
+        try {
+            const response = await fetch(`${API_URL}/orders/my-orders`, {
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
 
-            if (token && token !== 'null' && token !== 'undefined') {
-                try {
-                    const response = await fetch(`${API_URL}/orders/my-orders`, {
-                        headers: {
-                            'Authorization': `Bearer ${token}`,
-                            'Content-Type': 'application/json'
-                        }
-                    });
-
-                    if (response.ok) {
-                        const data = await response.json();
-                        if (Array.isArray(data)) {
-                            orders = data;
-                            fromDB = true;
-                            console.log('📦 Orders from database:', orders.length);
-                        } else if (data.orders && Array.isArray(data.orders)) {
-                            orders = data.orders;
-                            fromDB = true;
-                            console.log('📦 Orders from database (nested):', orders.length);
-                        }
-                    } else {
-                        console.log('⚠️ Database fetch failed, status:', response.status);
-                    }
-                } catch (dbError) {
-                    console.log('⚠️ Could not fetch from database:', dbError.message);
+            if (!response.ok) {
+                if (response.status === 401) {
+                    container.innerHTML = `
+                        <div class="empty-state">
+                            <i class="fas fa-user-lock"></i>
+                            <h4>Session Expired</h4>
+                            <p class="text-muted">Please login again.</p>
+                            <a href="/login" class="btn btn-primary-blue rounded-pill px-4 mt-3">
+                                <i class="fas fa-sign-in-alt me-2"></i> Login Again
+                            </a>
+                        </div>
+                    `;
+                    orderCount.textContent = '';
+                    return;
                 }
+                throw new Error(`Server error: ${response.status}`);
             }
 
-            // ✅ Fallback to localStorage if no database orders
-            if (!fromDB || orders.length === 0) {
-                const localOrders = getLocalOrders();
-                if (localOrders.length > 0) {
-                    orders = localOrders;
-                    console.log('📦 Orders from localStorage:', orders.length);
-                    // Show info that orders are from local storage
-                    showToast('Showing orders from local storage. Login to sync orders.', 'info');
-                }
-            }
+            const data = await response.json();
+            orders = Array.isArray(data) ? data : (data.orders || data.data || []);
 
-            // If still no orders, show empty state
+            console.log(`📦 Loaded ${orders.length} orders from DB`);
+
             if (orders.length === 0) {
                 container.innerHTML = `
                     <div class="empty-state">
@@ -571,212 +541,217 @@
 
             orderCount.textContent = `${orders.length} order${orders.length > 1 ? 's' : ''}`;
 
+            const sorted = [...orders].sort((a, b) =>
+                new Date(b.createdAt || 0) - new Date(a.createdAt || 0)
+            );
+
             let html = '';
-            const reversedOrders = [...orders].reverse();
-            
-            for (const order of reversedOrders) {
-                // Get order ID
-                const orderId = order.orderNumber || order.orderId || 'ORD' + String(Math.floor(Math.random() * 1000000)).padStart(6, '0');
-                
-                // Get items
-                let items = order.items || [];
-                
-                // If items have productId as object, extract it
-                items = items.map(item => {
-                    if (item.productId && typeof item.productId === 'object') {
-                        return {
-                            ...item,
-                            productId: item.productId._id || item.productId,
-                            productName: item.productId.name || item.productName || item.name || 'Product',
-                            price: item.price || item.productId?.price || 0
-                        };
-                    }
-                    return {
-                        ...item,
-                        productName: item.productName || item.name || 'Product'
-                    };
-                });
-
-                // Calculate total
-                let total = order.totalAmount || 0;
-                if (total === 0 && items.length > 0) {
-                    for (const item of items) {
-                        const price = Number(item.price) || 0;
-                        const quantity = Number(item.quantity) || 1;
-                        total += price * quantity;
-                    }
-                }
-
-                const itemCount = items.reduce((sum, item) => sum + (item.quantity || 1), 0);
-                const orderDate = new Date(order.createdAt || order.orderDate || Date.now());
-                const formattedDate = orderDate.toLocaleDateString('en-IN', {
-                    day: '2-digit',
-                    month: 'short',
-                    year: 'numeric'
-                });
-                const formattedTime = orderDate.toLocaleTimeString('en-IN', {
-                    hour: '2-digit',
-                    minute: '2-digit'
-                });
-                
-                html += `
-                    <div class="order-card">
-                        <div class="order-header">
-                            <div>
-                                <div class="order-id">Order #${orderId}</div>
-                                <div class="order-date">${formattedDate} at ${formattedTime}</div>
-                            </div>
-                            <div>${getStatusBadge(order.status || 'pending')}</div>
-                        </div>
-                        <div class="order-body">
-                `;
-                
-                for (const item of items) {
-                    const productName = item.productName || item.name || 'Product';
-                    const price = Number(item.price) || 0;
-                    const quantity = Number(item.quantity) || 1;
-                    const itemTotal = price * quantity;
-                    
-                    let imageHtml = `<i class="fas fa-box"></i>`;
-                    if (item.productId) {
-                        try {
-                            const img = await getProductImage(item.productId);
-                            if (img) {
-                                imageHtml = `<img src="${img}" alt="${productName}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-box\\'></i>'">`;
-                            }
-                        } catch (e) {
-                            imageHtml = `<i class="fas fa-box"></i>`;
-                        }
-                    }
-                    
-                    html += `
-                        <div class="product-item">
-                            <div class="product-img">
-                                ${imageHtml}
-                            </div>
-                            <div class="product-details">
-                                <div class="product-name">${productName}</div>
-                                <div class="product-meta">Qty: ${quantity} × ${formatPrice(price)}</div>
-                            </div>
-                            <div class="product-price">${formatPrice(itemTotal)}</div>
-                        </div>
-                    `;
-                }
-                
-                html += `
-                        </div>
-                        <div class="order-footer">
-                            <div>
-                                <div class="total-amount">Total: <span>${formatPrice(total)}</span></div>
-                                <div class="product-meta mt-1">${itemCount} item${itemCount > 1 ? 's' : ''}</div>
-                            </div>
-                            <div class="btn-group">
-                                <button class="btn-outline" onclick="trackOrder('${orderId}')">
-                                    <i class="fas fa-location-dot"></i> Track
-                                </button>
-                                ${order.status !== 'cancelled' && order.status !== 'delivered' ? `
-                                    <button class="btn-outline btn-outline-danger" onclick="cancelOrder('${orderId}')">
-                                        <i class="fas fa-times"></i> Cancel
-                                    </button>
-                                ` : ''}
-                            </div>
-                        </div>
-                    </div>
-                `;
+            for (const order of sorted) {
+                html += await renderOrderCard(order);
             }
-            
             container.innerHTML = html;
 
-            // ✅ Update localStorage as backup
-            saveLocalOrders(orders);
-
-        } catch (error) {
-            console.error('❌ Error rendering orders:', error);
+        } catch (err) {
+            console.error('❌ Orders fetch error:', err);
             container.innerHTML = `
                 <div class="empty-state">
                     <i class="fas fa-exclamation-circle text-danger"></i>
-                    <h4>Error loading orders</h4>
-                    <p class="text-muted">${error.message}</p>
+                    <h4>Failed to load orders</h4>
+                    <p class="text-muted">${escapeHtml(err.message)}</p>
                     <button class="btn btn-primary-blue rounded-pill px-4 mt-3" onclick="renderOrders()">
                         <i class="fas fa-sync-alt me-2"></i> Retry
                     </button>
                 </div>
             `;
+            orderCount.textContent = '';
         }
+    }
+
+    // ================================================================
+    // RENDER SINGLE ORDER CARD
+    // ================================================================
+    async function renderOrderCard(order) {
+        const dbId = order._id || '';
+        const displayId = order.orderNumber || order.orderId || dbId.slice(-8);
+
+        let items = order.items || order.products || [];
+        items = items.map(item => {
+            let pid = item.productId;
+            let pidStr = '';
+            if (pid && typeof pid === 'object') {
+                pidStr = String(pid._id || '');
+                return {
+                    ...item,
+                    productId: pidStr,
+                    productName: pid.name || item.productName || item.name || 'Product',
+                    price: item.price || pid.price || 0,
+                    image: pid.mainImage || pid.image || item.image || null
+                };
+            } else if (pid) {
+                pidStr = String(pid);
+            }
+            return {
+                ...item,
+                productId: pidStr,
+                productName: item.productName || item.name || 'Product'
+            };
+        });
+
+        let total = order.totalAmount || 0;
+        if (!total && items.length > 0) {
+            total = items.reduce((s, i) => s + (Number(i.price) || 0) * (Number(i.quantity) || 1), 0);
+        }
+
+        const itemCount = items.reduce((s, i) => s + (Number(i.quantity) || 1), 0);
+        const orderDate = new Date(order.createdAt || order.orderDate || Date.now());
+        const formattedDate = orderDate.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+        const formattedTime = orderDate.toLocaleTimeString('en-IN', { hour: '2-digit', minute: '2-digit' });
+
+        const status = order.status || 'pending';
+        const canCancel = !['cancelled', 'delivered', 'shipped'].includes(status);
+
+        let itemsHtml = '';
+        for (const item of items) {
+            const price = Number(item.price) || 0;
+            const qty = Number(item.quantity) || 1;
+            const itemTotal = price * qty;
+
+            let imgHtml = `<i class="fas fa-box"></i>`;
+            if (item.image) {
+                imgHtml = `<img src="${item.image}" alt="${escapeHtml(item.productName)}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-box\\'></i>'">`;
+            } else if (item.productId) {
+                const img = await getProductImage(item.productId);
+                if (img) {
+                    imgHtml = `<img src="${img}" alt="${escapeHtml(item.productName)}" onerror="this.parentElement.innerHTML='<i class=\\'fas fa-box\\'></i>'">`;
+                }
+            }
+
+            // ✅ Product URL — query param format: /product-detail?id=xxx
+            const productLink = item.productId
+                ? `${PRODUCT_URL}${item.productId}`
+                : '#';
+
+            // ✅ Whole product row clickable
+            itemsHtml += `
+                <a href="${productLink}" class="product-item" ${!item.productId ? 'onclick="return false;"' : ''}>
+                    <div class="product-img">${imgHtml}</div>
+                    <div class="product-details">
+                        <div class="product-name">
+                            ${escapeHtml(item.productName)}
+                            ${item.productId ? '<i class="fas fa-chevron-right view-product-arrow"></i>' : ''}
+                        </div>
+                        <div class="product-meta">Qty: ${qty} × ${formatPrice(price)}</div>
+                    </div>
+                    <div class="product-price">${formatPrice(itemTotal)}</div>
+                </a>
+            `;
+        }
+
+        return `
+            <div class="order-card" data-order-id="${dbId}">
+                <div class="order-header">
+                    <div>
+                        <div class="order-id">Order #${escapeHtml(displayId)}</div>
+                        <div class="order-date">${formattedDate} at ${formattedTime}</div>
+                    </div>
+                    <div>${getStatusBadge(status)}</div>
+                </div>
+                <div class="order-body">
+                    ${itemsHtml || '<p class="text-muted text-center py-3">No items</p>'}
+                </div>
+                <div class="order-footer">
+                    <div>
+                        <div class="total-amount">Total: <span>${formatPrice(total)}</span></div>
+                        <div class="product-meta mt-1">${itemCount} item${itemCount > 1 ? 's' : ''}</div>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-outline" onclick="trackOrder('${dbId}')">
+                            <i class="fas fa-location-dot"></i> Track
+                        </button>
+                        ${canCancel ? `
+                            <button class="btn-outline btn-outline-danger" 
+                                    onclick="cancelOrder('${dbId}', this)"
+                                    id="cancel-btn-${dbId}">
+                                <i class="fas fa-times"></i> Cancel
+                            </button>
+                        ` : ''}
+                    </div>
+                </div>
+            </div>
+        `;
     }
 
     // ================================================================
     // CANCEL ORDER
     // ================================================================
-    function cancelOrder(orderId) {
+    async function cancelOrder(dbId, btnElement) {
         if (!confirm('Are you sure you want to cancel this order?')) return;
-        
-        // Try to cancel via API
+
         const token = localStorage.getItem('token');
-        
-        if (token) {
-            fetch(`${API_URL}/orders/${orderId}/cancel`, {
+        if (!token) {
+            showToast('❌ Please login to cancel orders', 'error');
+            return;
+        }
+
+        const btn = btnElement || document.getElementById(`cancel-btn-${dbId}`);
+        const originalHtml = btn ? btn.innerHTML : '';
+        if (btn) {
+            btn.disabled = true;
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Cancelling...';
+        }
+
+        try {
+            console.log(`🚫 Cancelling order: ${dbId}`);
+
+            const response = await fetch(`${API_URL}/orders/${dbId}/cancel`, {
                 method: 'PUT',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
                 }
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    showToast('✅ Order cancelled successfully', 'success');
-                    renderOrders();
-                } else {
-                    // Fallback to localStorage
-                    cancelLocalOrder(orderId);
-                }
-            })
-            .catch(() => {
-                // Fallback to localStorage
-                cancelLocalOrder(orderId);
             });
-        } else {
-            cancelLocalOrder(orderId);
-        }
-    }
 
-    function cancelLocalOrder(orderId) {
-        const orders = getLocalOrders();
-        const orderIndex = orders.findIndex(o => (o.orderId === orderId || o.orderNumber === orderId));
-        
-        if (orderIndex === -1) {
-            showToast('Order not found', 'error');
-            return;
+            const data = await response.json().catch(() => ({}));
+
+            console.log('📡 Cancel response:', response.status, data);
+
+            if (!response.ok) {
+                throw new Error(data.message || `Failed to cancel (${response.status})`);
+            }
+            if (data.success === false) {
+                throw new Error(data.message || 'Failed to cancel order');
+            }
+
+            showToast('✅ Order cancelled successfully', 'success');
+            await renderOrders();
+
+        } catch (err) {
+            console.error('❌ Cancel error:', err);
+            showToast('❌ ' + err.message, 'error');
+
+            if (btn) {
+                btn.disabled = false;
+                btn.innerHTML = originalHtml;
+            }
         }
-        
-        orders[orderIndex].status = 'cancelled';
-        saveLocalOrders(orders);
-        showToast('✅ Order cancelled successfully', 'success');
-        renderOrders();
     }
 
     // ================================================================
     // TRACK ORDER
     // ================================================================
-    function trackOrder(orderId) {
-        // Try to get order from localStorage first
-        let orders = getLocalOrders();
-        let order = orders.find(o => (o.orderId === orderId || o.orderNumber === orderId));
-        
-        // If not found, use mock data
+    function trackOrder(dbId) {
+        const order = orders.find(o => String(o._id) === String(dbId));
         if (!order) {
-            order = {
-                status: 'pending',
-                orderDate: new Date().toISOString()
-            };
+            showToast('Order not found', 'error');
+            return;
         }
-        
+
         const status = order.status || 'pending';
-        const orderDate = new Date(order.orderDate || order.createdAt || Date.now());
-        
-        let steps = [];
-        
+        const orderDate = new Date(order.createdAt || Date.now());
+        const displayId = order.orderNumber || order.orderId || dbId.slice(-8);
+        const day = 24 * 60 * 60 * 1000;
+
+        let steps;
         if (status === 'cancelled') {
             steps = [
                 { title: 'Order Placed', date: orderDate, desc: 'Your order has been confirmed', completed: true },
@@ -785,29 +760,23 @@
         } else {
             steps = [
                 { title: 'Order Placed', date: orderDate, desc: 'Your order has been confirmed', completed: true },
-                { title: 'Processing', date: new Date(orderDate.getTime() + 2 * 24 * 60 * 60 * 1000), desc: 'Your order is being prepared', completed: status !== 'pending' },
-                { title: 'Shipped', date: new Date(orderDate.getTime() + 4 * 24 * 60 * 60 * 1000), desc: 'Your order has been dispatched', completed: status === 'shipped' || status === 'delivered' },
-                { title: 'Delivered', date: new Date(orderDate.getTime() + 6 * 24 * 60 * 60 * 1000), desc: 'Your order has been delivered', completed: status === 'delivered' }
+                { title: 'Processing', date: new Date(orderDate.getTime() + 2 * day), desc: 'Your order is being prepared', completed: ['processing', 'shipped', 'delivered'].includes(status) },
+                { title: 'Shipped', date: new Date(orderDate.getTime() + 4 * day), desc: 'Your order has been dispatched', completed: ['shipped', 'delivered'].includes(status) },
+                { title: 'Delivered', date: new Date(orderDate.getTime() + 6 * day), desc: 'Your order has been delivered', completed: status === 'delivered' }
             ];
         }
-        
-        const formatDate = (date) => {
-            return date.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
-        };
-        
-        const timelineHtml = steps.map((step, index) => {
-            const dotClass = step.completed ? 'active' : '';
-            const titleClass = step.completed ? '' : 'text-muted';
-            return `
-                <div class="tracking-step">
-                    <div class="dot ${dotClass}"></div>
-                    <div class="step-title ${titleClass}">${step.title}</div>
-                    <div class="step-date">${formatDate(step.date)}</div>
-                    <div class="step-desc">${step.desc}</div>
-                </div>
-            `;
-        }).join('');
-        
+
+        const formatDate = (d) => d.toLocaleDateString('en-IN', { day: '2-digit', month: 'short', year: 'numeric' });
+
+        const timelineHtml = steps.map(step => `
+            <div class="tracking-step">
+                <div class="dot ${step.completed ? 'active' : ''}"></div>
+                <div class="step-title ${step.completed ? '' : 'text-muted'}">${step.title}</div>
+                <div class="step-date">${formatDate(step.date)}</div>
+                <div class="step-desc">${step.desc}</div>
+            </div>
+        `).join('');
+
         const modalHtml = `
             <div class="modal fade" id="trackingModal" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
@@ -817,7 +786,7 @@
                                 <h5 class="modal-title fw-bold">
                                     <i class="fas fa-location-dot text-primary-blue me-2"></i> Track Order
                                 </h5>
-                                <p class="text-muted small mb-0">Order #${orderId}</p>
+                                <p class="text-muted small mb-0">Order #${escapeHtml(displayId)}</p>
                             </div>
                             <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                         </div>
@@ -832,22 +801,12 @@
                                     <div style="font-size: 3.5rem; color: ${status === 'delivered' ? '#16a34a' : '#2563eb'};">
                                         <i class="fas ${status === 'delivered' ? 'fa-check-circle' : 'fa-truck'}"></i>
                                     </div>
-                                    <h6 class="fw-bold mt-2" style="color: ${status === 'delivered' ? '#16a34a' : '#1e293b'};">
+                                    <h6 class="fw-bold mt-2">
                                         ${status === 'delivered' ? '✅ Delivered' : status === 'shipped' ? '📦 Shipped' : status === 'processing' ? '⚙️ Processing' : '⏳ Pending'}
                                     </h6>
                                 </div>
                             `}
-                            
-                            <div class="tracking-timeline">
-                                ${timelineHtml}
-                            </div>
-                            
-                            ${status !== 'cancelled' && status !== 'delivered' ? `
-                                <div class="alert alert-info mt-4" style="border-radius: 12px; background: #eff6ff; border-color: #bfdbfe;">
-                                    <i class="fas fa-info-circle me-2"></i>
-                                    <small>You will receive email updates about your order status.</small>
-                                </div>
-                            ` : ''}
+                            <div class="tracking-timeline">${timelineHtml}</div>
                         </div>
                         <div class="modal-footer" style="border-top: none; padding: 0 30px 28px;">
                             <button type="button" class="btn btn-primary-blue w-100" data-bs-dismiss="modal">
@@ -858,20 +817,14 @@
                 </div>
             </div>
         `;
-        
-        const existingModal = document.getElementById('trackingModal');
-        if (existingModal) {
-            existingModal.remove();
-        }
-        
+
+        document.getElementById('trackingModal')?.remove();
         document.body.insertAdjacentHTML('beforeend', modalHtml);
-        
-        const modal = new bootstrap.Modal(document.getElementById('trackingModal'));
-        modal.show();
+        new bootstrap.Modal(document.getElementById('trackingModal')).show();
     }
 
     // ================================================================
-    // UPDATE NAVBAR
+    // NAVBAR
     // ================================================================
     function updateNavbar() {
         const token = localStorage.getItem('token');
@@ -880,18 +833,47 @@
 
         if (token && token !== 'null' && token !== 'undefined') {
             dropdown.innerHTML = `
-                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>${user.name || 'My Account'}</a></li>
+                <li>
+                    <a class="dropdown-item" href="${PROFILE_URL}">
+                        <i class="fas fa-user me-2"></i>${escapeHtml(user.name || 'My Account')}
+                    </a>
+                </li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                <li>
+                    <a class="dropdown-item" href="/my-orders">
+                        <i class="fas fa-box me-2"></i>My Orders
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="/cart">
+                        <i class="fas fa-shopping-cart me-2"></i>My Cart
+                    </a>
+                </li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item text-danger" href="#" onclick="logout()"><i class="fas fa-sign-out-alt me-2"></i>Logout</a></li>
+                <li>
+                    <a class="dropdown-item text-danger" href="#" onclick="logout(); return false;">
+                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                    </a>
+                </li>
             `;
         } else {
             dropdown.innerHTML = `
-                <li><a class="dropdown-item" href="/login"><i class="fas fa-sign-in-alt me-2"></i>Login</a></li>
-                <li><a class="dropdown-item" href="/register"><i class="fas fa-user-plus me-2"></i>Register</a></li>
+                <li>
+                    <a class="dropdown-item" href="/login">
+                        <i class="fas fa-sign-in-alt me-2"></i>Login
+                    </a>
+                </li>
+                <li>
+                    <a class="dropdown-item" href="/register">
+                        <i class="fas fa-user-plus me-2"></i>Register
+                    </a>
+                </li>
                 <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="/my-orders"><i class="fas fa-box me-2"></i>My Orders</a></li>
+                <li>
+                    <a class="dropdown-item" href="/my-orders">
+                        <i class="fas fa-box me-2"></i>My Orders
+                    </a>
+                </li>
             `;
         }
     }
@@ -906,7 +888,6 @@
         renderOrders();
     });
 
-    // Make functions globally accessible
     window.logout = logout;
     window.trackOrder = trackOrder;
     window.cancelOrder = cancelOrder;

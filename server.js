@@ -24,7 +24,6 @@ const app = express();
 // ===== MIDDLEWARE =====
 // ================================================================
 
-// ✅ CORS — 5200 port included
 app.use(cors({
     origin: [
         'http://localhost:3000',
@@ -43,7 +42,6 @@ app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 app.use(cookieParser());
 
-// ✅ Static file serving — uploads folder
 app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 app.use(express.static(path.join(__dirname)));
 
@@ -54,12 +52,11 @@ console.log('🚀 Server configuration loaded!');
 console.log(`💰 Razorpay Key ID: ${process.env.RAZORPAY_KEY_ID ? '✅ Configured' : '❌ Missing'}`);
 
 // ================================================================
-// ===== AUTHENTICATION MIDDLEWARE =====
+// ===== ADMIN AUTH MIDDLEWARE =====
 // ================================================================
 const checkAdmin = (req, res, next) => {
     console.log('🔍 checkAdmin middleware called');
     
-    // Get token from cookie or header
     const token = req.cookies?.token || req.headers['authorization']?.split(' ')[1];
     
     console.log('📌 Token present:', !!token);
@@ -106,10 +103,42 @@ const checkAdmin = (req, res, next) => {
 };
 
 // ================================================================
+// ===== USER AUTH MIDDLEWARE =====
+// ================================================================
+const checkUser = (req, res, next) => {
+    const token = req.cookies?.token || req.headers['authorization']?.split(' ')[1];
+    
+    if (!token) {
+        if (req.path.startsWith('/api/')) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Please login to continue' 
+            });
+        }
+        return res.redirect('/login');
+    }
+
+    try {
+        const jwt = require('jsonwebtoken');
+        const decoded = jwt.verify(token, process.env.JWT_SECRET || 'shopygo_super_secret_key_2025');
+        req.user = decoded;
+        next();
+    } catch (error) {
+        if (req.path.startsWith('/api/')) {
+            return res.status(401).json({ 
+                success: false, 
+                message: 'Invalid or expired token' 
+            });
+        }
+        return res.redirect('/login');
+    }
+};
+
+// ================================================================
 // ===== ADMIN VIEW ROUTES =====
 // ================================================================
 
-// PUBLIC ROUTES - NO AUTH REQUIRED
+// PUBLIC
 app.get('/admin/login', (req, res) => {
     console.log('📋 Admin login page requested');
     res.render('admin/login', { 
@@ -125,7 +154,7 @@ app.get('/admin/register', (req, res) => {
     });
 });
 
-// PROTECTED ADMIN ROUTES
+// PROTECTED
 app.get('/admin/dashboard', checkAdmin, (req, res) => {
     console.log('📊 Admin Dashboard page requested');
     res.render('admin/dashboard', { 
@@ -198,7 +227,6 @@ app.get('/admin/change-password', checkAdmin, (req, res) => {
     });
 });
 
-// Admin Logout
 app.get('/admin/logout', (req, res) => {
     res.clearCookie('token');
     res.redirect('/admin/login');
@@ -211,6 +239,36 @@ app.get('/admin-categories', (req, res) => res.redirect('/admin/categories'));
 app.get('/admin-orders', (req, res) => res.redirect('/admin/orders'));
 app.get('/admin-customers', (req, res) => res.redirect('/admin/customers'));
 app.get('/admin-analytics', (req, res) => res.redirect('/admin/analytics'));
+
+// ================================================================
+// ===== ✅ USER PRODUCT DETAIL ROUTES =====
+// ================================================================
+
+// ✅ Product Detail — Query param format: /product-detail?id=xxx
+app.get('/product-detail', (req, res) => {
+    console.log('📦 Product Detail page — ID:', req.query.id);
+    res.render('user/product-detail', {   // ← 'user/' prefix
+        title: 'Product Details - ShopyGo'
+    });
+});
+
+// ✅ Product Redirect — Path param → query param
+app.get('/product/:id', (req, res) => {
+    console.log('📦 Product redirect for ID:', req.params.id);
+    res.redirect(`/product-detail?id=${req.params.id}`);
+});
+
+// ================================================================
+// ===== ✅ USER ORDER DETAILS ROUTE =====
+// ================================================================
+app.get('/order-details/:id', checkUser, (req, res) => {
+    console.log('📋 Order Details — ID:', req.params.id);
+    res.render('user/order-details', {   // ← 'user/' prefix
+        title: 'Order Details - ShopyGo',
+        orderId: req.params.id,
+        user: req.user
+    });
+});
 
 // ================================================================
 // ===== API ROUTES =====
@@ -234,7 +292,6 @@ app.use('/', viewRoutes);
 // ===== ERROR HANDLING =====
 // ================================================================
 
-// 404 Handler
 app.use((req, res) => {
     console.log('❌ 404 Not Found:', req.url);
     if (req.path.startsWith('/api/')) {
@@ -264,7 +321,6 @@ app.use((req, res) => {
     `);
 });
 
-// Global Error Handler
 app.use((err, req, res, next) => {
     console.error('❌ Server Error:', err);
     console.error('Stack:', err.stack);
